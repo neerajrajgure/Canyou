@@ -1,35 +1,45 @@
+package GUI;
+/**
+ * menuExpansionPane is the Panel where the buttons will go after selecting the category from the left side
+ */
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import java.awt.event.ContainerAdapter;
-import java.awt.event.ContainerEvent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
-import java.awt.TextArea;
-import javax.swing.DropMode;
-import java.awt.Color;
-import java.awt.Canvas;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
+// import com.jgoodies.forms.factories.DefaultComponentFactory;
 import javax.swing.JTextArea;
 
 
 public class CafeBill extends JFrame {
 
 	private JPanel contentPane;
-
+	private JPanel categoryPane;
+	private JPanel menuExpansionPane;
+	private JPanel costPane;
+	private JPanel frequentItemsPane;
+    private JList list;
+    private DefaultListModel<String> listModel;
+    JLabel lblSubtotal_1 = new JLabel("Subtotal");
+    final JLabel lblSubtotal = new JLabel("00");
 	/**
 	 * Launch the application.
 	 */
@@ -48,22 +58,41 @@ public class CafeBill extends JFrame {
 
 	/**
 	 * Create the frame.
-	 */
-	public CafeBill() {
+	 */	public CafeBill() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 689, 458);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setBounds(100, 100, 1000, 800);
+		contentPane = new JPanel(new BorderLayout());
+		
+		//categoryPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JTextArea textArea = new JTextArea();
+		categoryPane = new JPanel();
+		categoryPane.setBorder(BorderFactory.createLineBorder(Color.black));
+		menuExpansionPane = new JPanel();
+		menuExpansionPane.setBorder(BorderFactory.createLineBorder(Color.black));
+		costPane = new JPanel();
+		costPane.setBorder(BorderFactory.createLineBorder(Color.black));
+		frequentItemsPane = new JPanel();
+		frequentItemsPane.setBorder(BorderFactory.createLineBorder(Color.black));
+		contentPane.add(categoryPane, BorderLayout.WEST);
+		contentPane.add(menuExpansionPane, BorderLayout.CENTER);
+		contentPane.add(costPane, BorderLayout.EAST);
+		contentPane.add(frequentItemsPane, BorderLayout.SOUTH);
 		
-		JLabel lblNewLabel = new JLabel("Items");
-		
-		JLabel lblNewLabel_1 = new JLabel("Price");
 		
 		
-		JLabel lblSubtotal = new JLabel("00");
+		
+		final JTextArea textArea = new JTextArea();
+		
+		listModel = new DefaultListModel();
+        list = new JList(listModel);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setSelectedIndex(0);
+        setCategoryPane();
+        //list.addListSelectionListener((ListSelectionListener) this);
+
+		//JLabel lblNewLabel_4 = new JLabel("Total Price");
+		
 		
 		/*
 		 * This is the common action for every button click
@@ -71,12 +100,130 @@ public class CafeBill extends JFrame {
 		 * 
 		 * 
 		 * */
+
+
 		
-		JButton btnCheeseBurger = new JButton("Cheese Burger");
-		btnCheeseBurger.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+		//Change the index to number of categories in the database
+		
+		
+		
+		//GroupLayout gl_categoryPane = new GroupLayout(categoryPane);
+		//GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		/*
+		gl_categoryPane.setHorizontalGroup(gl_categoryPane.createParallelGroup(Alignment.TRAILING)
+				.addComponent(btnCtgCoffee)
+				.addGap(18)
+				.addComponent(btnCtgSandwich)
+				);
+		gl_categoryPane.setVerticalGroup(gl_categoryPane.createSequentialGroup()
+				.addComponent(btnCtgCoffee,GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
+				.addGap(18)
+				.addComponent(btnCtgSandwich,GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
+				);
+	*/
+		//setMenuExpansionPane();
+		setCostPane();
+		
+		
+		//contentPane.setLayout(gl_contentPane);
+	}
+	 public void setCategoryPane(){
+		 /*
+		  * Set Layout
+		  */
+ 			GridLayout categoryLayout = new GridLayout(4,1); // Change Hardcoded value
+ 			
+ 			categoryPane.setLayout(categoryLayout);
+		 
+			JButton btnCtgCoffee = new JButton();
+	        ImageIcon img = new ImageIcon("./src/images/Coffee.png");
+	        btnCtgCoffee.setIcon(img);
+
 			
+			btnCtgCoffee.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				/*
+					textArea.append("Cheese Burger  Rs 150 \n");
+					listModel.addElement("Cheese Burger 1 Rs.150 Rs.150\n");
+					float subTotal;
+					String tempStr;
+					 
+						tempStr = lblSubtotal.getText();
+						subTotal = Float.parseFloat(tempStr);
+						subTotal += 150;
+						lblSubtotal.setText(Float.toString(subTotal) );
+						*/
+					
+				}
+			});
+			
+			JButton btnCtgSandwich = new JButton();
+	        ImageIcon imgSandwitch = new ImageIcon("./src/images/Sandwich.png");
+	        btnCtgSandwich.setIcon(imgSandwitch);
+	        
+			JButton btnCtgBurger = new JButton();
+	        ImageIcon imgBurger = new ImageIcon("./src/images/Burger.png");
+	        btnCtgBurger.setIcon(imgBurger);
+
+			btnCtgSandwich.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				/*
+					textArea.append("Cheese Burger  Rs 150 \n");
+					listModel.addElement("Cheese Burger 1 Rs.150 Rs.150\n");
+					float subTotal;
+					String tempStr;
+					 
+						tempStr = lblSubtotal.getText();
+						subTotal = Float.parseFloat(tempStr);
+						subTotal += 150;
+						lblSubtotal.setText(Float.toString(subTotal) );
+						*/
+					
+				}
+			});
+			
+			JButton btnCtgSoftDrink = new JButton();
+	        ImageIcon imgSoftDrink = new ImageIcon("./src/images/SoftDrink.png");
+	        btnCtgSoftDrink.setIcon(imgSoftDrink);
+			categoryPane.add(btnCtgCoffee);
+			categoryPane.add(btnCtgSoftDrink);
+			categoryPane.add(btnCtgSandwich);
+			categoryPane.add(btnCtgBurger);
+
+	 }
+	public void setCostPane(){
+		/*
+		 * Set Layout
+		 */
+		BoxLayout gl_costPane = new BoxLayout(costPane,BoxLayout.PAGE_AXIS);
+		costPane.setLayout(gl_costPane);
+
+		final String[] columnNames = {"Sr_No","Item", "Quantity","Unit Price","Total Price"};
+	      TableModel dataModel = new AbstractTableModel() {
+	    	    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+				public String getColumnName(int col) {
+	    	        return columnNames[col].toString();
+	    	    }
+
+	          public int getColumnCount() { return 5; }
+	          public int getRowCount() { return 10;}
+	          public Object getValueAt(int row, int col) { return ""; }
+	      };
+	      JTable table = new JTable(dataModel);
+	      JScrollPane scrollpane = new JScrollPane(table);
+	      table.setFillsViewportHeight(true);
+	      costPane.add(scrollpane);
+
+		JButton btnPrintBill = new JButton("Submit Order");
+		btnPrintBill.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+	/*			
 				textArea.append("Cheese Burger  Rs 150 \n");
 				float subTotal;
 				String tempStr;
@@ -85,161 +232,12 @@ public class CafeBill extends JFrame {
 					subTotal = Float.parseFloat(tempStr);
 					subTotal += 150;
 					lblSubtotal.setText(Float.toString(subTotal)    );
-				
+	*/				
 			}
 		});
-		
-		JButton btnSandwich = new JButton("Sandwich");
-		btnSandwich.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { 
-				textArea.append("Cheese Burger  Rs 150 \n");
-				float subTotal;
-				String tempStr;
-				 
-					tempStr = lblSubtotal.getText();
-					subTotal = Float.parseFloat(tempStr);
-					subTotal += 150;
-					lblSubtotal.setText(Float.toString(subTotal)    );
-			}
-		});
-		
-		JButton btnTea = new JButton("Tea");
-		btnTea.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				textArea.append("Cheese Burger  Rs 150 \n");
-				float subTotal;
-				String tempStr;
-				 
-					tempStr = lblSubtotal.getText();
-					subTotal = Float.parseFloat(tempStr);
-					subTotal += 150;
-					lblSubtotal.setText(Float.toString(subTotal)    );
-			}
-		});
-		
-		JButton btnVegBurger = new JButton("Veg Burger");
-		btnVegBurger.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				textArea.append(" Veg Burger  Rs 150 \n");
-				float subTotal;
-				String tempStr;
-				 
-					tempStr = lblSubtotal.getText();
-					subTotal = Float.parseFloat(tempStr);
-					subTotal += 150;
-					lblSubtotal.setText(Float.toString(subTotal)    );
-				
-			}
-		});
-		
-		JButton btnColdDring = new JButton("Cold Drink");
-		btnColdDring.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				textArea.append("Cold Drink Rs 15 \n");
-				float subTotal;
-				String tempStr;
-				 
-					tempStr = lblSubtotal.getText();
-					subTotal = Float.parseFloat(tempStr);
-					subTotal += 150;
-					lblSubtotal.setText(Float.toString(subTotal)    );
-			}
-		});
-		
-		JButton btnCoffee = new JButton("Coffee");
-		btnCoffee.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//tableList.
-			//tableList.addRowSelectionInterval(1, 1);	
-				
-				textArea.append("Coffee Rs 50 \n");
-				float subTotal;
-				String tempStr;
-				 
-					tempStr = lblSubtotal.getText();
-					subTotal = Float.parseFloat(tempStr);
-					subTotal += 50;
-					lblSubtotal.setText(Float.toString(subTotal)    );
-			}
-		});
-		
-		JLabel lblSubtotal_1 = new JLabel("Subtotal");
-		
-		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(10)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnCheeseBurger, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnVegBurger, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnSandwich, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(9)
-									.addComponent(btnTea, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnCoffee, GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-								.addComponent(btnColdDring, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))))
-					.addPreferredGap(ComponentPlacement.RELATED, 150, GroupLayout.PREFERRED_SIZE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblSubtotal_1, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(10)
-									.addComponent(lblNewLabel)))
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblSubtotal, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE))
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblNewLabel_1)
-									.addGap(22))))
-						.addComponent(textArea, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(47)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblNewLabel)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNewLabel_1)
-							.addPreferredGap(ComponentPlacement.UNRELATED)))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblSubtotal_1, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblSubtotal, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
-							.addGap(158))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(16)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnCheeseBurger, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnVegBurger, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnSandwich, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnColdDring))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnCoffee)
-								.addComponent(btnTea)))))
-		);
-		contentPane.setLayout(gl_contentPane);
+		costPane.add(btnPrintBill);
+		costPane.add(list);
+	
+	
 	}
 }
