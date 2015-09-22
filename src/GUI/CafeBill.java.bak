@@ -142,7 +142,10 @@ public class CafeBill extends JFrame {
 			
 			btnCtgCoffee.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
+			        btnCtgCoffee.setIcon(img1);
+			        
+					setMenuExpansionPaneForCoffee();
 				/*
 					textArea.append("Cheese Burger  Rs 150 \n");
 					listModel.addElement("Cheese Burger 1 Rs.150 Rs.150\n");
@@ -168,6 +171,11 @@ public class CafeBill extends JFrame {
 
 			btnCtgSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
+					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
+			        btnCtgSandwich.setIcon(img1);
+			        
+					setMenuExpansionPaneForSandwich();
 					
 				/*
 					textArea.append("Cheese Burger  Rs 150 \n");
@@ -240,4 +248,124 @@ public class CafeBill extends JFrame {
 	
 	
 	}
+	/*
+	 * Button choice
+	 * Update accordingly
+	 * 
+	 * 
+	 * */
+	public void setMenuExpansionPaneForSandwich(){
+		 /*
+		  * Set Layout
+		  */
+		//ImageIcon img1 = new ImageIcon("./src/images/Coffee.png");
+        //btnCtgSandwich.setIcon(img1);
+        
+			GridLayout categoryLayout = new GridLayout(4,2); // Change Hardcoded value
+			menuExpansionPane.removeAll();
+			menuExpansionPane.revalidate();
+			menuExpansionPane.setLayout(categoryLayout);
+		 
+			JButton btnExpVegSandwich = new JButton();
+	        ImageIcon imgExpVegSandwich = new ImageIcon("./src/images/veg.png");
+	        btnExpVegSandwich.setIcon(imgExpVegSandwich);
+
+			
+	        btnExpVegSandwich.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+				}
+			});
+			
+	        JButton btnExpGrillVegSandwich = new JButton();
+	        ImageIcon imgExpGrillVegSandwich = new ImageIcon("./src/images/grillVeg.png");
+	        btnExpGrillVegSandwich.setIcon(imgExpGrillVegSandwich);
+
+			
+	        btnExpGrillVegSandwich.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+				}
+			});
+
+	        JButton btnExpChkSandwich = new JButton();
+	        ImageIcon imgExpChkSandwich = new ImageIcon("./src/images/chicken.png");
+	        btnExpChkSandwich.setIcon(imgExpChkSandwich);
+
+			
+	        btnExpChkSandwich.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+				}
+			});
+
+	        JButton btnExpGrillChkSandwich = new JButton();
+	        ImageIcon imgExpGrillChkSandwich = new ImageIcon("./src/images/Coffee.png");
+	        btnExpGrillChkSandwich.setIcon(imgExpGrillChkSandwich);
+
+			
+	        btnExpGrillChkSandwich.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+				}
+			});
+
+	        menuExpansionPane.add(btnExpVegSandwich);
+	        menuExpansionPane.add(btnExpGrillVegSandwich);
+	        menuExpansionPane.add(btnExpChkSandwich);
+	        
+
+	 }
+
+
+	public void setMenuExpansionPaneForCoffee(){
+		 /*
+		  * Set Layout
+		  */
+		//ImageIcon img1 = new ImageIcon("./src/images/Coffee.png");
+       //btnCtgSandwich.setIcon(img1);
+       
+			GridLayout categoryLayout1 = new GridLayout(4,2); // Change Hardcoded value
+			menuExpansionPane.removeAll();
+			menuExpansionPane.revalidate();
+			menuExpansionPane.setLayout(categoryLayout1);
+		 
+			JButton btnExpCoffee1 = new JButton();
+	        ImageIcon imgExpVegSandwich1 = new ImageIcon("./src/images/coffee.png");
+	        btnExpCoffee1.setIcon(imgExpVegSandwich1);
+	        //btnExpCoffee1.setLabel("Coffee1"); 
+
+			
+	        btnExpCoffee1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+				}
+			});
+
+			JButton btnExpCoffee2 = new JButton();
+	        ImageIcon imgExpVegSandwich2 = new ImageIcon("./src/images/coffee.png");
+	        btnExpCoffee1.setIcon(imgExpVegSandwich2);
+	        btnExpCoffee2.setText("Coffee2");;
+	        //btnExpCoffee1.setLabel("Coffee2"); 
+
+			
+	        btnExpCoffee2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+				}
+			});
+
+	        
+	        menuExpansionPane.add(btnExpCoffee2);
+	        menuExpansionPane.add(btnExpCoffee1);
+	        
+
+	 }
+
 }

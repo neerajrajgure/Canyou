@@ -142,8 +142,8 @@ public class CafeBill extends JFrame {
 			
 			btnCtgCoffee.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
-			        btnCtgCoffee.setIcon(img1);
+//					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
+//			        btnCtgCoffee.setIcon(img1);
 			        
 					setMenuExpansionPaneForCoffee();
 				/*
@@ -172,8 +172,8 @@ public class CafeBill extends JFrame {
 			btnCtgSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
-			        btnCtgSandwich.setIcon(img1);
+//					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
+//			        btnCtgSandwich.setIcon(img1);
 			        
 					setMenuExpansionPaneForSandwich();
 					
@@ -267,9 +267,9 @@ public class CafeBill extends JFrame {
 			menuExpansionPane.setLayout(categoryLayout);
 		 
 			JButton btnExpVegSandwich = new JButton();
-	        ImageIcon imgExpVegSandwich = new ImageIcon("./src/images/veg.png");
-	        btnExpVegSandwich.setIcon(imgExpVegSandwich);
-
+	        //ImageIcon imgExpVegSandwich = new ImageIcon("./src/images/veg.png");
+	        //btnExpVegSandwich.setIcon(imgExpVegSandwich);
+				  btnExpVegSandwich.setText("Veg Sandwich");;
 			
 	        btnExpVegSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -279,8 +279,9 @@ public class CafeBill extends JFrame {
 			});
 			
 	        JButton btnExpGrillVegSandwich = new JButton();
-	        ImageIcon imgExpGrillVegSandwich = new ImageIcon("./src/images/grillVeg.png");
-	        btnExpGrillVegSandwich.setIcon(imgExpGrillVegSandwich);
+	        //ImageIcon imgExpGrillVegSandwich = new ImageIcon("./src/images/grillVeg.png");
+	        //btnExpGrillVegSandwich.setIcon(imgExpGrillVegSandwich);
+				  btnExpGrillVegSandwich.setText("Grill Veg Sandwich");;
 
 			
 	        btnExpGrillVegSandwich.addActionListener(new ActionListener() {
@@ -291,8 +292,9 @@ public class CafeBill extends JFrame {
 			});
 
 	        JButton btnExpChkSandwich = new JButton();
-	        ImageIcon imgExpChkSandwich = new ImageIcon("./src/images/chicken.png");
-	        btnExpChkSandwich.setIcon(imgExpChkSandwich);
+	        //ImageIcon imgExpChkSandwich = new ImageIcon("./src/images/chicken.png");
+	        //btnExpChkSandwich.setIcon(imgExpChkSandwich);
+			  btnExpChkSandwich.setText("Chicken Sandwich");;
 
 			
 	        btnExpChkSandwich.addActionListener(new ActionListener() {
@@ -303,8 +305,9 @@ public class CafeBill extends JFrame {
 			});
 
 	        JButton btnExpGrillChkSandwich = new JButton();
-	        ImageIcon imgExpGrillChkSandwich = new ImageIcon("./src/images/Coffee.png");
-	        btnExpGrillChkSandwich.setIcon(imgExpGrillChkSandwich);
+	        //ImageIcon imgExpGrillChkSandwich = new ImageIcon("./src/images/Coffee.png");
+	        //btnExpGrillChkSandwich.setIcon(imgExpGrillChkSandwich);
+				
 
 			
 	        btnExpGrillChkSandwich.addActionListener(new ActionListener() {
@@ -335,8 +338,9 @@ public class CafeBill extends JFrame {
 			menuExpansionPane.setLayout(categoryLayout1);
 		 
 			JButton btnExpCoffee1 = new JButton();
-	        ImageIcon imgExpVegSandwich1 = new ImageIcon("./src/images/coffee.png");
-	        btnExpCoffee1.setIcon(imgExpVegSandwich1);
+	      //  ImageIcon imgExpVegSandwich1 = new ImageIcon("./src/images/coffee.png");
+	      //  btnExpCoffee1.setIcon(imgExpVegSandwich1);
+			  btnExpCoffee1.setText("Coffee1");;
 	        //btnExpCoffee1.setLabel("Coffee1"); 
 
 			
@@ -348,8 +352,8 @@ public class CafeBill extends JFrame {
 			});
 
 			JButton btnExpCoffee2 = new JButton();
-	        ImageIcon imgExpVegSandwich2 = new ImageIcon("./src/images/coffee.png");
-	        btnExpCoffee1.setIcon(imgExpVegSandwich2);
+	    //    ImageIcon imgExpVegSandwich2 = new ImageIcon("./src/images/coffee.png");
+	    //    btnExpCoffee1.setIcon(imgExpVegSandwich2);
 	        btnExpCoffee2.setText("Coffee2");;
 	        //btnExpCoffee1.setLabel("Coffee2"); 
 
