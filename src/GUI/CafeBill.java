@@ -1,4 +1,5 @@
 package GUI;
+
 /**
  * menuExpansionPane is the Panel where the buttons will go after selecting the category from the left side
  */
@@ -11,6 +12,7 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -40,6 +42,7 @@ public class CafeBill extends JFrame {
     private DefaultListModel<String> listModel;
     JLabel lblSubtotal_1 = new JLabel("Subtotal");
     final JLabel lblSubtotal = new JLabel("00");
+    DefaultTableModel dataModel;
 	/**
 	 * Launch the application.
 	 */
@@ -209,10 +212,11 @@ public class CafeBill extends JFrame {
 		costPane.setLayout(gl_costPane);
 
 		final String[] columnNames = {"Sr_No","Item", "Quantity","Unit Price","Total Price"};
-	      TableModel dataModel = new AbstractTableModel() {
-	    	    /**
-			 * 
-			 */
+	      dataModel = new DefaultTableModel(0,0);
+	      /*
+	      {
+	    	  
+	    	  
 			private static final long serialVersionUID = 1L;
 				public String getColumnName(int col) {
 	    	        return columnNames[col].toString();
@@ -222,6 +226,8 @@ public class CafeBill extends JFrame {
 	          public int getRowCount() { return 10;}
 	          public Object getValueAt(int row, int col) { return ""; }
 	      };
+	      */
+	     dataModel.setColumnIdentifiers(columnNames);
 	      JTable table = new JTable(dataModel);
 	      JScrollPane scrollpane = new JScrollPane(table);
 	      table.setFillsViewportHeight(true);
@@ -263,7 +269,7 @@ public class CafeBill extends JFrame {
         
 			GridLayout categoryLayout = new GridLayout(4,2); // Change Hardcoded value
 			menuExpansionPane.removeAll();
-			menuExpansionPane.revalidate();
+			menuExpansionPane.updateUI();
 			menuExpansionPane.setLayout(categoryLayout);
 		 
 			JButton btnExpVegSandwich = new JButton();
@@ -334,7 +340,7 @@ public class CafeBill extends JFrame {
        
 			GridLayout categoryLayout1 = new GridLayout(4,2); // Change Hardcoded value
 			menuExpansionPane.removeAll();
-			menuExpansionPane.revalidate();
+			menuExpansionPane.updateUI();
 			menuExpansionPane.setLayout(categoryLayout1);
 		 
 			JButton btnExpCoffee1 = new JButton();
@@ -346,7 +352,9 @@ public class CafeBill extends JFrame {
 			
 	        btnExpCoffee1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					Integer [] data = {100,1,1,150,150};
+					//dataModel.setValueAt(100, 1, 1);
+					dataModel.addRow(data);
 					
 				}
 			});
