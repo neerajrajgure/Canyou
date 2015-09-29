@@ -6,7 +6,10 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -14,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -22,8 +27,11 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -40,6 +48,8 @@ public class CafeBill extends JFrame {
 	private JPanel frequentItemsPane;
     private JList list;
     private DefaultListModel<String> listModel;
+    private ArrayList<String> categories;
+    private ArrayList<ArrayList<MenuItem>> menuItems;
     JLabel lblSubtotal_1 = new JLabel("Subtotal");
     final JLabel lblSubtotal = new JLabel("00");
     DefaultTableModel dataModel;
@@ -65,15 +75,16 @@ public class CafeBill extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 		contentPane = new JPanel(new BorderLayout());
-		
-		//categoryPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
 		categoryPane = new JPanel();
+		categoryPane.setPreferredSize(new Dimension(200,800));
 		categoryPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		menuExpansionPane = new JPanel();
+		menuExpansionPane.setPreferredSize(new Dimension(200,800));
 		menuExpansionPane.setBorder(BorderFactory.createLineBorder(Color.black));
+		
 		costPane = new JPanel();
+		costPane.setPreferredSize(new Dimension(600,800));
 		costPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		frequentItemsPane = new JPanel();
 		frequentItemsPane.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -208,30 +219,92 @@ public class CafeBill extends JFrame {
 		/*
 		 * Set Layout
 		 */
-		BoxLayout gl_costPane = new BoxLayout(costPane,BoxLayout.PAGE_AXIS);
+		//BoxLayout gl_costPane = new BoxLayout(costPane,BoxLayout.PAGE_AXIS);
+
+		GridBagLayout gl_costPane = new GridBagLayout();
 		costPane.setLayout(gl_costPane);
-
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
 		final String[] columnNames = {"Sr_No","Item", "Quantity","Unit Price","Total Price"};
-	      dataModel = new DefaultTableModel(0,0);
-	      /*
-	      {
+	      dataModel = new DefaultTableModel(0,0){
 	    	  
-	    	  
-			private static final long serialVersionUID = 1L;
-				public String getColumnName(int col) {
-	    	        return columnNames[col].toString();
-	    	    }
+	    	    @Override
+	    	       public boolean isCellEditable(int row, int col) {
+	    	            //Note that the data/cell address is constant,
+	    	            //no matter where the cell appears onscreen.
+	    	            if (col == 2 || col==1) {
+	    	                return true;
+	    	            } else {
+	    	                return false;
+	    	            }
+	    	       }
 
-	          public int getColumnCount() { return 5; }
-	          public int getRowCount() { return 10;}
-	          public Object getValueAt(int row, int col) { return ""; }
+	    	    
+    	  
 	      };
-	      */
+	      
 	     dataModel.setColumnIdentifiers(columnNames);
+	     
 	      JTable table = new JTable(dataModel);
 	      JScrollPane scrollpane = new JScrollPane(table);
 	      table.setFillsViewportHeight(true);
-	      costPane.add(scrollpane);
+	      @SuppressWarnings("serial")
+		Action action = new AbstractAction()
+	      {
+	    	    public void actionPerformed(ActionEvent e)
+	    	    {
+	    	    	if (table.getSelectedColumn() == 2) {
+	    	        TableCellListener tcl = (TableCellListener)e.getSource();
+					Float priceVal =(Float) table.getValueAt(tcl.getRow(), 3);
+					Float newTotalPrice =Float.parseFloat((String)tcl.getNewValue())* priceVal;
+					dataModel.setValueAt(newTotalPrice, tcl.getRow(), 4);
+	    	    	}
+
+	    	    }
+	    	};
+
+    	TableCellListener tcl = new TableCellListener(table, action);
+    	c.gridx = 0;
+    	c.gridy = 0;
+		costPane.add(scrollpane,c);
+		JButton btnDeleteRow = new JButton("Delete Row");
+		btnDeleteRow.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+			        if (table.getSelectedRow() != -1) {
+			            // remove selected row from the model
+		        	dataModel.removeRow(table.getSelectedRow());
+		        }
+				
+				
+			}
+		});
+		JButton btnAddRow = new JButton("Add Row");
+		btnAddRow.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					 if (table.getSelectedRow() != -1) {
+						Object [] data = {"","","","0","",""};
+					//dataModel.setValueAt(100, 1, 1);
+					//dataModel.addRow(data);
+					//dataModel.insertRow(table.getSelectedRow(), data);
+						dataModel.insertRow(table.getSelectedRow()+1, data);
+					 }
+					
+					
+				}
+		});
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weighty = 1;
+		costPane.add(btnDeleteRow,c);
+		c.gridx = 1;
+		c.gridy = 1;
+		costPane.add(btnAddRow,c);
+		c.gridx = 0;
+		c.gridy = 2;
+		costPane.add(lblSubtotal_1,c);
+		c.gridx = 1;
+		c.gridy = 2;
+		costPane.add(lblSubtotal,c);
 
 		JButton btnPrintBill = new JButton("Submit Order");
 		btnPrintBill.addActionListener(new ActionListener() {
@@ -249,8 +322,9 @@ public class CafeBill extends JFrame {
 	*/				
 			}
 		});
-		costPane.add(btnPrintBill);
-		costPane.add(list);
+		c.gridx = 0;
+		c.gridy = 3;
+		costPane.add(btnPrintBill,c);
 	
 	
 	}
@@ -275,7 +349,7 @@ public class CafeBill extends JFrame {
 			JButton btnExpVegSandwich = new JButton();
 	        //ImageIcon imgExpVegSandwich = new ImageIcon("./src/images/veg.png");
 	        //btnExpVegSandwich.setIcon(imgExpVegSandwich);
-				  btnExpVegSandwich.setText("Veg Sandwich");;
+				  btnExpVegSandwich.setText("Veg Sandwich");
 			
 	        btnExpVegSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -346,13 +420,13 @@ public class CafeBill extends JFrame {
 			JButton btnExpCoffee1 = new JButton();
 	      //  ImageIcon imgExpVegSandwich1 = new ImageIcon("./src/images/coffee.png");
 	      //  btnExpCoffee1.setIcon(imgExpVegSandwich1);
-			  btnExpCoffee1.setText("Coffee1");;
+			  btnExpCoffee1.setText("Coffee1");
 	        //btnExpCoffee1.setLabel("Coffee1"); 
 
 			
 	        btnExpCoffee1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Integer [] data = {100,1,1,150,150};
+					Object [] data = {(int)100,(String)"Latte",(int)1,(float)150.0,(float)150.0};
 					//dataModel.setValueAt(100, 1, 1);
 					dataModel.addRow(data);
 					
@@ -362,7 +436,7 @@ public class CafeBill extends JFrame {
 			JButton btnExpCoffee2 = new JButton();
 	    //    ImageIcon imgExpVegSandwich2 = new ImageIcon("./src/images/coffee.png");
 	    //    btnExpCoffee1.setIcon(imgExpVegSandwich2);
-	        btnExpCoffee2.setText("Coffee2");;
+	        btnExpCoffee2.setText("Coffee2");
 	        //btnExpCoffee1.setLabel("Coffee2"); 
 
 			
