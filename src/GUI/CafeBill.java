@@ -52,6 +52,8 @@ public class CafeBill extends JFrame {
     private ArrayList<ArrayList<MenuItem>> menuItems;
     JLabel lblSubtotal_1 = new JLabel("Subtotal");
     final JLabel lblSubtotal = new JLabel("00");
+    final JLabel lblTotal_1 = new JLabel("Total with tax (0.5)");
+    final JLabel lblTotal = new JLabel("00");
     DefaultTableModel dataModel;
 	/**
 	 * Launch the application.
@@ -306,6 +308,13 @@ public class CafeBill extends JFrame {
 		c.gridy = 2;
 		costPane.add(lblSubtotal,c);
 
+		c.gridx = 0;
+		c.gridy = 3;
+		costPane.add(lblTotal_1,c);
+		c.gridx = 1;
+		c.gridy = 3;
+		costPane.add(lblTotal,c);
+
 		JButton btnPrintBill = new JButton("Submit Order");
 		btnPrintBill.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -323,11 +332,88 @@ public class CafeBill extends JFrame {
 			}
 		});
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		costPane.add(btnPrintBill,c);
 	
 	
 	}
+	
+	/*
+	 *  This function will update the billing pannel depending on the item selected
+	 *  The input passed it the name
+	 *  Will need updating if the number of items are increased ..prices changes etc
+	 */
+	
+	
+	public void itemAddedToBill(String item1)
+	{
+		
+		//if (item1 ) // Make sure nul pointer is not passed
+		int id = dataModel.getColumnCount();
+		id = dataModel.getRowCount();
+		int cost = 0;
+		
+		id++;
+								
+		String s1 = new String(Integer.toString(id));
+		
+		
+			switch (item1)
+			{
+			case "veg sandwich":
+				cost = 150 ;
+				
+				break;
+			case "coffee1":
+				cost = 100;
+				
+				break;
+			case "coffee2" :
+				cost =200;
+				break;
+			case "chicken sandwich":
+				cost = 175;
+				break;
+			}	
+			
+			String[] socrates = { s1,  item1, "1", Integer.toString(cost), Float.toString(cost * 1) };
+			dataModel.addRow(socrates);
+			
+		calculateTotal();
+		
+	}
+	/*
+	 *  Calculating the total with tax
+	 *  The amount is .05
+	 * 
+	 */
+	
+	public void calculateTotal()
+	{
+		float totalAmt = 0 , tot; 
+		int iRowCnt, iQty, iNumber, j,k;
+		iRowCnt = dataModel.getRowCount();
+		Object obj;
+		
+		//j = dataModel.findColumn("Quantity");
+		//k = dataModel.findColumn("Unit Price");
+		j  = dataModel.findColumn("Total Price");
+		
+		for (int i=0; i< iRowCnt; i++)
+		{
+		 obj     = 	 dataModel.getValueAt(i, j) ;
+		 tot = Float.parseFloat(obj.toString());
+		 
+		 totalAmt =  totalAmt + tot;  
+		}
+		
+	
+		lblSubtotal.setText(Float.toString(totalAmt));
+		float totAmtWithTax =  (float) (totalAmt + (totalAmt * 0.5));
+		
+		lblTotal.setText (Float.toString(totAmtWithTax));
+	}
+	
 	/*
 	 * Button choice
 	 * Update accordingly
@@ -354,7 +440,7 @@ public class CafeBill extends JFrame {
 	        btnExpVegSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					
+					itemAddedToBill("veg sandwich");
 				}
 			});
 			
@@ -367,7 +453,7 @@ public class CafeBill extends JFrame {
 	        btnExpGrillVegSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					
+					itemAddedToBill("Chicken Sandwich");
 				}
 			});
 
@@ -380,7 +466,8 @@ public class CafeBill extends JFrame {
 	        btnExpChkSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					
+					itemAddedToBill("coffee2");
+				
 				}
 			});
 
@@ -393,7 +480,7 @@ public class CafeBill extends JFrame {
 	        btnExpGrillChkSandwich.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					
+					itemAddedToBill("Grill Chicken");
 				}
 			});
 
@@ -426,9 +513,10 @@ public class CafeBill extends JFrame {
 			
 	        btnExpCoffee1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Object [] data = {(int)100,(String)"Latte",(int)1,(float)150.0,(float)150.0};
+					//Object [] data = {(int)100,(String)"Latte",(int)1,(float)150.0,(float)150.0};
 					//dataModel.setValueAt(100, 1, 1);
-					dataModel.addRow(data);
+	itemAddedToBill("coffee1");
+					//dataModel.addRow(data);
 					
 				}
 			});
@@ -443,7 +531,7 @@ public class CafeBill extends JFrame {
 	        btnExpCoffee2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					
+					itemAddedToBill("coffee2");
 				}
 			});
 
