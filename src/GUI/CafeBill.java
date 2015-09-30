@@ -52,8 +52,15 @@ public class CafeBill extends JFrame {
     private ArrayList<ArrayList<MenuItem>> menuItems;
     JLabel lblSubtotal_1 = new JLabel("Subtotal");
     final JLabel lblSubtotal = new JLabel("00");
-    final JLabel lblTotal_1 = new JLabel("Total with tax (0.5)");
+    final JLabel lblTotal_1 = new JLabel("Total with tax ");
     final JLabel lblTotal = new JLabel("00");
+    final JLabel lblTax1_1 = new JLabel("Tax 1 (0.01)");
+    final JLabel lblTax1 = new JLabel("00");
+    final JLabel lblTax2_1 = new JLabel("Tax 1 (0.02)");
+    final JLabel lblTax2 = new JLabel("00");
+    final JLabel lblTax3_1 = new JLabel("Tax 1 (0.05)");
+    final JLabel lblTax3 = new JLabel("00");
+    
     DefaultTableModel dataModel;
 	/**
 	 * Launch the application.
@@ -310,9 +317,30 @@ public class CafeBill extends JFrame {
 
 		c.gridx = 0;
 		c.gridy = 3;
-		costPane.add(lblTotal_1,c);
+		costPane.add(lblTax1_1,c);
 		c.gridx = 1;
 		c.gridy = 3;
+		costPane.add(lblTax1,c);
+		
+		c.gridx = 0;
+		c.gridy = 4;
+		costPane.add(lblTax2_1,c);
+		c.gridx = 1;
+		c.gridy = 4;
+		costPane.add(lblTax2,c);
+		
+		c.gridx = 0;
+		c.gridy = 5;
+		costPane.add(lblTax3_1,c);
+		c.gridx = 1;
+		c.gridy = 5;
+		costPane.add(lblTax3,c);
+		
+		c.gridx = 0;
+		c.gridy = 6;
+		costPane.add(lblTotal_1,c);
+		c.gridx = 1;
+		c.gridy = 6;
 		costPane.add(lblTotal,c);
 
 		JButton btnPrintBill = new JButton("Submit Order");
@@ -332,7 +360,7 @@ public class CafeBill extends JFrame {
 			}
 		});
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 7;
 		costPane.add(btnPrintBill,c);
 	
 	
@@ -390,7 +418,7 @@ public class CafeBill extends JFrame {
 	
 	public void calculateTotal()
 	{
-		float totalAmt = 0 , tot; 
+		float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ; 
 		int iRowCnt, iQty, iNumber, j,k;
 		iRowCnt = dataModel.getRowCount();
 		Object obj;
@@ -407,10 +435,16 @@ public class CafeBill extends JFrame {
 		 totalAmt =  totalAmt + tot;  
 		}
 		
-	
-		lblSubtotal.setText(Float.toString(totalAmt));
-		float totAmtWithTax =  (float) (totalAmt + (totalAmt * 0.5));
+		ftax1 = (float) (totalAmt * 0.01);
+		ftax2 = (float) (totalAmt * 0.02);
+		ftax3 = (float) (totalAmt * 0.05);
+		totAmtWithTax =  (float) (totalAmt + (totalAmt * 0.5));
 		
+		lblSubtotal.setText(Float.toString(totalAmt));
+		
+		lblTax1.setText(Float.toString(ftax1));
+		lblTax2.setText(Float.toString(ftax2));
+		lblTax3.setText(Float.toString(ftax3));		
 		lblTotal.setText (Float.toString(totAmtWithTax));
 	}
 	

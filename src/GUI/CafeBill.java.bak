@@ -52,7 +52,7 @@ public class CafeBill extends JFrame {
     private ArrayList<ArrayList<MenuItem>> menuItems;
     JLabel lblSubtotal_1 = new JLabel("Subtotal");
     final JLabel lblSubtotal = new JLabel("00");
-    final JLabel lblTotal_1 = new JLabel("Total");
+    final JLabel lblTotal_1 = new JLabel("Total with tax (0.5)");
     final JLabel lblTotal = new JLabel("00");
     DefaultTableModel dataModel;
 	/**
