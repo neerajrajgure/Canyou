@@ -31,6 +31,12 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -49,6 +55,7 @@ public class CafeBill extends JFrame {
     private JList list;
     private DefaultListModel<String> listModel;
     private ArrayList<String> categories;
+    private ArrayList<String> imageIcons;
     private ArrayList<ArrayList<MenuItem>> menuItems;
     JLabel lblSubtotal_1 = new JLabel("Subtotal");
     final JLabel lblSubtotal = new JLabel("00");
@@ -60,6 +67,13 @@ public class CafeBill extends JFrame {
     final JLabel lblTax2 = new JLabel("00");
     final JLabel lblTax3_1 = new JLabel("Tax 1 (0.05)");
     final JLabel lblTax3 = new JLabel("00");
+	private static Connection connect = null;
+	private static Statement statement = null;
+	private static PreparedStatement preparedStatement = null;
+	private static ResultSet resultSet = null;
+	private int index;
+	private int index2;
+
     
     DefaultTableModel dataModel;
 	/**
@@ -69,6 +83,7 @@ public class CafeBill extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					CafeBill frame = new CafeBill();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -77,12 +92,49 @@ public class CafeBill extends JFrame {
 			}
 		});
 	}
+	public void connectDatabase(){
+        try {
+			Class.forName("com.mysql.jdbc.Driver");
+	        // Setup the connection with the DB
+	        connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	public ResultSet readDBMS(String query){
+	    try {
+	        // This will load the MySQL driver, each DB has its own driver
+	        preparedStatement = connect.prepareStatement(query);
+	        resultSet = preparedStatement.executeQuery();
+	        
+
+	        //displayResultSet(resultSet);
+	      } catch (Exception e) {
+	       e.printStackTrace();
+	      } 
+	    return resultSet;
+
+	}
 
 	/**
 	 * Create the frame.
-	 */	public CafeBill() {
+	 * 
+	 */	
+	public CafeBill() {
+		connectDatabase();
+		categories = new ArrayList<String>();
+		imageIcons = new ArrayList<String>();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
+		
 		contentPane = new JPanel(new BorderLayout());
 		setContentPane(contentPane);
 		categoryPane = new JPanel();
@@ -101,10 +153,75 @@ public class CafeBill extends JFrame {
 		contentPane.add(menuExpansionPane, BorderLayout.CENTER);
 		contentPane.add(costPane, BorderLayout.EAST);
 		contentPane.add(frequentItemsPane, BorderLayout.SOUTH);
+		/*
+		 * Read Categories and Items from Database
+		 */
+		
+		ResultSet r = readDBMS("Select categoryName, imageIcon from HMS.categories");
+	    try {
+			while (r.next()) {
+			      String categoryName = r.getString("categoryName");
+			      String imageIcon = r.getString("imageIcon");
+			      categories.add(categoryName);
+			      imageIcons.add(imageIcon);
+			    }
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			
+		}finally{
+			try {
+				r.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		
+		/*
+		categories.add("Coffee");
+		categories.add("Sandwich");
+		imageIcons.add("./src/images/Coffee.png");
+		imageIcons.add("./src/images/sandwich.png");
+		*/
+		/*
+		 * Read Items from Database
+		 */
+		menuItems = new ArrayList<ArrayList<MenuItem>>();
+	    for(int i = 0;i<categories.size();i++){
+			ResultSet r1 = readDBMS("Select itemId, itemName, price from item I , categories C where I.categoryId = C.categoryId and categoryName = '"+categories.get(i)+"'");
+			ArrayList<MenuItem> subcategories = new ArrayList<MenuItem>();
+			
+			try {
+				while (r1.next()) {
+				      int itemNum = r1.getInt("itemId");
+				      String itemName = r1.getString("itemName");
+				      Float price = r1.getFloat("price");
+				      MenuItem m = new MenuItem();
+				      m.itemNum = itemNum;
+				      m.itemName = itemName;
+				      m.price = price;
+				      subcategories.add(m);
+				    }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+				try {
+					r1.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			menuItems.add(subcategories);
+	    }
+	    
 		
 		
+
 		final JTextArea textArea = new JTextArea();
 		
 		listModel = new DefaultListModel();
@@ -112,40 +229,7 @@ public class CafeBill extends JFrame {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         setCategoryPane();
-        //list.addListSelectionListener((ListSelectionListener) this);
-
-		//JLabel lblNewLabel_4 = new JLabel("Total Price");
-		
-		
-		/*
-		 * This is the common action for every button click
-		 * Add an entry to the billing list and recalculate the subtotal.
-		 * 
-		 * 
-		 * */
-
-
-		
-		//Change the index to number of categories in the database
-		
-		
-		
-		//GroupLayout gl_categoryPane = new GroupLayout(categoryPane);
-		//GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		/*
-		gl_categoryPane.setHorizontalGroup(gl_categoryPane.createParallelGroup(Alignment.TRAILING)
-				.addComponent(btnCtgCoffee)
-				.addGap(18)
-				.addComponent(btnCtgSandwich)
-				);
-		gl_categoryPane.setVerticalGroup(gl_categoryPane.createSequentialGroup()
-				.addComponent(btnCtgCoffee,GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
-				.addGap(18)
-				.addComponent(btnCtgSandwich,GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
-				);
-	*/
-		//setMenuExpansionPane();
-		setCostPane();
+ 		setCostPane();
 		
 		
 		//contentPane.setLayout(gl_contentPane);
@@ -154,76 +238,60 @@ public class CafeBill extends JFrame {
 		 /*
 		  * Set Layout
 		  */
- 			GridLayout categoryLayout = new GridLayout(4,1); // Change Hardcoded value
+ 			GridLayout categoryLayout = new GridLayout(categories.size(),1);
  			
  			categoryPane.setLayout(categoryLayout);
-		 
-			JButton btnCtgCoffee = new JButton();
-	        ImageIcon img = new ImageIcon("./src/images/Coffee.png");
-	        btnCtgCoffee.setIcon(img);
+ 			//Dynamically Add Buttons
+ 			
+		    for(index=0;index<categories.size();index++){
+		    	String b = categories.get(index);
+				JButton btn= new JButton();
+				btn.setName(b);
+		        ImageIcon img = new ImageIcon(imageIcons.get(index));
+		        btn.setIcon(img);
+				btn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//setMenuExpansionPaneForCoffee();
+						//System.out.println(menuItems.get(menuItems.indexOf(btn.getName())));
+						System.out.println(btn.getName());
+						ArrayList<MenuItem> expandedMenu = menuItems.get(categories.indexOf(btn.getName()));
+						setMenuExpansionPane(expandedMenu);
 
-			
-			btnCtgCoffee.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-//					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
-//			        btnCtgCoffee.setIcon(img1);
-			        
-					setMenuExpansionPaneForCoffee();
-				/*
-					textArea.append("Cheese Burger  Rs 150 \n");
-					listModel.addElement("Cheese Burger 1 Rs.150 Rs.150\n");
-					float subTotal;
-					String tempStr;
-					 
-						tempStr = lblSubtotal.getText();
-						subTotal = Float.parseFloat(tempStr);
-						subTotal += 150;
-						lblSubtotal.setText(Float.toString(subTotal) );
-						*/
-					
-				}
-			});
-			
-			JButton btnCtgSandwich = new JButton();
-	        ImageIcon imgSandwitch = new ImageIcon("./src/images/Sandwich.png");
-	        btnCtgSandwich.setIcon(imgSandwitch);
-	        
-			JButton btnCtgBurger = new JButton();
-	        ImageIcon imgBurger = new ImageIcon("./src/images/Burger.png");
-	        btnCtgBurger.setIcon(imgBurger);
+						
+					}
+				});
+				categoryPane.add(btn);
 
-			btnCtgSandwich.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-//					ImageIcon img1 = new ImageIcon("./src/images/chicken.png");
-//			        btnCtgSandwich.setIcon(img1);
-			        
-					setMenuExpansionPaneForSandwich();
-					
-				/*
-					textArea.append("Cheese Burger  Rs 150 \n");
-					listModel.addElement("Cheese Burger 1 Rs.150 Rs.150\n");
-					float subTotal;
-					String tempStr;
-					 
-						tempStr = lblSubtotal.getText();
-						subTotal = Float.parseFloat(tempStr);
-						subTotal += 150;
-						lblSubtotal.setText(Float.toString(subTotal) );
-						*/
-					
-				}
-			});
+		    }
 			
-			JButton btnCtgSoftDrink = new JButton();
-	        ImageIcon imgSoftDrink = new ImageIcon("./src/images/SoftDrink.png");
-	        btnCtgSoftDrink.setIcon(imgSoftDrink);
-			categoryPane.add(btnCtgCoffee);
-			categoryPane.add(btnCtgSoftDrink);
-			categoryPane.add(btnCtgSandwich);
-			categoryPane.add(btnCtgBurger);
 
 	 }
+	public void setMenuExpansionPane(ArrayList<MenuItem> expandedMenu ){
+		 /*
+		  * Set Layout
+		  */
+		GridLayout subcategoryLayout = new GridLayout(expandedMenu.size(),2);
+		menuExpansionPane.removeAll();
+		menuExpansionPane.updateUI();
+		menuExpansionPane.setLayout(subcategoryLayout);
+	    for(index2=0;index2<expandedMenu.size();index2++){
+	    	String item = expandedMenu.get(index2).itemName;
+			JButton btn= new JButton(item);
+			btn.setText(item);
+			btn.setName(Integer.toString(index2));
+			btn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//itemAddedToBill(item);
+					String[] row = { Integer.toString(expandedMenu.get(Integer.parseInt(btn.getName())).itemNum),  item, "1", Float.toString(expandedMenu.get(Integer.parseInt(btn.getName())).price), Float.toString(expandedMenu.get(Integer.parseInt(btn.getName())) .price)};
+					dataModel.addRow(row);
+					calculateTotal();
+				}
+			});
+			menuExpansionPane.add(btn);
+
+	    }
+	}
+
 	public void setCostPane(){
 		/*
 		 * Set Layout
@@ -264,9 +332,10 @@ public class CafeBill extends JFrame {
 	    	    {
 	    	    	if (table.getSelectedColumn() == 2) {
 	    	        TableCellListener tcl = (TableCellListener)e.getSource();
-					Float priceVal =(Float) table.getValueAt(tcl.getRow(), 3);
+					Float priceVal =Float.parseFloat((String) table.getValueAt(tcl.getRow(), 3));
 					Float newTotalPrice =Float.parseFloat((String)tcl.getNewValue())* priceVal;
 					dataModel.setValueAt(newTotalPrice, tcl.getRow(), 4);
+					calculateTotal();
 	    	    	}
 
 	    	    }
@@ -282,6 +351,7 @@ public class CafeBill extends JFrame {
 			        if (table.getSelectedRow() != -1) {
 			            // remove selected row from the model
 		        	dataModel.removeRow(table.getSelectedRow());
+		        	calculateTotal();
 		        }
 				
 				
@@ -291,7 +361,7 @@ public class CafeBill extends JFrame {
 		btnAddRow.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					 if (table.getSelectedRow() != -1) {
-						Object [] data = {"","","","0","",""};
+						Object [] data = {"","","0","0","",""};
 					//dataModel.setValueAt(100, 1, 1);
 					//dataModel.addRow(data);
 					//dataModel.insertRow(table.getSelectedRow(), data);
@@ -372,7 +442,7 @@ public class CafeBill extends JFrame {
 	 *  Will need updating if the number of items are increased ..prices changes etc
 	 */
 	
-	
+/*	
 	public void itemAddedToBill(String item1)
 	{
 		
@@ -410,6 +480,7 @@ public class CafeBill extends JFrame {
 		calculateTotal();
 		
 	}
+	*/
 	/*
 	 *  Calculating the total with tax
 	 *  The amount is .05
@@ -430,6 +501,10 @@ public class CafeBill extends JFrame {
 		for (int i=0; i< iRowCnt; i++)
 		{
 		 obj     = 	 dataModel.getValueAt(i, j) ;
+		 String quant =  obj.toString();
+		 if(quant.equals("") ){
+			 continue;
+		 }
 		 tot = Float.parseFloat(obj.toString());
 		 
 		 totalAmt =  totalAmt + tot;  
@@ -454,10 +529,9 @@ public class CafeBill extends JFrame {
 	 * 
 	 * 
 	 * */
+	
+	/*
 	public void setMenuExpansionPaneForSandwich(){
-		 /*
-		  * Set Layout
-		  */
 		//ImageIcon img1 = new ImageIcon("./src/images/Coffee.png");
         //btnCtgSandwich.setIcon(img1);
         
@@ -524,12 +598,9 @@ public class CafeBill extends JFrame {
 	        
 
 	 }
-
-
+*/
+/*
 	public void setMenuExpansionPaneForCoffee(){
-		 /*
-		  * Set Layout
-		  */
 		//ImageIcon img1 = new ImageIcon("./src/images/Coffee.png");
        //btnCtgSandwich.setIcon(img1);
        
@@ -575,5 +646,6 @@ public class CafeBill extends JFrame {
 	        
 
 	 }
+*/
 
 }
