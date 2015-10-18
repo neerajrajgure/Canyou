@@ -21,14 +21,18 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -39,11 +43,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 // import com.jgoodies.forms.factories.DefaultComponentFactory;
 import javax.swing.JTextArea;
-
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 public class CafeBill extends JFrame {
 
@@ -73,9 +80,14 @@ public class CafeBill extends JFrame {
 	private static ResultSet resultSet = null;
 	private int index;
 	private int index2;
-
+	String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
+    " 5 Item Five" };
+	private JComboBox<String> cExtraItem;
+	//private ComboBoxEditor<String> cExtraItem1; 
     
     DefaultTableModel dataModel;
+    
+    JTableX table ;
 	/**
 	 * Launch the application.
 	 */
@@ -322,9 +334,14 @@ public class CafeBill extends JFrame {
 	      
 	     dataModel.setColumnIdentifiers(columnNames);
 	     
-	      JTable table = new JTable(dataModel);
+	      //JTable table = new JTable(dataModel);  
+	     // Trying something with the JtableX class to have cell editor for each column cell
+	     
+//	     JTableX table = new JTable(dataModel);
+	     table = new JTableX(dataModel);
 	      JScrollPane scrollpane = new JScrollPane(table);
 	      table.setFillsViewportHeight(true);
+	      addRowEditor();
 	      @SuppressWarnings("serial")
 		Action action = new AbstractAction()
 	      {
@@ -350,6 +367,7 @@ public class CafeBill extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 			        if (table.getSelectedRow() != -1) {
 			            // remove selected row from the model
+			        	System.out.println("Deleting row number #### " + table.getSelectedRowCount()); 	
 		        	dataModel.removeRow(table.getSelectedRow());
 		        	calculateTotal();
 		        }
@@ -360,12 +378,26 @@ public class CafeBill extends JFrame {
 		JButton btnAddRow = new JButton("Add Row");
 		btnAddRow.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					 if (table.getSelectedRow() != -1) {
-						Object [] data = {"","","0","0","",""};
+					int selRow = 0;
+					selRow = table.getSelectedRow();
+					 if (selRow != -1) {
+						Object [] data = {"","","0","0","","0.0"};
 					//dataModel.setValueAt(100, 1, 1);
 					//dataModel.addRow(data);
 					//dataModel.insertRow(table.getSelectedRow(), data);
-						dataModel.insertRow(table.getSelectedRow()+1, data);
+						int col=0;
+						dataModel.insertRow(selRow+1, data);
+						//enListExtraChoices();
+						TableColumn cm = table.getColumnModel().getColumn(1); //hard code value
+						//cExtraItem = new JComboBox<>(ExtraChoiceCombo);
+						
+						//This is wworking combo ££££
+						//cm.setCellEditor(new MyComboBoxEditor(ExtraChoiceCombo));
+						//cm.setCellRenderer(new MyComboBoxRenderer(ExtraChoiceCombo));
+						//This is wworking ££££
+						//col.setCellRenderer(new MyComboBoxRenderer(values));
+				//		col.setCellEditor(new MyComboBoxEditor(values));
+		//				cm.setCellEditor(cellEditor);
 					 }
 					
 					
@@ -434,6 +466,22 @@ public class CafeBill extends JFrame {
 		costPane.add(btnPrintBill,c);
 	
 	
+	}
+	
+	
+	/*
+	 * 
+	 */
+	public void enListExtraChoices()
+	
+	{
+		cExtraItem = new JComboBox<>(ExtraChoiceCombo);
+		cExtraItem.enable();
+		//cExtraItem.add(ExtraChoiceCombo);
+		
+		
+		
+		
 	}
 	
 	/*
@@ -523,6 +571,37 @@ public class CafeBill extends JFrame {
 		lblTotal.setText (Float.toString(totAmtWithTax));
 	}
 	
+	/*
+	 * 
+	 *Seema
+	 *In this function we have set the column editor and renderor to a text editor or a combobox editor
+	 *Right now by default for column 1 thi is in effect
+	 *Also need to find when to add the combobox 
+	 * */
+public void addRowEditor()
+{
+ //   table = new JTableX(model);
+   // table.setRowSelectionAllowed(false);
+   // table.setColumnSelectionAllowed(false);
+    // create a RowEditorModel... this is used to hold the extra
+    // information that is needed to deal with row specific editors
+    RowEditorModel rm = new RowEditorModel();
+    // tell the JTableX which RowEditorModel we are using
+    table.setRowEditorModel(rm);
+    // create a new JComboBox and DefaultCellEditor to use in the
+    // JTableX column
+    JComboBox<String> cb = new JComboBox(ExtraChoiceCombo);
+    DefaultCellEditor ed = new DefaultCellEditor(cb);
+    // tell the RowEditorModel to use ed for row 1
+    rm.addEditorForRow(1,ed);
+    // create a new JComboBox and editor for a different row
+    //JTextPane tp = new JTextPane();
+    //ed = (DefaultCellEditor)new TextAreaCellRenderer(tp);
+    
+    TextAreaCellRenderer txtedtr = new TextAreaCellRenderer();
+    // inform the RowEditorMode of the situation
+    rm.addEditorForRow(2,txtedtr);
+}
 	/*
 	 * Button choice
 	 * Update accordingly

@@ -1,8 +1,12 @@
 package GUI;
 
+/*
+ * Seema : Making the members public
+ * */
+
 public class MenuItem {
-	private int itemNum;
-	private String itemName;
-	private float price; 
+	public int itemNum;
+	public String itemName;
+	public float price; 
 
 }

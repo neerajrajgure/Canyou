@@ -164,6 +164,7 @@ public class TableCellListener implements PropertyChangeListener, Runnable
 				tcl,
 				ActionEvent.ACTION_PERFORMED,
 				"");
+			System.out.println("TableCellListener : value of " + "  Row=" + getRow() +" col=" + getColumn() + "   &&& " + table.getValueAt(getRow(),1).toString());
 			action.actionPerformed(event);
 		}
 	}
