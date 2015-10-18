@@ -245,7 +245,7 @@ public class CafeBill extends JFrame {
  			
 		    for(index=0;index<categories.size();index++){
 		    	String b = categories.get(index);
-				JButton btn= new JButton();
+				final JButton btn= new JButton();
 				btn.setName(b);
 		        ImageIcon img = new ImageIcon(imageIcons.get(index));
 		        btn.setIcon(img);
@@ -266,7 +266,7 @@ public class CafeBill extends JFrame {
 			
 
 	 }
-	public void setMenuExpansionPane(ArrayList<MenuItem> expandedMenu ){
+	public void setMenuExpansionPane(final ArrayList<MenuItem> expandedMenu ){
 		 /*
 		  * Set Layout
 		  */
@@ -275,8 +275,8 @@ public class CafeBill extends JFrame {
 		menuExpansionPane.updateUI();
 		menuExpansionPane.setLayout(subcategoryLayout);
 	    for(index2=0;index2<expandedMenu.size();index2++){
-	    	String item = expandedMenu.get(index2).itemName;
-			JButton btn= new JButton(item);
+	    	final String item = expandedMenu.get(index2).itemName;
+			final JButton btn= new JButton(item);
 			btn.setText(item);
 			btn.setName(Integer.toString(index2));
 			btn.addActionListener(new ActionListener() {
@@ -322,7 +322,7 @@ public class CafeBill extends JFrame {
 	      
 	     dataModel.setColumnIdentifiers(columnNames);
 	     
-	      JTable table = new JTable(dataModel);
+	      final JTable table = new JTable(dataModel);
 	      JScrollPane scrollpane = new JScrollPane(table);
 	      table.setFillsViewportHeight(true);
 	      @SuppressWarnings("serial")
