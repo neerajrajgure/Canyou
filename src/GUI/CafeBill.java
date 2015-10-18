@@ -387,10 +387,10 @@ public class CafeBill extends JFrame {
 						TableColumn cm = table.getColumnModel().getColumn(1); //hard code value
 						//cExtraItem = new JComboBox<>(ExtraChoiceCombo);
 						
-						//This is wworking combo ££££
+						//This is wworking combo
 						//cm.setCellEditor(new MyComboBoxEditor(ExtraChoiceCombo));
 						//cm.setCellRenderer(new MyComboBoxRenderer(ExtraChoiceCombo));
-						//This is wworking ££££
+						//This is wworking
 						//col.setCellRenderer(new MyComboBoxRenderer(values));
 				//		col.setCellEditor(new MyComboBoxEditor(values));
 		//				cm.setCellEditor(cellEditor);

@@ -17,10 +17,10 @@ public class ExtraChoiceTableCellRenderer implements TableCellRenderer {
 
  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
  {
-//        if (value instanceof Country) {
-//           Country country = (Country) value;
-//          setText(country.getName());
-//     }
+//if (value instanceof Country) {
+//Country country = (Country) value;
+//setText(country.getName());
+//}
 
 	 if (isSelected) {
 		 //setBackground(table.getSelectionBackground());
@@ -30,8 +30,9 @@ public class ExtraChoiceTableCellRenderer implements TableCellRenderer {
 
 
 //	 Component c1 = new Component();
- return this;
-//  }
+// return this;
+	 return null;
+//}
  }
 }
 
