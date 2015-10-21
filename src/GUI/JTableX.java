@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import java.util.Vector;
-
+//Seema: Remove this file code not used 19-0ct-2015
  public class JTableX extends JTable
  {
      protected RowEditorModel rm;
@@ -79,7 +79,7 @@ import java.util.Vector;
          {
              //tmpEditor = rm.getEditor(row);
              // ££££
-             if ((row <8 ) && (col == 1))
+             if ((row < 8 ) && (col == 1))
              {
             	 tmpEditor = rm.getEditor(1);
              System.out.println(" getCellEditor : In the if condition " + "  Row=" + row +" col=" + col  + "   &&&&& " );
