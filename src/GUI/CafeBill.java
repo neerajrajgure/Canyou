@@ -470,8 +470,22 @@ public class CafeBill extends JFrame {
 			}
 		});
 		c.gridx = 0;
-		c.gridy = 7;
+		c.gridy = 8;
 		costPane.add(btnPrintBill,c);
+        JButton btnClear = new JButton("Clear Order");
+        btnClear.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
+                {
+                    System.out.println(dataModel.getRowCount());
+                    dataModel.removeRow(i);
+                    calculateTotal();
+                }
+            }
+        });
+        c.gridx = 0;
+        c.gridy = 7;
+        costPane.add(btnClear,c);
 	
 	
 	}
