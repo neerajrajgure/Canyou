@@ -483,11 +483,11 @@ public class CafeBill extends JFrame {
                         calculateTotal();
                     }
                 }
-	    }
-	});
-	c.gridx = 0;
-	c.gridy = 7;
-	costPane.add(btnClear,c);
+	    });
+	    c.gridx = 0;
+	    c.gridy = 7;
+	    costPane.add(btnClear,c);
+        }
 
 	/*
 	 *  This function will update the billing pannel depending on the item selected
