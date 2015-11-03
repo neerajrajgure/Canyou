@@ -32,9 +32,13 @@ INSERT into categories VALUES(104, 'Waffle', './src/images/Waffle.png' );
 INSERT into categories VALUES(105, 'Cake', './src/images/Cake.png' );
 
  
-insert into item (itemId, itemName, categoryId, price) values (1001, 'Expresso', 101, 65.00);
-insert into item (itemId, itemName, categoryId, price) values (1002, 'Latte (Hot) - Small', 101, 65.00);
-insert into item (itemId, itemName, categoryId, price) values (1003, 'Latte (Hot) - Large', 101, 80.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 50.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Small - Cafe Latte (Hot)', 101, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Regular - Cafe Latte (Hot)', 101, 65.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1004, 'Small - Cappuccino (Hot)', 101, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1005, 'Regular - Cappuccino (Hot)', 101, 65.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1006, 'Small - Flat White', 101, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1007, 'Regular - Flat White', 101, 65.00);
 
 
 insert into item (itemId, itemName, categoryId, price) values (1026, 'Ice Latte - Regular', 102, 70.00);
