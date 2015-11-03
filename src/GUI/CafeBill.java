@@ -49,6 +49,7 @@ import javax.swing.JTable;
 // import com.jgoodies.forms.factories.DefaultComponentFactory;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -146,19 +147,19 @@ public class CafeBill extends JFrame {
 		categories = new ArrayList<String>();
 		imageIcons = new ArrayList<String>();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 800);
+		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		
 		contentPane = new JPanel(new BorderLayout());
 		setContentPane(contentPane);
 		categoryPane = new JPanel();
-		categoryPane.setPreferredSize(new Dimension(200,800));
+		categoryPane.setPreferredSize(new Dimension(200,400));
 		categoryPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		menuExpansionPane = new JPanel();
-		menuExpansionPane.setPreferredSize(new Dimension(200,800));
+		menuExpansionPane.setPreferredSize(new Dimension(200,400));
 		menuExpansionPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		costPane = new JPanel();
-		costPane.setPreferredSize(new Dimension(600,800));
+		costPane.setPreferredSize(new Dimension(700,700));
 		costPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		frequentItemsPane = new JPanel();
 		frequentItemsPane.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -348,6 +349,13 @@ public class CafeBill extends JFrame {
 	     
 	      JScrollPane scrollpane = new JScrollPane(table);
 	      table.setFillsViewportHeight(true);
+
+	      TableColumnModel columnModel = table.getColumnModel();
+	      columnModel.getColumn(0).setPreferredWidth(100);
+	      columnModel.getColumn(1).setPreferredWidth(400);
+	      columnModel.getColumn(2).setPreferredWidth(100);
+	      columnModel.getColumn(3).setPreferredWidth(100);
+	      columnModel.getColumn(4).setPreferredWidth(100);
 	
 	      @SuppressWarnings("serial")
 		Action action = new AbstractAction()
