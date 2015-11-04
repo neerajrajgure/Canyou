@@ -608,7 +608,7 @@ public class CafeBill extends JFrame {
 		ftax1 = (float) (totalAmt * 0.01);
 		ftax2 = (float) (totalAmt * 0.02);
 		ftax3 = (float) (totalAmt * 0.05);
-		totAmtWithTax =  (float) (totalAmt + (totalAmt * 0.5));
+		totAmtWithTax =  (float) (totalAmt + ftax1 + ftax2 + ftax3);
 		
 		lblSubtotal.setText(Float.toString(totalAmt));
 		

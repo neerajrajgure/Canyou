@@ -83,8 +83,8 @@ class TextAreaCellRenderer extends AbstractCellEditor implements
 TableCellRenderer,TableCellEditor {
 private JTextPane textPane;
 private JScrollPane scroll;
-private String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
-" 5 Item Five" };
+private String ExtraChoiceCombo[] = { "Extra Cheese", "Extra Coffee shot", "Extra Sauce", "Hard Toasted",
+"Extra Cream" };
 //private JComboBox<String> cExtraItem;
 
 
@@ -102,8 +102,8 @@ public Object getCellEditorValue() {
 //this is what makes it work for the for the column
 
 
-public Component getTableCellRendererComponent(JTable table,
-     Object value, boolean isSelected, boolean hasFocus, int row, int column){
+public Component getTableCellRendererComponent(final JTable table,
+     Object value, boolean isSelected, boolean hasFocus, final int row, int column){
 		//Seema : Cehck if the row is the newly added row.
 	    // if yes it has to be a combo box else its editable
 	    //As we do not need any scroll value
