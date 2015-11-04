@@ -100,6 +100,7 @@ public class CafeBill extends JFrame {
 					
 					CafeBill frame = new CafeBill();
 					frame.setVisible(true);
+					frame.pack();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -152,14 +153,14 @@ public class CafeBill extends JFrame {
 		contentPane = new JPanel(new BorderLayout());
 		setContentPane(contentPane);
 		categoryPane = new JPanel();
-		categoryPane.setPreferredSize(new Dimension(200,400));
+		categoryPane.setPreferredSize(new Dimension(200,800));
 		categoryPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		menuExpansionPane = new JPanel();
-		menuExpansionPane.setPreferredSize(new Dimension(200,400));
+		menuExpansionPane.setPreferredSize(new Dimension(200,800));
 		menuExpansionPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		costPane = new JPanel();
-		costPane.setPreferredSize(new Dimension(700,700));
+		costPane.setPreferredSize(new Dimension(800,800));
 		costPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		frequentItemsPane = new JPanel();
 		frequentItemsPane.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -284,7 +285,7 @@ public class CafeBill extends JFrame {
 		 /*
 		  * Set Layout
 		  */
-		GridLayout subcategoryLayout = new GridLayout(expandedMenu.size(),2);
+		GridLayout subcategoryLayout = new GridLayout(expandedMenu.size(),1);
 		menuExpansionPane.removeAll();
 		menuExpansionPane.updateUI();
 		menuExpansionPane.setLayout(subcategoryLayout);
@@ -292,6 +293,7 @@ public class CafeBill extends JFrame {
 	    	final String item = expandedMenu.get(index2).itemName;
 			final JButton btn= new JButton(item);
 			btn.setText(item);
+			btn.setPreferredSize(new Dimension(100,40));
 			btn.setName(Integer.toString(index2));
 			btn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -304,6 +306,7 @@ public class CafeBill extends JFrame {
 			menuExpansionPane.add(btn);
 
 	    }
+	    //pack();
 	}
 
 	public void setCostPane(){
@@ -348,14 +351,15 @@ public class CafeBill extends JFrame {
 //	      addRowEditor(); //CHANGE
 	     
 	      JScrollPane scrollpane = new JScrollPane(table);
+	      table.setPreferredScrollableViewportSize(new Dimension(700,300));
 	      table.setFillsViewportHeight(true);
 
 	      TableColumnModel columnModel = table.getColumnModel();
 	      columnModel.getColumn(0).setPreferredWidth(100);
-	      columnModel.getColumn(1).setPreferredWidth(400);
+	      columnModel.getColumn(1).setPreferredWidth(300);
 	      columnModel.getColumn(2).setPreferredWidth(100);
 	      columnModel.getColumn(3).setPreferredWidth(100);
-	      columnModel.getColumn(4).setPreferredWidth(100);
+	      columnModel.getColumn(4).setPreferredWidth(200);
 	
 	      @SuppressWarnings("serial")
 		Action action = new AbstractAction()
@@ -383,8 +387,10 @@ public class CafeBill extends JFrame {
     	
 		c.gridx = 0;
     	c.gridy = 0;
+    	c.gridwidth = 5;
 		costPane.add(scrollpane,c);
 		JButton btnDeleteRow = new JButton("Delete Row");
+		btnDeleteRow.setSize(100, 100);
 		btnDeleteRow.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 			        if (table.getSelectedRow() != -1) {
@@ -398,6 +404,7 @@ public class CafeBill extends JFrame {
 			}
 		});
 		JButton btnAddRow = new JButton("Add Row");
+		btnAddRow.setSize(100, 100);
 		btnAddRow.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int selRow = 0;
@@ -419,45 +426,52 @@ public class CafeBill extends JFrame {
 					
 				}
 		});
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 1;
 		c.weighty = 1;
+		c.gridwidth = 1;
 		costPane.add(btnDeleteRow,c);
-		c.gridx = 1;
+		c.gridx = 3;
 		c.gridy = 1;
+		c.gridwidth = 1;
+		//c.weightx =1;
 		costPane.add(btnAddRow,c);
-		c.gridx = 0;
+		c.gridx =1;
 		c.gridy = 2;
+		c.gridwidth = 1;
 		costPane.add(lblSubtotal_1,c);
-		c.gridx = 1;
+		c.gridx = 3;
 		c.gridy = 2;
+		c.gridwidth = 1;
 		costPane.add(lblSubtotal,c);
 
-		c.gridx = 0;
-		c.gridy = 3;
-		costPane.add(lblTax1_1,c);
 		c.gridx = 1;
 		c.gridy = 3;
+		c.gridwidth = 1;
+		costPane.add(lblTax1_1,c);
+		c.gridx = 3;
+		c.gridy = 3;
+		c.gridwidth = 1;
 		costPane.add(lblTax1,c);
 		
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 4;
 		costPane.add(lblTax2_1,c);
-		c.gridx = 1;
+		c.gridx = 3;
 		c.gridy = 4;
 		costPane.add(lblTax2,c);
 		
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 5;
 		costPane.add(lblTax3_1,c);
-		c.gridx = 1;
+		c.gridx = 3;
 		c.gridy = 5;
 		costPane.add(lblTax3,c);
 		
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 6;
 		costPane.add(lblTotal_1,c);
-		c.gridx = 1;
+		c.gridx = 3;
 		c.gridy = 6;
 		costPane.add(lblTotal,c);
 
@@ -477,11 +491,12 @@ public class CafeBill extends JFrame {
 	*/				
 			}
 		});
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 8;
 		costPane.add(btnPrintBill,c);
 
             JButton btnClear = new JButton("Clear Order");
+            btnClear.setSize(100, 100);
             btnClear.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     for(int i=table.getModel().getRowCount()-1;i>=0;i--)
@@ -492,7 +507,7 @@ public class CafeBill extends JFrame {
                     }
                 }
 	    });
-	    c.gridx = 0;
+	    c.gridx = 1;
 	    c.gridy = 7;
 	    costPane.add(btnClear,c);
         }
