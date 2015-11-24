@@ -10,20 +10,21 @@ create table customer(cid integer, Name varchar(35), Address varchar(35), phonen
 
 # create table transactiontypes(transtypeid int, transdesc varchar(10));
 # CREATE TABLE transactiontypes(transtypeid int AUTO_INCREMENT PRIMARY KEY,transdesc varchar(10));
-CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(10));
+CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(20));
 
+create table menu_order(oid int PRIMARY KEY, cid int,orderDate Date, transtypeid int, transtypeinfo varchar(20), FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid));
 
-create table menu_order(oid int, cid int,orderDate Date, transtypeid int, transtypeinfo varchar(20), FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid));
+create table billing_info(oid int ,itemId int references item(itemId), item_instruction varchar(35),FOREIGN KEY (oid) REFERENCES menu_order(oid ));
 
 create table item(itemId integer, itemName varchar(35),categoryId int NOT NULL references categories(categoryId), price float);
 
-create table billing_info(transaction_id int,itemId int references item(itemId), item_instruction varchar(35) );
-
 create table categories(categoryId int, categoryName varchar(35), imageIcon varchar(50));
 
-create table tax(tax1 float, tax2 float, tax3 float);
+create table tax(effectivedate Date, tax1 float, tax2 float, tax3 float, tax4 float, tax5 float);
 
 ----
+INSERT INTO transactiontypes WHERE (transtypeid, transdesc) VALUES (51, 'Credit Card');
+INSERT INTO transactiontypes WHERE (transtypeid, transdesc) VALUES (51, 'Cash');
 
 insert into categories values(101, 'Hot Beverage','./src/images/HotBeverage.png' );
 insert into categories values(102, 'Cold Beverage','./src/images/ColdBeverage.png' );
@@ -31,7 +32,7 @@ INSERT into categories VALUES(103, 'Sandwich', './src/images/Sandwich.png' );
 INSERT into categories VALUES(104, 'Waffle', './src/images/Waffle.png' );
 INSERT into categories VALUES(105, 'Cake', './src/images/Cake.png' );
 
- 
+
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 50.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Small - Cafe Latte (Hot)', 101, 55.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Regular - Cafe Latte (Hot)', 101, 65.00);
