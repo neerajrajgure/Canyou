@@ -11,46 +11,31 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ComboBoxEditor;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.JComboBox;
-
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
-// import com.jgoodies.forms.factories.DefaultComponentFactory;
-import javax.swing.JTextArea;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 public class CafeBill extends JFrame {
@@ -144,7 +129,10 @@ public class CafeBill extends JFrame {
 	 * 
 	 */	
 	public CafeBill() {
+	    CouponDiscount cd= new CouponDiscount(this);
 		connectDatabase();
+        setTitle("The Hive -Coffee & Fun Serverd Togethers");//Title name
+        setIconImage(Toolkit.getDefaultToolkit().getImage(("./src/images/THE_HIVE_Logo.jpg"))); //Title logo
 		categories = new ArrayList<String>();
 		imageIcons = new ArrayList<String>();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -477,10 +465,38 @@ public class CafeBill extends JFrame {
 
 		JButton btnPrintBill = new JButton("Submit Order");
 		btnPrintBill.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-	/*			
-				textArea.append("Cheese Burger  Rs 150 \n");
+			public void actionPerformed(ActionEvent e) {int count=table.getRowCount();
+            //ResultSet resultset=null;
+            try {
+      Class.forName("com.mysql.jdbc.Driver");
+     // Setup the connection with the DB
+    connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
+    String query="Insert into menu_order(oid,cid,orderDate,transtypeid,transtypeinfo) values (?,?,?,?,?)";
+    preparedStatement=connect.prepareStatement(query);
+    for(int i=0;i<count;i++)
+        {
+             int OId= (int) table.getValueAt(i, 1);
+             int CId= (int) table.getValueAt(i, 2);
+             String orderDate=(String) table.getValueAt(i, 3);
+             int Transtypeid=(int) table.getValueAt(i, 4);
+             String TrantypeInfo=(String) table.getValueAt(i, 5);
+             preparedStatement.setInt(1,OId);
+             preparedStatement.setInt(2,CId);
+             preparedStatement.setString(3,orderDate);
+             preparedStatement.setInt(4,Transtypeid);
+             preparedStatement.setString(5,TrantypeInfo);
+             preparedStatement.executeUpdate();
+        }
+
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            }
+         /*
+          * textArea.append("Cheese Burger  Rs 150 \n");
 				float subTotal;
 				String tempStr;
 				 
@@ -505,11 +521,22 @@ public class CafeBill extends JFrame {
                         dataModel.removeRow(i);
                         calculateTotal();
                     }
+                    CouponDiscount.couponValue=0.0;
                 }
 	    });
 	    c.gridx = 1;
 	    c.gridy = 7;
 	    costPane.add(btnClear,c);
+	    JButton btnac = new JButton("Apply Coupon & Discount");
+	    btnac.setSize(100, 100);
+        btnac.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            new CouponDiscount().setVisible(true);
+            }
+        });
+        c.gridx = 1;
+        c.gridy = 9;
+        costPane.add(btnac,c);
         }
 
 	/*
@@ -572,6 +599,7 @@ public class CafeBill extends JFrame {
 		String quant ;
 		
 		System.out.println("Calculating total rowselected =" + table.getSelectedRowCount());
+		System.out.println("Row Count :"+iRowCnt);
 		
 		cQty = dataModel.findColumn("Quantity");
 		cUnit = dataModel.findColumn("Unit Price");
@@ -605,13 +633,20 @@ public class CafeBill extends JFrame {
 		 totalAmt =  totalAmt + tot;  
 		}
 		
-		ftax1 = (float) (totalAmt * 0.01);
+		System.out.println("Discount Value :"+CouponDiscount.couponValue);
+        ftax1 = (float) (totalAmt * 0.01);
 		ftax2 = (float) (totalAmt * 0.02);
 		ftax3 = (float) (totalAmt * 0.05);
-		totAmtWithTax =  (float) (totalAmt + (totalAmt * 0.5));
 		
+		if(CouponDiscount.couponValue!=0.0)
+		{
+			totAmtWithTax =  (float) (totalAmt + (totalAmt * 0.5) - (CouponDiscount.couponValue));
+			}
+		else
+		{
+			totAmtWithTax =  (float) (totalAmt + (totalAmt * 0.5));
+		}
 		lblSubtotal.setText(Float.toString(totalAmt));
-		
 		lblTax1.setText(Float.toString(ftax1));
 		lblTax2.setText(Float.toString(ftax2));
 		lblTax3.setText(Float.toString(ftax3));		
@@ -654,6 +689,7 @@ public void addRowEditor()
 }
 	/*
 	 * Button choice
+	=-0987654321
 	 * Update accordingly
 	 * 
 	 * 
