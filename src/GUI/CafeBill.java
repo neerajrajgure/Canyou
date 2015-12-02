@@ -15,6 +15,8 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -26,11 +28,16 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -75,6 +82,7 @@ public class CafeBill extends JFrame {
     
     //JTableX table ;
     JTable table ;
+    ReceiptPrinting rp;
 	/**
 	 * Launch the application.
 	 */
@@ -86,6 +94,7 @@ public class CafeBill extends JFrame {
 					CafeBill frame = new CafeBill();
 					frame.setVisible(true);
 					frame.pack();
+					frame.rp = new ReceiptPrinting(frame);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -194,9 +203,7 @@ public class CafeBill extends JFrame {
 		menuItems = new ArrayList<ArrayList<MenuItem>>();
 	    for(int i = 0;i<categories.size();i++){
 			ResultSet r1 = readDBMS("Select itemId, itemName, price from item I , categories C where I.categoryId = C.categoryId and categoryName = '"+categories.get(i)+"'");
-			ArrayList<MenuItem> subcategories = new ArrayList<MenuItem>();
-			
-			try {
+			ArrayList<MenuItem> subcategories = new ArrayList<MenuItem>();try {
 				while (r1.next()) {
 				      int itemNum = r1.getInt("itemId");
 				      String itemName = r1.getString("itemName");
@@ -465,7 +472,22 @@ public class CafeBill extends JFrame {
 
 		JButton btnPrintBill = new JButton("Submit Order");
 		btnPrintBill.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {int count=table.getRowCount();
+		    public void actionPerformed(ActionEvent e) {
+		        //new ReceiptPrinting().setVisible(true);
+		        // ReceiptPrinting rp = new ReceiptPrinting();
+		        PrinterJob job = PrinterJob.getPrinterJob();
+		        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+		        PageFormat pf = job.pageDialog(aset);
+		        job.setPrintable(rp , pf);
+		        boolean ok = job.printDialog(aset);
+		        if (ok) {
+		            try {
+		                job.print(aset);
+		            } catch (PrinterException ex) {
+		                // The job did not successfully complete
+		            }
+		        }
+			   /* int count=table.getRowCount();
             //ResultSet resultset=null;
             try {
       Class.forName("com.mysql.jdbc.Driver");
@@ -495,8 +517,7 @@ public class CafeBill extends JFrame {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             }
-         /*
-          * textArea.append("Cheese Burger  Rs 150 \n");
+             * textArea.append("Cheese Burger  Rs 150 \n");
 				float subTotal;
 				String tempStr;
 				 
@@ -520,6 +541,8 @@ public class CafeBill extends JFrame {
                         System.out.println(dataModel.getRowCount());
                         dataModel.removeRow(i);
                         calculateTotal();
+                        menuExpansionPane.removeAll();
+                        menuExpansionPane.updateUI();
                     }
                     CouponDiscount.couponValue=0.0;
                 }
@@ -532,11 +555,57 @@ public class CafeBill extends JFrame {
         btnac.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             new CouponDiscount().setVisible(true);
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            // Setup the connection with the DB
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
+            String query="Insert into coupon(couponId,couponName,startDate,startTime,endDate,endTime,itemId,percentage) values (?,?,?,?,?,?,?,?)";
+            preparedStatement=connect.prepareStatement(query);
+            preparedStatement.setString(1, "TEST1");
+            preparedStatement.setString(2, "HIVE10");
+            preparedStatement.setDate(3, getCurrentDate());
+            preparedStatement.setTime(4, getCurrentTime());
+            preparedStatement.setDate(5, getCurrentDate());
+            preparedStatement.setTime(6, getCurrentTime());
+            preparedStatement.setInt(7, 1001);
+            preparedStatement.setInt(8, 50);
+            preparedStatement.executeUpdate();
+                }
+            catch (ClassNotFoundException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
             }
+            catch (SQLException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+                }
+            }
+            private java.sql.Time getCurrentTime() {
+                java.util.Date today = new java.util.Date();
+                return new java.sql.Time(today.getTime());
+            }
+            private Timestamp getCurrentTimeStamp() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+            private java.sql.Date getCurrentDate() {
+                java.util.Date today = new java.util.Date();
+                return new java.sql.Date(today.getTime());
+            }
+            //}
         });
         c.gridx = 1;
         c.gridy = 9;
         costPane.add(btnac,c);
+        JButton btncanelOrder = new JButton("Cancel Order");
+        btncanelOrder.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //code for cancel the order
+            }
+        });
+        c.gridx = 2;
+        c.gridy = 9;
+        costPane.add(btncanelOrder,c);
         }
 
 	/*
