@@ -24,6 +24,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
@@ -67,6 +68,8 @@ public class CafeBill extends JFrame {
     final JLabel lblTax2 = new JLabel("00");
     final JLabel lblTax3_1 = new JLabel("Tax 1 (0.05)");
     final JLabel lblTax3 = new JLabel("00");
+    JLabel lblDiscount_1 = new JLabel("Discount");
+    final JLabel lblDiscount = new JLabel("00");
 	private static Connection connect = null;
 	//private static Statement statement = null;
 	private static PreparedStatement preparedStatement = null;
@@ -203,7 +206,9 @@ public class CafeBill extends JFrame {
 		menuItems = new ArrayList<ArrayList<MenuItem>>();
 	    for(int i = 0;i<categories.size();i++){
 			ResultSet r1 = readDBMS("Select itemId, itemName, price from item I , categories C where I.categoryId = C.categoryId and categoryName = '"+categories.get(i)+"'");
-			ArrayList<MenuItem> subcategories = new ArrayList<MenuItem>();try {
+			ArrayList<MenuItem> subcategories = new ArrayList<MenuItem>();
+			
+			try {
 				while (r1.next()) {
 				      int itemNum = r1.getInt("itemId");
 				      String itemName = r1.getString("itemName");
@@ -398,7 +403,7 @@ public class CafeBill extends JFrame {
 				
 			}
 		});
-		JButton btnAddRow = new JButton("Add Row");
+		/*JButton btnAddRow = new JButton("Add Row");
 		btnAddRow.setSize(100, 100);
 		btnAddRow.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -420,7 +425,7 @@ public class CafeBill extends JFrame {
 					
 					
 				}
-		});
+		});*/
 		c.gridx = 1;
 		c.gridy = 1;
 		c.weighty = 1;
@@ -430,7 +435,7 @@ public class CafeBill extends JFrame {
 		c.gridy = 1;
 		c.gridwidth = 1;
 		//c.weightx =1;
-		costPane.add(btnAddRow,c);
+		//costPane.add(btnAddRow,c);
 		c.gridx =1;
 		c.gridy = 2;
 		c.gridwidth = 1;
@@ -464,11 +469,18 @@ public class CafeBill extends JFrame {
 		costPane.add(lblTax3,c);
 		
 		c.gridx = 1;
-		c.gridy = 6;
+		c.gridy = 7;
 		costPane.add(lblTotal_1,c);
 		c.gridx = 3;
-		c.gridy = 6;
+		c.gridy = 7;
 		costPane.add(lblTotal,c);
+		
+		c.gridx = 1;
+        c.gridy = 6;
+        costPane.add(lblDiscount_1,c);
+        c.gridx = 3;
+        c.gridy = 6;
+        costPane.add(lblDiscount,c);
 
 		JButton btnPrintBill = new JButton("Submit Order");
 		btnPrintBill.addActionListener(new ActionListener() {
@@ -526,10 +538,20 @@ public class CafeBill extends JFrame {
 					subTotal += 150;
 					lblSubtotal.setText(Float.toString(subTotal)    );
 	*/				
-			}
+		        for(int i=table.getModel().getRowCount()-1;i>=0;i--)
+                {
+                    System.out.println(dataModel.getRowCount());
+                    dataModel.removeRow(i);
+                    calculateTotal();
+                    menuExpansionPane.removeAll();
+                    menuExpansionPane.updateUI();
+                }
+		        CouponDiscount.couponValue=0.0;
+		        JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
+		    }
 		});
 		c.gridx = 1;
-		c.gridy = 8;
+		c.gridy = 9;
 		costPane.add(btnPrintBill,c);
 
             JButton btnClear = new JButton("Clear Order");
@@ -548,7 +570,7 @@ public class CafeBill extends JFrame {
                 }
 	    });
 	    c.gridx = 1;
-	    c.gridy = 7;
+	    c.gridy = 8;
 	    costPane.add(btnClear,c);
 	    JButton btnac = new JButton("Apply Coupon & Discount");
 	    btnac.setSize(100, 100);
@@ -595,7 +617,7 @@ public class CafeBill extends JFrame {
             //}
         });
         c.gridx = 1;
-        c.gridy = 9;
+        c.gridy = 10;
         costPane.add(btnac,c);
         JButton btncanelOrder = new JButton("Cancel Order");
         btncanelOrder.addActionListener(new ActionListener() {
@@ -603,8 +625,8 @@ public class CafeBill extends JFrame {
                 //code for cancel the order
             }
         });
-        c.gridx = 2;
-        c.gridy = 9;
+        c.gridx = 1;
+        c.gridy = 11;
         costPane.add(btncanelOrder,c);
         }
 
@@ -720,6 +742,7 @@ public class CafeBill extends JFrame {
 		lblTax2.setText(Float.toString(ftax2));
 		lblTax3.setText(Float.toString(ftax3));		
 		lblTotal.setText (Float.toString(totAmtWithTax));
+		lblDiscount.setText(Float.toString((float) CouponDiscount.couponValue));
 	}
 	
 	/*
