@@ -2,11 +2,12 @@ package GUI;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.*;
 import java.awt.print.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 //public class ReceiptPrinting implements Printable, ActionListener {
 public class ReceiptPrinting implements Printable {
@@ -18,9 +19,11 @@ public class ReceiptPrinting implements Printable {
     {
     }
     final String companyName = "The Hive";
-    final String addrLine1 = "Shop no 27 RADHEY HEIGHTS";
-    final String addrLine2 = "Sector no 29 at village Ravet";
-    final String addrLine3 = "Taluka Haveli ,District Pune 412101";
+    final String companyTag = "-Coffee & Fun Served Together-";
+    final String addrLine1 = "Shop no 27 RADHEY HEIGHTS,";
+    final String addrLine2 = "Sector no 29, at village Ravet";
+    final String addrLine3 = "Taluka Haveli, District Pune 412104";
+    final String dash="----------------------------------------------------------------";
     final String tfield1 = "ITEM";
     final String tfield2 = " |QTY";
     final String tfield3 = "|PRICE";
@@ -31,6 +34,7 @@ public class ReceiptPrinting implements Printable {
     final String Vat_ ="VAT(12.50)";
     final String total_wt ="Total with Tax";
     final String S_Charge ="Service Charge(5.0)";
+    final String greet = "THANK YOU PLEASE VISIT AGAIN!! ";
     final String blank=" ";
     private String Subtotal;
     private String Tax1;
@@ -45,6 +49,9 @@ public class ReceiptPrinting implements Printable {
         if (page > 0) { /* We have only one page, and 'page' is zero-based */
             return NO_SUCH_PAGE;
         }
+        Date date1 = new Date( );
+        SimpleDateFormat sdf =  new SimpleDateFormat ("E yyyy-MM-dd 'at' ");
+        SimpleDateFormat sdf1 =  new SimpleDateFormat ("hh:mm a ");
 
         /* User (0,0) is typically outside the imageable area, so we must
          * translate by the X and Y values in the PageFormat to avoid clipping
@@ -58,38 +65,42 @@ public class ReceiptPrinting implements Printable {
         Total=_cb.lblTotal.getText();
         Discount=_cb.lblDiscount.getText();
         /* Now we perform our rendering */
-        g.drawString(companyName, 5, 10);
-        g.drawString(addrLine1, 5, 20);
-        g.drawString(addrLine2, 5, 30);
-        g.drawString(addrLine3, 5, 40);
-        g.drawString(tfield1, 5, 50);
-        g.drawString(tfield2, 105, 50);
-        g.drawString(tfield3, 130, 50);
-        g.drawString(tfield4, 165, 50);
+        g.drawString(companyName, 80, 10);
+        g.drawString(companyTag, 38, 20);
+        g.drawString(dash, 5, 30);
+        g.drawString(sdf.format(date1) , 143, 40);
+        g.drawString(sdf1.format(date1) , 165, 50);
+        g.drawString(addrLine1, 5,40);
+        g.drawString(addrLine2, 5, 50);
+        g.drawString(addrLine3, 5, 60);
+        g.drawString(dash, 5, 70);
+        g.drawString(tfield1, 5, 80);
+        g.drawString(tfield2, 105, 80);
+        g.drawString(tfield3, 130, 80);
+        g.drawString(tfield4, 165, 80);
+        g.drawString(dash, 5, 90);
         int newline = g.getFont().getSize() + 5 ;
         System.out.println("Newline size :"+newline);
         String menuName,printQuantity,prinrtunitprice,prinrToatalprice;
-        int y = 65;
+        int y = 105;
         for (int row = 0; row <_cb.dataModel.getRowCount(); row++){
 
             menuName = _cb.dataModel.getValueAt(row ,1).toString();
-            // menuName =  _cb.dataModel.getValueAt(row ,1).substring(0,15) +" ";
+//            menuName =  _cb.dataModel.getValueAt(row ,1).toString().substring(0,26);
             printQuantity =  _cb.dataModel.getValueAt(row ,2).toString();
             prinrtunitprice =  _cb.dataModel.getValueAt(row ,3).toString();
             prinrToatalprice =  _cb.dataModel.getValueAt(row, 4) .toString();
             System.out.println( "Field = "+menuName+" "+printQuantity+" "+prinrtunitprice+" "+prinrToatalprice);
-            //             g.drawString(printitem+printQuantity+prinrtunitprice+prinrToatalprice,5,y += newline);
-
-
-
+//            g.drawString(printitem+printQuantity+prinrtunitprice+prinrToatalprice,5,y += newline);
             g.drawString(menuName, 5, y);
             g.drawString(printQuantity, 115, y);
             g.drawString(prinrtunitprice, 140, y);
             g.drawString(prinrToatalprice, 170, y);
             g.drawString(blank, 180,y += newline);//This has to fix later
 
-            System.out.println("Value of Y :"+y);
+            //System.out.println("Value of Y :"+y);
         }
+            g.drawString(dash, 5, y += newline);
             g.drawString(Sub_Total, 5, y += newline);
             g.drawString(Vat_, 5, y += newline);
             g.drawString(S_Charge, 5, y += newline);
