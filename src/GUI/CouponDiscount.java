@@ -221,7 +221,7 @@ public class CouponDiscount extends javax.swing.JFrame {
                 ResultSet r1 = preparedStatement.executeQuery();
                 SimpleDateFormat sdf= new SimpleDateFormat("yyyy-mm-dd");
                 java.util.Date today = new java.util.Date();
-                System.out.println("TODAYS DATE :"+today.getTime());
+                System.out.println("TODAYS DATE :"+today.getDate());
                 ArrayList<coupons> couponlist = new ArrayList<coupons>();
 
                 try{
