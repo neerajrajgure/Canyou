@@ -222,12 +222,12 @@ public class CouponDiscount extends javax.swing.JFrame {
                 SimpleDateFormat sdf= new SimpleDateFormat("yyyy-mm-dd");
                 java.util.Date today = new java.util.Date();
                 System.out.println("TODAYS DATE :"+today.getDate());
-                ArrayList<coupons> couponlist = new ArrayList<coupons>();
+                ArrayList<Coupons> couponlist = new ArrayList<Coupons>();
 
                 try{
                     while (r1.next()) {
 
-                        coupons c = new coupons();
+                        Coupons c = new Coupons();
                         c.setCouponId(r1.getString("couponId"));
                         c.setCouponName(r1.getString("couponName"));
                         c.setStartDate(r1.getString("startDate"));
@@ -244,10 +244,10 @@ public class CouponDiscount extends javax.swing.JFrame {
                     }
 
 
-                    Iterator<coupons> iter=couponlist.iterator();
+                    Iterator<Coupons> iter=couponlist.iterator();
                     while(iter.hasNext())
                     {
-                        coupons cp=iter.next();
+                        Coupons cp=iter.next();
                         String couponName=cp.getCouponName();
                         if(couponName.equals(couponString))
                         {
