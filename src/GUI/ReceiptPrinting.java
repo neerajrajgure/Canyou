@@ -20,7 +20,7 @@ public class ReceiptPrinting implements Printable {
     }
     final String companyName = "The Hive";
     final String companyTag = "-Coffee & Fun Served Together-";
-    final String addrLine1 = "Shop no 27 RADHEY HEIGHTS,";
+    final String addrLine1 = "Shop no 27 Radhey Heights,";
     final String addrLine2 = "Sector no 29, at village Ravet";
     final String addrLine3 = "Taluka Haveli, District Pune 412104";
     final String dash="----------------------------------------------------------------";
@@ -50,8 +50,8 @@ public class ReceiptPrinting implements Printable {
             return NO_SUCH_PAGE;
         }
         Date date1 = new Date( );
-        SimpleDateFormat sdf =  new SimpleDateFormat ("E yyyy-MM-dd 'at' ");
-        SimpleDateFormat sdf1 =  new SimpleDateFormat ("hh:mm a ");
+        SimpleDateFormat sdf =  new SimpleDateFormat ("E yyyy-MM-dd ");
+        SimpleDateFormat sdf1 =  new SimpleDateFormat ("hh:mm");
 
         /* User (0,0) is typically outside the imageable area, so we must
          * translate by the X and Y values in the PageFormat to avoid clipping
@@ -64,6 +64,7 @@ public class ReceiptPrinting implements Printable {
         Tax3=_cb.lblTax3.getText();
         Total=_cb.lblTotal.getText();
         Discount=_cb.lblDiscount.getText();
+        System.out.println("Discount is:"+Discount+"is the value");
         /* Now we perform our rendering */
         g.drawString(companyName, 80, 10);
         g.drawString(companyTag, 38, 20);
@@ -100,6 +101,27 @@ public class ReceiptPrinting implements Printable {
 
             //System.out.println("Value of Y :"+y);
         }
+        if(Discount.matches("0.0")){
+            System.out.println("Am in if");
+            g.drawString(dash, 5, y += newline);
+            g.drawString(Sub_Total, 5, y += newline);
+            g.drawString(Vat_, 5, y += newline);
+            g.drawString(S_Charge, 5, y += newline);
+            g.drawString(S_Tax, 5, y += newline);
+//            g.drawString(Discount_, 5,y += newline);
+            g.drawString(total_wt, 5, y += newline);
+//            System.out.println("Value of Y :"+y);
+           //numeric values from GUI
+            int x=170;
+            g.drawString(Subtotal, x, y+= newline-75);
+            g.drawString(Tax1, x, y+= newline);
+            g.drawString(Tax2, x, y += newline);
+            g.drawString(Tax3, x, y+=newline);
+//            g.drawString(Discount, x, y+=newline);
+            g.drawString(Total, x, y+=newline);
+        }
+        else{
+            System.out.println("Am in else");
             g.drawString(dash, 5, y += newline);
             g.drawString(Sub_Total, 5, y += newline);
             g.drawString(Vat_, 5, y += newline);
@@ -116,6 +138,7 @@ public class ReceiptPrinting implements Printable {
             g.drawString(Tax3, x, y+=newline);
             g.drawString(Discount, x, y+=newline);
             g.drawString(Total, x, y+=newline);
+            }
             /* tell the caller that this page is part of the printed document */
         return PAGE_EXISTS;
     }

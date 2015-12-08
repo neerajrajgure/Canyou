@@ -467,7 +467,7 @@ public class CafeBill extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //new ReceiptPrinting().setVisible(true);
                 // ReceiptPrinting rp = new ReceiptPrinting();
-                /* PrinterJob job = PrinterJob.getPrinterJob();
+                 PrinterJob job = PrinterJob.getPrinterJob();
                 PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
                 PageFormat pf = job.pageDialog(aset);
                 job.setPrintable(rp , pf);
@@ -479,7 +479,6 @@ public class CafeBill extends JFrame {
                         // The job did not successfully complete
                     }
                 }
-                 */
                 int count=table.getRowCount();
                 //ResultSet resultset=null;
                 /*try {
