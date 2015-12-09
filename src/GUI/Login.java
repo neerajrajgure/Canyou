@@ -1,5 +1,6 @@
 package GUI;
 import javax.swing.*;
+import javax.swing.table.TableModel;
 
 import com.mysql.jdbc.Statement;
 
@@ -15,12 +16,18 @@ import java.sql.ResultSet;
 
 class Login extends JFrame implements ActionListener
 {
+    private static CafeBill cb_;
+    public Login(CafeBill cb){
+        cb_ =cb;
+    }
+    //    public Login()
+    //    {
+    //    }
     JButton SUBMIT;
     JPanel panel;
-    JLabel /*label1,*/label2;
-    final JTextField  /*text1,*/text2;
-    Login()
-    {
+    JLabel label2;
+    JTextField text2;
+    Login(){
         //   label1 = new JLabel();
         //   label1.setText("Username:");
         //   text1 = new JTextField(15);
@@ -30,6 +37,7 @@ class Login extends JFrame implements ActionListener
         text2 = new JPasswordField(10);
 
         SUBMIT=new JButton("SUBMIT");
+
         SUBMIT.setLocation(50 , 40);
         SUBMIT.setBackground(new Color(59, 89, 182));
         SUBMIT.setForeground(Color.WHITE);
@@ -37,8 +45,6 @@ class Login extends JFrame implements ActionListener
         SUBMIT.setFont(new Font("Tahoma", Font.BOLD, 12));
 
         panel=new JPanel(new GridLayout(3,1));
-        //   panel.add(label1);
-        //   panel.add(text1);
         panel.add(label2);
         panel.add(text2);
         panel.add(SUBMIT);
@@ -69,31 +75,31 @@ class Login extends JFrame implements ActionListener
                 {
                     result = true; 
                     new CafeBill().setVisible(true);
+                    this.dispose();
+                    //text2.setText("");
                 }
-                
+
             }
             if(result==false) {
                 JOptionPane.showMessageDialog(this, "Incorrect Password!");
+                text2.setText("");
             }
-            
+
         }
         catch (Exception e){
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
-
-
-
     public static void main(String arg[])
     {
         try
         {
             Login frame=new Login();
-            frame.setSize(200,100);
+            frame.setSize(300,100);
             frame.setLocation(500, 300);
-            //   frame.pack();
             frame.setResizable(false);
             frame.setVisible(true);
+//            frame.pack();
         }
         catch(Exception e)
         {
