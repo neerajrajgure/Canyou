@@ -11,7 +11,7 @@ create table customer(cid integer, Name varchar(35), Address varchar(35), phonen
 # CREATE TABLE transactiontypes(transtypeid int AUTO_INCREMENT PRIMARY KEY,transdesc varchar(10));
 CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(10));
 
-create table menu_order(oid int PRIMARY KEY, cid int,orderDate Date, transtypeid int, transtypeinfo varchar(20), userid int, FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (userid) REFERENCES emp(userid));
+create table menu_order(oid int PRIMARY KEY, cid int,orderDate Date, transtypeid int, transtypeinfo varchar(20), empid int, FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (empid) REFERENCES emp(empid));
 
 create table item(itemId integer, itemName varchar(35),categoryId int NOT NULL references categories(categoryId), price float);
 
@@ -21,12 +21,12 @@ create table categories(categoryId int, categoryName varchar(35), imageIcon varc
 
 create table tax(tax1 float, tax2 float, tax3 float);
 
-create table emp(loginName varchar(20), firstName varchar(20), lastName varchar(20), password varchar(10),userid int PRIMARY KEY);
+create table emp(loginName varchar(20), firstName varchar(20), lastName varchar(20), password varchar(10), empid int PRIMARY KEY);
 
-INSERT INTO emp(loginName, firstName, lastName, password, userid) VALUES (' ', 'Suhas', ' ', 73412, 31);
-INSERT INTO emp(loginName, firstName, lastName, password, userid) VALUES (' ', 'Swapnil', ' ', 43489, 32);
-INSERT INTO emp(loginName, firstName, lastName, password, userid) VALUES (' ', 'Abhijeet', ' ', 64781, 33);
-INSERT INTO emp(loginName, firstName, lastName, password, userid) VALUES (' ', 'Nadim', ' ', 93451, 33);
+INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Suhas', ' ', 73412, 31);
+INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Swapnil', ' ', 43489, 32);
+INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Abhijeet', ' ', 64781, 33);
+INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Nadim', ' ', 93451, 34);
 
 insert into categories values(101, 'Hot Beverage','./src/images/HotBeverage.png' );
 insert into categories values(102, 'Cold Beverage','./src/images/ColdBeverage.png' );
