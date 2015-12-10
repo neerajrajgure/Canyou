@@ -2,7 +2,7 @@ package GUI;
 
 import java.util.ArrayList;
 
-public class coupons {
+public class Coupons {
     private String couponId;
     private String couponName;
     private String startDate;
@@ -11,7 +11,7 @@ public class coupons {
     private String endTime;
     int itemId;
     int percentage;
-    public coupons() {
+    public Coupons() {
         // TODO Auto-generated constructor stub
     }
     public String getCouponId() {

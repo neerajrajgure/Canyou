@@ -1,16 +1,18 @@
 package GUI;
 
 import java.sql.Connection;
-import java.sql.Date;
+//import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
-
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 public class CouponDiscount extends javax.swing.JFrame {
@@ -222,12 +224,12 @@ public class CouponDiscount extends javax.swing.JFrame {
                 SimpleDateFormat sdf= new SimpleDateFormat("yyyy-mm-dd");
                 java.util.Date today = new java.util.Date();
                 System.out.println("TODAYS DATE :"+today.getDate());
-                ArrayList<coupons> couponlist = new ArrayList<coupons>();
+                ArrayList<Coupons> couponlist = new ArrayList<Coupons>();
 
                 try{
                     while (r1.next()) {
 
-                        coupons c = new coupons();
+                        Coupons c = new Coupons();
                         c.setCouponId(r1.getString("couponId"));
                         c.setCouponName(r1.getString("couponName"));
                         c.setStartDate(r1.getString("startDate"));
@@ -244,20 +246,20 @@ public class CouponDiscount extends javax.swing.JFrame {
                     }
 
 
-                    Iterator<coupons> iter=couponlist.iterator();
+                    Iterator<Coupons> iter=couponlist.iterator();
                     while(iter.hasNext())
                     {
-                        coupons cp=iter.next();
+                        Coupons cp=iter.next();
                         String couponName=cp.getCouponName();
                         if(couponName.equals(couponString))
                         {
 
                             // java.util.Date today = new java.util.Date();
 
-                            Date startDate=(Date) sdf.parse(cp.getStartDate());
-                            Date endDate=(Date) sdf.parse(cp.getEndDate());
-                            Date startTime=(Date) sdf.parse(cp.getStartTime());
-                            Date endtime=(Date) sdf.parse(cp.getEndTime());
+                            String startDate=cp.getStartDate();
+                            String  endDate=cp.getEndDate();
+                            String startTime=cp.getStartTime();
+                            String endtime=cp.getEndTime();
 
                             /*   if(today.getDate()|| today.getDate().after(startDate) )
                      {
@@ -302,7 +304,23 @@ public class CouponDiscount extends javax.swing.JFrame {
             // TODO Auto-generated method stub
             return null;
         }*/
-
+    public boolean checkdate(String inputdate)
+    {   
+        DateFormat formatter= new SimpleDateFormat("yyyy/mm/dd");
+        String date=formatter.format(new Date());
+        ParsePosition position=new ParsePosition(0);
+        Date systemDate=(Date) formatter.parse(date, position);
+        
+        ParsePosition position1=new ParsePosition(0);
+        Date dbDate=formatter.parse(inputdate, position1);
+        
+        if(dbDate.equals(systemDate) || systemDate.after(dbDate))
+        {
+            
+        }
+        
+        return true;
+    }
     private ResultSet readDBMS(String string) {
         // TODO Auto-generated method stub
         return null;
