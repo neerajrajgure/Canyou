@@ -42,6 +42,13 @@ public class ReceiptPrinting implements Printable {
     private String Tax3;
     private String Total;
     private String Discount;
+    private Paper receiptPaper;
+    private double paperWidth = 0.2;
+    private double paperHeight = 0.2;
+    double leftMargin = 0.01;
+    double rightMargin = 0.01;
+    double topMargin = 0.01;
+    double bottomMargin = 0.01;
     public int print(Graphics g, PageFormat pf, int page) throws PrinterException {
         Dimension d = this.getPreferredSize();
         g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
@@ -56,6 +63,13 @@ public class ReceiptPrinting implements Printable {
         /* User (0,0) is typically outside the imageable area, so we must
          * translate by the X and Y values in the PageFormat to avoid clipping
          */
+        receiptPaper = new Paper();
+        receiptPaper.setSize(paperWidth * 0.2, paperHeight * 0.2);
+        receiptPaper.setImageableArea(leftMargin * 0.02, topMargin * 0.02,
+                (paperWidth - leftMargin - rightMargin) * 0.02,
+                (paperHeight - topMargin - bottomMargin) * 0.02);
+
+        //PageFormat pf.setPaper(receiptPaper);
         Graphics2D g2d = (Graphics2D)g;
         g2d.translate(pf.getImageableX(), pf.getImageableY());
         Subtotal = _cb.lblSubtotal.getText();

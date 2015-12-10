@@ -99,6 +99,8 @@ class Login extends JFrame implements ActionListener
             frame.setLocation(500, 300);
             frame.setResizable(false);
             frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JDialog d2 = new JDialog(frame);
 //            frame.pack();
         }
         catch(Exception e)

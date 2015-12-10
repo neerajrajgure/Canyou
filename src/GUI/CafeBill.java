@@ -86,7 +86,7 @@ public class CafeBill extends JFrame {
     //JTableX table ;
     JTable table ;
     ReceiptPrinting rp;
-    public long oid = 1;
+    public long oid = 0;
     public Float db_tax1;
     public Float db_tax2;
     public Float db_tax3;
@@ -115,6 +115,7 @@ public class CafeBill extends JFrame {
                     frame.pack();
                    try {
                         frame.oid = frame.getNextOid();
+                        System.out.println(" Oid in menu_order is  : "+ frame.oid);
                     } catch(Exception e) {
                         // Call the Fall back method to use text files as the backups
                         e.printStackTrace();
@@ -167,18 +168,18 @@ public class CafeBill extends JFrame {
 //                 if (rs.getString("name").equals("serviceTax"))
                 if (rs.getString("name").equals("serviceTax"))
                 {
-                    System.out.println("In if :" );
                     db_tax1 = rs.getFloat("percentValue");
+                    System.out.println("In tax if :"+ db_tax1);
                 }
                 else if (rs.getString("name").equals("VAT"))
                 {
-                    System.out.println("In else -1 : " );
                     db_tax2 = rs.getFloat("percentValue");
+                    System.out.println("In tax else 1 : "+ db_tax2 );
                 }
                 else if(rs.getString("name").equals("service Charge"))
                 {
-                    System.out.println("Ins else 2: " );
                     db_tax3 = rs.getFloat("percentValue");
+                    System.out.println("Ins tax else 2: "+ db_tax3 );
                 }
             }
             //            System.out.println("db_tax1: " );
@@ -198,7 +199,7 @@ public class CafeBill extends JFrame {
         connectDatabase();
         long maxoid=0;
         try {
-            preparedStatement = connect.prepareStatement("Select max(oid) from menu_order where orderDate=CURRENT_DATE()");
+            preparedStatement = connect.prepareStatement("SELECT MAX(oid) FROM menu_order WHERE orderDate=CURRENT_DATE()");
             ResultSet rs=preparedStatement.executeQuery();
             while(rs.next())
             {
@@ -534,7 +535,7 @@ public class CafeBill extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //new ReceiptPrinting().setVisible(true);
                 // ReceiptPrinting rp = new ReceiptPrinting();
-                 PrinterJob job = PrinterJob.getPrinterJob();
+                /* PrinterJob job = PrinterJob.getPrinterJob();
                 PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
                 PageFormat pf = job.pageDialog(aset);
                 job.setPrintable(rp , pf);
@@ -545,14 +546,14 @@ public class CafeBill extends JFrame {
                     } catch (PrinterException ex) {
                         // The job did not successfully complete
                     }
-                }
+                }*/
                 int count=table.getRowCount();
                 //ResultSet resultset=null;
-/*                try {
+                try {
       Class.forName("com.mysql.jdbc.Driver");
      // Setup the connection with the DB
     connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
-    String query="Insert into menu_order(oid,cid,orderDate,transtypeid,transtypeinfo) values (?,?,?,?,?,?,?,?)";
+    String query="Insert into menu_order(oid,cid,orderDate,transtypeid,transtypeinfo,empid) values (?,?,?,?,?,?)";
     preparedStatement=connect.prepareStatement(query);
     //    for(int i=0;i<count;i++)
         {
@@ -561,16 +562,20 @@ public class CafeBill extends JFrame {
 //             String orderDate=(String) table.getValueAt(i, 3);
 //             int Transtypeid=(int) table.getValueAt(i, 4);
 //             String TrantypeInfo=(String) table.getValueAt(i, 5);
-             preparedStatement.setInt(1, (int) getNextOid());
+             //preparedStatement.setInt(1, (int)getNextOid());
+             System.out.println("New Oid: " );
+             preparedStatement.setLong(1, oid);
+             System.out.println(" Oid in menu_order is  : "+ oid);
              preparedStatement.setInt(2, 1);
              preparedStatement.setDate(3, getCurrentDate());
-             preparedStatement.setTime(6, getCurrentTime());
+             // preparedStatement.setString(3,"2015-12-10");
              preparedStatement.setInt(4, 51);
              preparedStatement.setString(5, "cc-1234");
-             preparedStatement.setInt(7, 1);
-             preparedStatement.setInt(8, 1);
+             preparedStatement.setInt(6, 31);
              preparedStatement.executeUpdate();
+             preparedStatement.close();
              }
+        System.out.println("menu order updated " );
 
         } catch (ClassNotFoundException e1) {
             // TODO Auto-generated catch block
@@ -578,8 +583,8 @@ public class CafeBill extends JFrame {
         } catch (SQLException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
-            }*/
-                /* try {
+            }
+                 try {
       Class.forName("com.mysql.jdbc.Driver");
      // Setup the connection with the DB
     connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
@@ -592,8 +597,8 @@ public class CafeBill extends JFrame {
 //             String orderDate=(String) table.getValueAt(i, 3);
 //             int Transtypeid=(int) table.getValueAt(i, 4);
 //             String TrantypeInfo=(String) table.getValueAt(i, 5);
-             preparedStatement.setLong(1, getNextOid());
-             //preparedStatement.setInt(, 1);
+             preparedStatement.setLong(1, oid);
+             System.out.println(" Oid in billing_info is  : "+ oid);
              preparedStatement.setInt(2, 1001);
              preparedStatement.setString(3, "Test");
              preparedStatement.executeUpdate();
@@ -606,10 +611,9 @@ public class CafeBill extends JFrame {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             }
-                 */
-                /* textArea.append("Cheese Burger  Rs 150 \n");
+                 /* textArea.append("Cheese Burger  Rs 150 \n");
                 float subTotal;
-                String tempStr;
+                Stqring tempStr;
                 tempStr = lblSubtotal.getText();
                     subTotal = Float.parseFloat(tempStr);
                     subTotal += 150;
@@ -623,6 +627,8 @@ public class CafeBill extends JFrame {
                     menuExpansionPane.updateUI();
                 }
                 CouponDiscount.couponValue=0.0;
+                
+                oid++;
                 //JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
                 }
         });
@@ -652,8 +658,7 @@ public class CafeBill extends JFrame {
         btnac.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new CouponDiscount().setVisible(true);
-                new CouponDiscount().getModalExclusionType();
-                try {
+/*                try {
                     Class.forName("com.mysql.jdbc.Driver");
                     // Setup the connection with the DB
                     connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
@@ -676,7 +681,7 @@ public class CafeBill extends JFrame {
                 catch (SQLException e2) {
                     // TODO Auto-generated catch block
                     e2.printStackTrace();
-                }
+                }*/
             }
 
             //}
@@ -791,7 +796,7 @@ public class CafeBill extends JFrame {
         ftax3 = (float) (totalAmt *  db_tax3/100);
         if(CouponDiscount.couponValue!=0.0)
         {
-            totAmtWithTax =  (float) (totalAmt + (totalAmt *  totalTax/100) - ((CouponDiscount.couponValue/100)*totalAmt));
+            totAmtWithTax =  (float) (totalAmt + (totalAmt *  totalTax/100) - (totalAmt*CouponDiscount.couponValue/100));
         }
         else
         {
