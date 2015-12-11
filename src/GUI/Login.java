@@ -14,23 +14,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
 
-class Login extends JFrame implements ActionListener
+class Login extends JDialog implements ActionListener
 {
     private static CafeBill cb_;
-    public Login(CafeBill cb){
-        cb_ =cb;
-    }
-    //    public Login()
-    //    {
-    //    }
+
     JButton SUBMIT;
     JPanel panel;
     JLabel label2;
     JTextField text2;
-    Login(){
-        //   label1 = new JLabel();
-        //   label1.setText("Username:");
-        //   text1 = new JTextField(15);
+
+    public Login(CafeBill cb){
+        cb_ = cb;
+
+        setModal(true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         label2 = new JLabel();
         label2.setText("Password:");
@@ -52,9 +49,13 @@ class Login extends JFrame implements ActionListener
         SUBMIT.addActionListener(this);
         setTitle("LOGIN FORM");
     }
+
     public void actionPerformed(ActionEvent ae)
     {
+        // System.out.println("Test-100");
+
         try {
+            // System.out.println("Test-140");
             boolean result = false;
 
             Class.forName("com.mysql.jdbc.Driver");
@@ -68,43 +69,52 @@ class Login extends JFrame implements ActionListener
             preparedStatement = connect.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             String pass= text2.getText();
-            System.out.println(pass);
+            // Never ever display password ... System.out.println(pass);
             while(rs.next()) {
-                String password=rs.getString("Password");
+               // System.out.println("Test-1100");
+               String password=rs.getString("Password");
                 if ((pass.equals(password)))
                 {
                     result = true; 
-                    new CafeBill().setVisible(true);
+                    cb_ = new CafeBill();
+                    cb_.setVisible(true);
                     this.dispose();
                     //text2.setText("");
                 }
 
             }
+            // System.out.println("Test-1200");
+
             if(result==false) {
+                // System.out.println("Test-1240");
+
                 JOptionPane.showMessageDialog(this, "Incorrect Password!");
                 text2.setText("");
             }
+            // System.out.println("Test-1400");
 
         }
         catch (Exception e){
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+        // System.out.println("Test-1500");
     }
+
     public static void main(String arg[])
     {
         try
         {
-            Login frame=new Login();
+            CafeBill cb = new CafeBill();
+            Login frame=new Login(cb);
             frame.setSize(300,100);
             frame.setLocation(500, 300);
             frame.setResizable(false);
             frame.setVisible(true);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JDialog d2 = new JDialog(frame);
-//            frame.pack();
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null, e.getMessage());}
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 }
