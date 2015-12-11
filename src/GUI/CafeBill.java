@@ -118,7 +118,7 @@ public class CafeBill extends JFrame {
                     frame.pack();
                    try {
                         frame.oid = frame.getNextOid();
-                        System.out.println(" Oid in menu_order is  : "+ frame.oid);
+                        System.out.println(" Oid in frame is  : "+ frame.oid);
                     } catch(Exception e) {
                         // Call the Fall back method to use text files as the backups
                         e.printStackTrace();
@@ -144,6 +144,7 @@ public class CafeBill extends JFrame {
         final int x = (screenSize.width - loginScreen.getWidth()) / 2;
         final int y = (screenSize.height - loginScreen.getHeight()) / 2;
         loginScreen.setLocation(x, y);
+        loginScreen.setSize(250, 110);
         loginScreen.setVisible(true);
     }
 
@@ -185,7 +186,7 @@ public class CafeBill extends JFrame {
                                 String db_tax_name = rs.getString("name");
                                 System.out.println("My Str = " + "'" +  db_tax_name + "'");
 //                 if (rs.getString("name").equals("serviceTax"))
-                if (rs.getString("name").equals("serviceTax"))
+                if (rs.getString("name").equals("Service Tax"))
                 {
                     db_tax1 = rs.getFloat("percentValue");
                     System.out.println("In tax if :"+ db_tax1);
@@ -607,6 +608,7 @@ public class CafeBill extends JFrame {
              preparedStatement.setInt(2, 1001);
              preparedStatement.setString(3, "Test");
              preparedStatement.executeUpdate();
+             preparedStatement.close();
              }
 
         } catch (ClassNotFoundException e1) {
@@ -616,13 +618,6 @@ public class CafeBill extends JFrame {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             }
-/*                  textArea.append("Cheese Burger  Rs 150 \n");
-                float subTotal;
-                Stqring tempStr;
-                tempStr = lblSubtotal.getText();
-                    subTotal = Float.parseFloat(tempStr);
-                    subTotal += 150;
-                    lblSubtotal.setText(Float.toString(subTotal)    );*/
                 for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
                     System.out.println(dataModel.getRowCount());
@@ -632,13 +627,14 @@ public class CafeBill extends JFrame {
                     menuExpansionPane.updateUI();
                 }
                 CouponDiscount.couponValue=0.0;
-                
+                System.out.println("incremet oid is" +oid);
                 oid++;
+
                 //JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
                 //new ReceiptPrinting().setVisible(true);
                 // ReceiptPrinting rp = new ReceiptPrinting();
-/*
+
                 PrinterJob job = PrinterJob.getPrinterJob();
                 PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
                 PageFormat pf = job.pageDialog(aset);
@@ -651,18 +647,7 @@ public class CafeBill extends JFrame {
                         // The job did not successfully complete
                     }
                 }
-*/
-                    PrinterJob job = PrinterJob.getPrinterJob();
-                    job.setPrintable(rp);
-                    boolean ok = job.printDialog();
-                    if (ok) {
-                        try {
-                             job.print();
-                        } catch (PrinterException ex) {
-                         /* The job did not successfully complete */
-                        }
-                    }
-                }
+            }
         });
         c.gridx = 1;
         c.gridy = 9;
