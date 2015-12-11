@@ -1,4 +1,3 @@
-
 create database HMS;
 use HMS;
 create user billing identified by 'hmsbilling';
@@ -11,17 +10,17 @@ create table customer(cid integer, Name varchar(35), Address varchar(35), phonen
 # CREATE TABLE transactiontypes(transtypeid int AUTO_INCREMENT PRIMARY KEY,transdesc varchar(10));
 CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(10));
 
-create table menu_order(oid int PRIMARY KEY, cid int,orderDate Date, transtypeid int, transtypeinfo varchar(20), empid int, FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (empid) REFERENCES emp(empid));
-
 create table item(itemId integer, itemName varchar(35),categoryId int NOT NULL references categories(categoryId), price float);
-
-create table billing_info(oid int ,itemId int references item(itemId), item_instruction varchar(35),FOREIGN KEY (oid) REFERENCES menu_order(oid ));
 
 create table categories(categoryId int, categoryName varchar(35), imageIcon varchar(50));
 
 create table tax(tax1 float, tax2 float, tax3 float);
-
 create table emp(loginName varchar(20), firstName varchar(20), lastName varchar(20), password varchar(10), empid int PRIMARY KEY);
+
+create table menu_order(oid int PRIMARY KEY, cid int,orderDate Date, transtypeid int, transtypeinfo varchar(20), empid int, FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (empid) REFERENCES emp(empid));
+
+create table billing_info(oid int ,itemId int references item(itemId), item_instruction varchar(35),FOREIGN KEY (oid) REFERENCES menu_order(oid ));
+
 
 INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Suhas', ' ', 73412, 31);
 INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Swapnil', ' ', 43489, 32);
@@ -35,7 +34,7 @@ INSERT into categories VALUES(104, 'Waffle', './src/images/Waffle.png' );
 INSERT into categories VALUES(105, 'Cake', './src/images/Cake.png' );
 
  
-COFFEE - HOT DRINKS (101)----------------
+/*COFFEE - HOT DRINKS (101)----------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 42.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Americano', 101, 48.00);
@@ -62,51 +61,50 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1015, 'Large - La
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1016, 'Latte Flavoured', 101, 64.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1017, 'Large - Latte Flavoured', 101, 77.00);
 
-HOT BEVERAGES-----------------------------   
+/*HOT BEVERAGES-----------------------------   */
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1018, 'Hot Chocolate', 101, 48.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1019, 'Large - Hot Chocolate', 101, 58.00);
 
-HOT TEAS--------------------------
+/*HOT TEAS--------------------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1020, 'Regular Tea', 101, 52.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1021, 'Darjeeling Tea', 101, 55.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1021, 'Masala Tea', 101, 49.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1022, 'Green Tea', 101, 47.00);
 
-
-COFFEE - COLD BEVERAGES-(102)--------------------------------
+/*COFFEE - COLD BEVERAGES-(102)--------------------------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1023, 'Iced Coffee', 102, 55.00); 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1024, 'Frappe', 102, 59.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1025, 'Creamy Frappe', 102, 79.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1026, 'Mocha Frapp', 102, 74.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1027, 'Affogato', 102, 69.00);
 
-TEA - COLD BEVERAGES   -------------------------
+/*TEA - COLD BEVERAGES   ------------------------- */
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1028, 'Lemon Iced Tea', 102, 65.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1029, 'Peach Iced Tea', 102, 65.00);
 
-OTHER COLD BEVERAGES    ----------------------
+/* OTHER COLD BEVERAGES    ---------------------- */
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1030, 'Cold Chocolate', 102, 59.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1031, 'Big O', 102, 79.00);
 
-MILK SHAKES-----------------
+/* MILK SHAKES-----------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1032, 'Rose Shake', 102, 59.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1033, 'Strawberry Shake', 102, 59.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1034, 'Butterscotch shake', 102, 69.00);
 
-VEG SANDWICHES  (103) -----------------------
+/* VEG SANDWICHES  (103) ----------------------- */
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1035, 'Cheese', 103, 60.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1036, 'Corn Cheese', 103, 70.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1037, 'Club Sandwich', 103, 70.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1038, 'Paneer Tikka', 103, 78.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1039, 'Chocolate ', 103, 68.00);
 
-CHICKEN SANDWICHES ---------------------
+/* CHICKEN SANDWICHES ---------------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1040, 'Chicken Mayo', 103, 85.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1041, 'Grilled Chicken', 103, 85.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1042, 'Tandoori Chicken', 103, 99.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicken ', 103, 92.00);
 
-CAKES   ----------------
+/* CAKES   ---------------- */
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1044, 'Cupcakes', 105, 29.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1045, 'Slice', 105, 22.00);
