@@ -17,7 +17,7 @@ create table categories(categoryId int, categoryName varchar(35), imageIcon varc
 
 create table tax(name varchar(20), description varchar(50), percentValue float, startDate date, endDate date);
 
-insert into tax values ('Service Charge', 'Sevice Charge', '5', '2015-12-1', '2115-12-31');
+insert into tax values ('Service Charge', 'Service Charge', '5', '2015-12-1', '2115-12-31');
 
 
 
