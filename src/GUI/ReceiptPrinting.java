@@ -174,7 +174,7 @@ public class ReceiptPrinting implements Printable {
         // TODO Auto-generated method stub
         return null;
     }
-    public void actionPerformed(ActionEvent e) {
+/*    public void actionPerformed(ActionEvent e) {
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPrintable(this);
         boolean ok = job.printDialog();
@@ -185,7 +185,19 @@ public class ReceiptPrinting implements Printable {
                 // The job did not successfully complete
             }
         }
-    }
+    }*/
+    public void actionPerformed(ActionEvent e) {
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(this);
+        boolean ok = job.printDialog();
+        if (ok) {
+            try {
+                 job.print();
+            } catch (PrinterException ex) {
+             /* The job did not successfully complete */
+            }
+        }
+   }
 
     public static void main(String args[]) {
  try {
