@@ -45,6 +45,9 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableColumn;
+import javax.swing.JDialog;
+import java.awt.Dialog;
+
 
 public class CafeBill extends JFrame {
 
@@ -87,10 +90,10 @@ public class CafeBill extends JFrame {
     JTable table ;
     ReceiptPrinting rp;
     public long oid = 0;
-    public Float db_tax1;
-    public Float db_tax2;
-    public Float db_tax3;
-    public Float totalTax;
+    public float db_tax1;
+    public float db_tax2;
+    public float db_tax3;
+    public float totalTax;
     private java.sql.Time getCurrentTime() {
         java.util.Date today = new java.util.Date();
         return new java.sql.Time(today.getTime());
@@ -122,12 +125,28 @@ public class CafeBill extends JFrame {
                     }
                    frame.rp = new ReceiptPrinting(frame);
                    frame.getTax();
+
+                   frame.showOpenLoginScreen();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
     }
+
+    void showOpenLoginScreen()
+    {
+        this.dispose();
+        Login loginScreen = new Login(this);
+        loginScreen.pack();
+        final Toolkit toolkit = Toolkit.getDefaultToolkit();
+        final Dimension screenSize = toolkit.getScreenSize();
+        final int x = (screenSize.width - loginScreen.getWidth()) / 2;
+        final int y = (screenSize.height - loginScreen.getHeight()) / 2;
+        loginScreen.setLocation(x, y);
+        loginScreen.setVisible(true);
+    }
+
     public void connectDatabase(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -163,8 +182,8 @@ public class CafeBill extends JFrame {
             System.out.println(("rsString = " + rs.getString("name")));
                  */
 //                                System.out.println("db_tax2: " );
-//                                String test1 = rs.getString("name");
-//                                System.out.println("My Str = " + "'" + test1 + "'");
+                                String db_tax_name = rs.getString("name");
+                                System.out.println("My Str = " + "'" +  db_tax_name + "'");
 //                 if (rs.getString("name").equals("serviceTax"))
                 if (rs.getString("name").equals("serviceTax"))
                 {
@@ -176,7 +195,7 @@ public class CafeBill extends JFrame {
                     db_tax2 = rs.getFloat("percentValue");
                     System.out.println("In tax else 1 : "+ db_tax2 );
                 }
-                else if(rs.getString("name").equals("service Charge"))
+                else if(db_tax_name.compareTo("Service Charge") == 0)
                 {
                     db_tax3 = rs.getFloat("percentValue");
                     System.out.println("Ins tax else 2: "+ db_tax3 );
@@ -704,8 +723,8 @@ public class CafeBill extends JFrame {
                 calculateTotal();
                 menuExpansionPane.removeAll();
                 menuExpansionPane.updateUI();
-               // new CafeBill().disable();
-                new Login().setVisible(true);
+                // new CafeBill().disable();
+                showOpenLoginScreen();
                 }
         });
         c.gridx = 6;
