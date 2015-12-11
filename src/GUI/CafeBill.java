@@ -533,20 +533,6 @@ public class CafeBill extends JFrame {
         JButton btnPrintBill = new JButton("Submit Order");
         btnPrintBill.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //new ReceiptPrinting().setVisible(true);
-                // ReceiptPrinting rp = new ReceiptPrinting();
-                /* PrinterJob job = PrinterJob.getPrinterJob();
-                PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-                PageFormat pf = job.pageDialog(aset);
-                job.setPrintable(rp , pf);
-                boolean ok = job.printDialog(aset);
-                if (ok) {
-                    try {
-                        job.print(aset);
-                    } catch (PrinterException ex) {
-                        // The job did not successfully complete
-                    }
-                }*/
                 int count=table.getRowCount();
                 //ResultSet resultset=null;
                 try {
@@ -611,7 +597,7 @@ public class CafeBill extends JFrame {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             }
-                 /* textArea.append("Cheese Burger  Rs 150 \n");
+/*                  textArea.append("Cheese Burger  Rs 150 \n");
                 float subTotal;
                 Stqring tempStr;
                 tempStr = lblSubtotal.getText();
@@ -630,6 +616,33 @@ public class CafeBill extends JFrame {
                 
                 oid++;
                 //JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
+
+                //new ReceiptPrinting().setVisible(true);
+                // ReceiptPrinting rp = new ReceiptPrinting();
+/*
+                PrinterJob job = PrinterJob.getPrinterJob();
+                PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+                PageFormat pf = job.pageDialog(aset);
+                job.setPrintable(rp , pf);
+                boolean ok = job.printDialog(aset);
+                if (ok) {
+                    try {
+                        job.print(aset);
+                    } catch (PrinterException ex) {
+                        // The job did not successfully complete
+                    }
+                }
+*/
+                    PrinterJob job = PrinterJob.getPrinterJob();
+                    job.setPrintable(rp);
+                    boolean ok = job.printDialog();
+                    if (ok) {
+                        try {
+                             job.print();
+                        } catch (PrinterException ex) {
+                         /* The job did not successfully complete */
+                        }
+                    }
                 }
         });
         c.gridx = 1;
