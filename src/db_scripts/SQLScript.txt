@@ -10,9 +10,7 @@ create table customer(cid integer, Name varchar(35), Address varchar(35), phonen
 # CREATE TABLE transactiontypes(transtypeid int AUTO_INCREMENT PRIMARY KEY,transdesc varchar(10));
 CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(10));
 
-
 create table item(itemId integer, itemName varchar(35),categoryId int NOT NULL references categories(categoryId), price float);
-
 
 create table categories(categoryId int, categoryName varchar(35), imageIcon varchar(50));
 
@@ -73,7 +71,6 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1021, 'Darjeeling
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1021, 'Masala Tea', 101, 49.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1022, 'Green Tea', 101, 47.00);
 
-
 /*COFFEE - COLD BEVERAGES-(102)--------------------------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1023, 'Iced Coffee', 102, 55.00); 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1024, 'Frappe', 102, 59.00);
@@ -111,5 +108,3 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicke
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1044, 'Cupcakes', 105, 29.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1045, 'Slice', 105, 22.00);
-
-INSERT INTO tax values(12.50, 14.50, 5);
