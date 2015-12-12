@@ -16,12 +16,14 @@ import java.sql.ResultSet;
 
 class Login extends JDialog implements ActionListener
 {
-    private static CafeBill cb_;
+    private CafeBill cb_;
 
     JButton SUBMIT;
     JPanel panel;
     JLabel label2;
     JTextField text2;
+    String empName;
+    long empID;
 
     public Login(CafeBill cb){
         cb_ = cb;
@@ -73,10 +75,16 @@ class Login extends JDialog implements ActionListener
             while(rs.next()) {
                // System.out.println("Test-1100");
                String password=rs.getString("Password");
+
                 if ((pass.equals(password)))
                 {
                     result = true; 
+                    empName = rs.getString(2);
+                    empID = Integer.parseInt(rs.getString(5));
                     cb_ = new CafeBill();
+                    cb_.currEmpName = empName;
+                    cb_.currEmpID = empID;
+                    cb_.init();
                     cb_.setVisible(true);
                     this.dispose();
                     //text2.setText("");
@@ -110,7 +118,7 @@ class Login extends JDialog implements ActionListener
             frame.setLocation(500, 300);
             frame.setResizable(false);
             frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         }
         catch(Exception e)
         {
