@@ -8,7 +8,9 @@ create table customer(cid integer, Name varchar(35), Address varchar(35), phonen
 
 # create table transactiontypes(transtypeid int, transdesc varchar(10));
 # CREATE TABLE transactiontypes(transtypeid int AUTO_INCREMENT PRIMARY KEY,transdesc varchar(10));
-CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(10));
+CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(25));
+insert into transactiontypes values(51, 'Cash');
+insert into transactiontypes values(52, 'Credit Card');
 
 create table item(itemId integer, itemName varchar(35),categoryId int NOT NULL references categories(categoryId), price float);
 
@@ -25,7 +27,7 @@ insert into tax values ('Service Charge', 'Service Charge', '5', '2015-12-1', '2
 
 create table emp(loginName varchar(20), firstName varchar(20), lastName varchar(20), password varchar(10), empid int PRIMARY KEY);
 
-create table menu_order(oid int PRIMARY KEY, cid int, orderDate Date, orderTime Time, transtypeid int, transtypeinfo varchar(20), empid int, FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (empid) REFERENCES emp(empid));
+create table menu_order(oid int PRIMARY KEY, cid int, orderDate Date, orderTime Time, transtypeid int, transtypeinfo varchar(20), empid int, discounAmount float, discountPercent float, subTotal float, totalTax float, totalAmount float, FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (empid) REFERENCES emp(empid));
 
 create table billing_info(oid int ,itemId int references item(itemId), item_instruction varchar(35),FOREIGN KEY (oid) REFERENCES menu_order(oid ));
 
