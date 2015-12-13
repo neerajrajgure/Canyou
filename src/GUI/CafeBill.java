@@ -30,6 +30,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.print.PageFormat;
+import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.math.BigDecimal;
@@ -172,6 +173,21 @@ public class CafeBill extends JFrame {
         loginScreen.setVisible(true);
     }
 
+    void showOpenPayScreen()
+    {
+        Payment objPay = new Payment();
+        // objPay.createAndShowGUI();
+        System.out.println("Cash or CC: " + Payment.payCashOrCC);
+        objPay.pack();
+        final Toolkit toolkit = Toolkit.getDefaultToolkit();
+        final Dimension screenSize = toolkit.getScreenSize();
+        final int x = (screenSize.width - objPay.getWidth()) / 2;
+        final int y = (screenSize.height - objPay.getHeight()) / 2;
+        objPay.setLocation(x, y);
+        objPay.setSize(250, 110);
+        objPay.setVisible(true);
+    }
+    
     public void connectDatabase(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -585,8 +601,13 @@ public class CafeBill extends JFrame {
                 int count=table.getRowCount();
                 //ResultSet resultset=null;
 
+                showOpenPayScreen();
+                
+                //TODO: Should substring the transInfo so that the data in the db does not overflow.
+                System.out.println("Payment info: " + Payment.transInfo);
+
                 // Change Values customerId, transID, transInfo from the Credit Cash Dialog
-                setMenuOrder(1, 51, " ",Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
+                setMenuOrder(1, 51, " ", Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, "discount Comment", Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
                 int iRowCnt = dataModel.getRowCount();
                 Object obj;
                 String objString;
@@ -603,18 +624,6 @@ public class CafeBill extends JFrame {
                     setBillingInfo(itemId, "Test");
 
                 }
-
-                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
-                {
-                    System.out.println(dataModel.getRowCount());
-                    dataModel.removeRow(i);
-                    calculateTotal();
-                    menuExpansionPane.removeAll();
-                    menuExpansionPane.updateUI();
-                }
-                CouponDiscount.couponValue=0.0;
-                System.out.println("incremet oid is" +oid);
-                oid++;
 
                 //JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
@@ -634,6 +643,37 @@ public class CafeBill extends JFrame {
                     }
                 }
 */
+
+                PrinterJob job = PrinterJob.getPrinterJob();
+                PageFormat pf = job.defaultPage();
+                Paper paper = new Paper();
+                double margin = 8; // half inch
+
+                System.out.println("width = " + paper.getWidth());
+                System.out.println("Calc width = " + (paper.getWidth() - margin * 2));
+                paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
+                pf.setPaper(paper);
+
+                job.setPrintable(rp, pf);
+                if (job.printDialog()) {
+                  try {
+                    job.print();
+                  } catch (PrinterException printException) {
+                    System.out.println(printException);
+                  }
+                }
+
+                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
+                {
+                    System.out.println(dataModel.getRowCount());
+                    dataModel.removeRow(i);
+                    calculateTotal();
+                    menuExpansionPane.removeAll();
+                    menuExpansionPane.updateUI();
+                }
+                CouponDiscount.couponValue=0.0;
+                System.out.println("incremet oid is" + oid);
+                oid++;
             }
         });
         c.gridx = 1;
@@ -717,9 +757,9 @@ public class CafeBill extends JFrame {
         costPane.add(btncanelOrder,c);
     }
 
-    public void setMenuOrder(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, float subTotal, float totalTaxPercent, float totalAmount){
+    public void setMenuOrder(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, String discountDesc, float subTotal, float totalTaxPercent, float totalAmount){
         try {
-                String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?)";
+                String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 preparedStatement=connect.prepareStatement(query);
                 System.out.println("New Oid: " );
                 preparedStatement.setLong(1, oid);
@@ -732,9 +772,10 @@ public class CafeBill extends JFrame {
                 preparedStatement.setLong(7, currEmpID);
                 preparedStatement.setFloat(8, discounAmount);
                 preparedStatement.setFloat(9, discountPercent);
-                preparedStatement.setFloat(10, subTotal);
-                preparedStatement.setFloat(11, totalTaxPercent);
-                preparedStatement.setFloat(12, totalAmount);
+                preparedStatement.setString(10, discountDesc);
+                preparedStatement.setFloat(11, subTotal);
+                preparedStatement.setFloat(12, totalTaxPercent);
+                preparedStatement.setFloat(13, totalAmount);
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
                 System.out.println("menu order updated " );

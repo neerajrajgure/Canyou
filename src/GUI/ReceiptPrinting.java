@@ -13,16 +13,16 @@ import java.util.Date;
 public class ReceiptPrinting implements Printable {
     private static CafeBill _cb;
     public ReceiptPrinting(CafeBill cb){
-        _cb =cb;
+        _cb = cb;
      }
-    public ReceiptPrinting()
-    {
-    }
-    final String companyName = "The Hive";
+//    public ReceiptPrinting()
+//    {
+//    }
+    final String companyName = "Cafe The Hive";
     final String companyTag = "-Coffee & Fun Served Together-";
     final String addrLine1 = "Shop no 27 Radhey Heights,";
-    final String addrLine2 = "Sector no 29, at village Ravet";
-    final String addrLine3 = "Taluka Haveli, District Pune 412104";
+    final String addrLine2 = "Ravet Road, Bhondwe Chowk";
+    final String addrLine3 = "Ravet, Pune 44";
     final String dash="----------------------------------------------------------------";
     final String tfield1 = "ITEM";
     final String tfield2 = " |QTY";
@@ -30,11 +30,12 @@ public class ReceiptPrinting implements Printable {
     final String tfield4 = "|TOTAL";
     final String Sub_Total = "SubTotal";
     final String Discount_ = "Discount";
-    final String S_Tax ="Service Tax(14.50)";
-    final String Vat_ ="VAT(12.50)";
+    final String S_Tax = "Service Tax(14.50)";
+    final String Vat_ = "VAT(12.50)";
     final String total_wt ="Total with Tax";
-    final String S_Charge ="Service Charge(5.0)";
-    final String greet = "THANK YOU PLEASE VISIT AGAIN!! ";
+    final String S_Charge = "Service Charge(5.0)";
+    final String Grettings = " Please visit again";
+    final String website = "www.thehivecafe.com";
     final String blank=" ";
     private String Subtotal;
     private String Tax1;
@@ -42,6 +43,7 @@ public class ReceiptPrinting implements Printable {
     private String Tax3;
     private String Total;
     private String Discount;
+ /*   
     private Paper receiptPaper;
     private double paperWidth = 0.2;
     private double paperHeight = 0.2;
@@ -49,6 +51,10 @@ public class ReceiptPrinting implements Printable {
     double rightMargin = 0.01;
     double topMargin = 0.01;
     double bottomMargin = 0.01;
+   */
+    
+    private int leftMargin = 0;
+    
     public int print(Graphics g, PageFormat pf, int page) throws PrinterException {
         Dimension d = this.getPreferredSize();
         g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
@@ -57,19 +63,21 @@ public class ReceiptPrinting implements Printable {
             return NO_SUCH_PAGE;
         }
         Date date1 = new Date( );
-        SimpleDateFormat sdf =  new SimpleDateFormat ("E yyyy-MM-dd ");
-        SimpleDateFormat sdf1 =  new SimpleDateFormat ("hh:mm");
+        SimpleDateFormat sdf =  new SimpleDateFormat ("E yyyy-MM-dd");
+        SimpleDateFormat sdf1 =  new SimpleDateFormat ("hh:mm a");
 
         /* User (0,0) is typically outside the imageable area, so we must
          * translate by the X and Y values in the PageFormat to avoid clipping
          */
-        receiptPaper = new Paper();
-        receiptPaper.setSize(paperWidth * 0.2, paperHeight * 0.2);
-        receiptPaper.setImageableArea(leftMargin * 0.02, topMargin * 0.02,
-                (paperWidth - leftMargin - rightMargin) * 0.02,
-                (paperHeight - topMargin - bottomMargin) * 0.02);
-
-        //PageFormat pf.setPaper(receiptPaper);
+       
+//        receiptPaper = new Paper();
+//        receiptPaper.setSize(paperWidth * 0.2, paperHeight * 0.2);
+//        receiptPaper.setImageableArea(leftMargin * 0.02, topMargin * 0.02,
+//                (paperWidth - leftMargin - rightMargin) * 0.02,
+//                (paperHeight - topMargin - bottomMargin) * 0.02);
+//        pf.setPaper(receiptPaper);
+//
+//        //PageFormat pf.setPaper(receiptPaper);
         Graphics2D g2d = (Graphics2D)g;
         g2d.translate(pf.getImageableX(), pf.getImageableY());
         Subtotal = _cb.lblSubtotal.getText();
@@ -80,24 +88,27 @@ public class ReceiptPrinting implements Printable {
         Discount=_cb.lblDiscount.getText();
         System.out.println("Discount is:"+Discount+"is the value");
         /* Now we perform our rendering */
-        g.drawString(companyName, 80, 10);
-        g.drawString(companyTag, 38, 20);
-        g.drawString(dash, 5, 30);
-        g.drawString(sdf.format(date1) , 143, 40);
-        g.drawString(sdf1.format(date1) , 165, 50);
-        g.drawString(addrLine1, 5,40);
-        g.drawString(addrLine2, 5, 50);
-        g.drawString(addrLine3, 5, 60);
-        g.drawString(dash, 5, 70);
-        g.drawString(tfield1, 5, 80);
-        g.drawString(tfield2, 105, 80);
-        g.drawString(tfield3, 130, 80);
-        g.drawString(tfield4, 165, 80);
-        g.drawString(dash, 5, 90);
+        g2d.drawString(companyName, 75, 10);
+        g.drawString(companyTag, 33, 20);
+        g.drawString(dash, leftMargin, 30);
+        g.drawString(sdf.format(date1) , 132, 40);
+        g.drawString(sdf1.format(date1) , 156, 50);
+        g.drawString(addrLine1, leftMargin, 40);
+        g.drawString(addrLine2, leftMargin, 50);
+        g.drawString(addrLine3, leftMargin, 60);
+        g.drawString(dash, leftMargin, 70);
+        g.drawString(tfield1, leftMargin, 80);
+        g.drawString(tfield2, 100, 80);
+        g.drawString(tfield3, 125, 80);
+        g.drawString(tfield4, 160, 80);
+        g.drawString(dash, leftMargin, 90);
+        
+        
         int newline = g.getFont().getSize() + 5 ;
         System.out.println("Newline size :"+newline);
+
         String menuName,printQuantity,prinrtunitprice,prinrToatalprice;
-        int y = 105;
+        int y = 100;
         for (int row = 0; row <_cb.dataModel.getRowCount(); row++){
 
             menuName = _cb.dataModel.getValueAt(row ,1).toString();
@@ -107,26 +118,26 @@ public class ReceiptPrinting implements Printable {
             prinrToatalprice =  _cb.dataModel.getValueAt(row, 4) .toString();
             System.out.println( "Field = "+menuName+" "+printQuantity+" "+prinrtunitprice+" "+prinrToatalprice);
 //            g.drawString(printitem+printQuantity+prinrtunitprice+prinrToatalprice,5,y += newline);
-            g.drawString(menuName, 5, y);
-            g.drawString(printQuantity, 115, y);
-            g.drawString(prinrtunitprice, 140, y);
-            g.drawString(prinrToatalprice, 170, y);
-            g.drawString(blank, 180,y += newline);//This has to fix later
+            g.drawString(menuName, leftMargin, y);
+            g.drawString(printQuantity, 110, y);
+            g.drawString(prinrtunitprice, 135, y);
+            g.drawString(prinrToatalprice, 165, y);
+            g.drawString(blank, 175,y += newline);//This has to fix later
 
             //System.out.println("Value of Y :"+y);
         }
         if(Discount.matches("0.0")){
             System.out.println("Am in if");
-            g.drawString(dash, 5, y += newline);
-            g.drawString(Sub_Total, 5, y += newline);
-            g.drawString(Vat_, 5, y += newline);
-            g.drawString(S_Charge, 5, y += newline);
-            g.drawString(S_Tax, 5, y += newline);
-//            g.drawString(Discount_, 5,y += newline);
-            g.drawString(total_wt, 5, y += newline);
+            g.drawString(dash, leftMargin, y += newline);
+            g.drawString(Sub_Total, leftMargin, y += newline);
+            g.drawString(Vat_, leftMargin, y += newline);
+            g.drawString(S_Charge, leftMargin, y += newline);
+            g.drawString(S_Tax, leftMargin, y += newline);
+//            g.drawString(Discount_, leftMargin,y += newline);
+            g.drawString(total_wt, leftMargin, y += newline);
 //            System.out.println("Value of Y :"+y);
            //numeric values from GUI
-            int x=170;
+            int x=165;
             g.drawString(Subtotal, x, y+= newline-75);
             g.drawString(Tax1, x, y+= newline);
             g.drawString(Tax2, x, y += newline);
@@ -136,23 +147,27 @@ public class ReceiptPrinting implements Printable {
         }
         else{
             System.out.println("Am in else");
-            g.drawString(dash, 5, y += newline);
-            g.drawString(Sub_Total, 5, y += newline);
-            g.drawString(Vat_, 5, y += newline);
-            g.drawString(S_Charge, 5, y += newline);
-            g.drawString(S_Tax, 5, y += newline);
-            g.drawString(Discount_, 5,y += newline);
-            g.drawString(total_wt, 5, y += newline);
+            g.drawString(dash, leftMargin, y += newline);
+            g.drawString(Sub_Total, leftMargin, y += newline);
+            g.drawString(Vat_, leftMargin, y += newline);
+            g.drawString(S_Charge, leftMargin, y += newline);
+            g.drawString(S_Tax, leftMargin, y += newline);
+            g.drawString(Discount_, leftMargin, y += newline);
+            g.drawString(total_wt, leftMargin, y += newline);
 //            System.out.println("Value of Y :"+y);
            //numeric values from GUI
-            int x=170;
-            g.drawString(Subtotal, x, y+= newline-90);
+            int x=165;
+            g.drawString(Subtotal, x, y+= newline-85);
             g.drawString(Tax1, x, y+= newline);
             g.drawString(Tax2, x, y += newline);
             g.drawString(Tax3, x, y+=newline);
             g.drawString(Discount, x, y+=newline);
-            g.drawString(Total, x, y+=newline);
-            }
+            
+            
+
+//            g.drawString(website, x, y +=newline);
+        }
+
             /* tell the caller that this page is part of the printed document */
         return PAGE_EXISTS;
     }
@@ -174,18 +189,6 @@ public class ReceiptPrinting implements Printable {
         // TODO Auto-generated method stub
         return null;
     }
-/*    public void actionPerformed(ActionEvent e) {
-        PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPrintable(this);
-        boolean ok = job.printDialog();
-        if (ok) {
-            try {
-                job.print();
-            } catch (PrinterException ex) {
-                // The job did not successfully complete
-            }
-        }
-    }*/
     public void actionPerformed(ActionEvent e) {
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPrintable(this);
@@ -194,7 +197,7 @@ public class ReceiptPrinting implements Printable {
             try {
                  job.print();
             } catch (PrinterException ex) {
-             /* The job did not successfully complete */
+              //The job did not successfully complete
             }
         }
    }
@@ -206,15 +209,27 @@ public class ReceiptPrinting implements Printable {
         } catch (Exception cnf) {
         }
         PrinterJob job = PrinterJob.getPrinterJob();
+/*
         PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
         PageFormat pf = job.pageDialog(aset);
         job.setPrintable(new ReceiptPrinting(), pf);
-        boolean ok = job.printDialog(aset);
+        boolean ok = job.printDialog();
         if (ok) {
             try {
                  job.print(aset);
             } catch (PrinterException ex) {
-             /* The job did not successfully complete */
+             // The job did not successfully complete
+            }
+        }
+*/
+        CafeBill test_cb = new CafeBill();
+        job.setPrintable(new ReceiptPrinting(test_cb));
+        boolean ok = job.printDialog();
+        if (ok) {
+            try {
+                 job.print();
+            } catch (PrinterException ex) {
+              //The job did not successfully complete
             }
         }
     }

@@ -8,7 +8,7 @@ create table customer(cid integer, Name varchar(35), Address varchar(35), phonen
 
 # create table transactiontypes(transtypeid int, transdesc varchar(10));
 # CREATE TABLE transactiontypes(transtypeid int AUTO_INCREMENT PRIMARY KEY,transdesc varchar(10));
-CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(25));
+CREATE TABLE transactiontypes(transtypeid int PRIMARY KEY,transdesc varchar(100));
 insert into transactiontypes values(51, 'Cash');
 insert into transactiontypes values(52, 'Credit Card');
 
