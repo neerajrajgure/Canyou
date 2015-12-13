@@ -109,19 +109,19 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1033, 'Strawberry
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1034, 'Butterscotch shake', 102, 69.00);
 
 /* VEG SANDWICHES  (103) ----------------------- */
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1035, 'Cheese', 103, 60.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1036, 'Corn Cheese', 103, 70.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1037, 'Club Sandwich', 103, 70.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1038, 'Paneer Tikka', 103, 78.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1039, 'Chocolate ', 103, 68.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1035, 'Cheese', 103, 59.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1036, 'Corn Cheese', 103, 65.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1037, 'Club Sandwich', 103, 74.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1038, 'Paneer Tikka', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1039, 'Chocolate ', 103, 69.00);
 
 /* CHICKEN SANDWICHES ---------------------*/
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1040, 'Chicken Mayo', 103, 85.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1041, 'Grilled Chicken', 103, 85.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1042, 'Tandoori Chicken', 103, 99.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicken ', 103, 92.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1040, 'Chicken Mayo', 103, 75.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1041, 'Grilled Chicken', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1042, 'Tandoori Chicken', 103, 89.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicken ', 103, 84.00);
 
 /* CAKES   ---------------- */
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1044, 'Cupcakes', 105, 29.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1045, 'Slice', 105, 22.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1044, 'Cupcakes', 105, 25.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1045, 'Slice', 105, 25.00);
