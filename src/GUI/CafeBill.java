@@ -619,7 +619,10 @@ public class CafeBill extends JFrame {
         btnPrintBill.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int count=table.getRowCount();
-                //ResultSet resultset=null;                
+                //ResultSet resultset=null;    
+                
+                
+/*                
                 Customer cust = new Customer();
                 //c.DOB = null;
                 cust.FName ="Bill";
@@ -631,7 +634,7 @@ public class CafeBill extends JFrame {
                 cust.phone = "9873211111";
                 cust.DOB = getCurrentDate();
                 setCustomerInfo(cust);
-
+*/
                 showOpenPayScreen();
                 
                 //TODO: Should substring the transInfo so that the data in the db does not overflow.
