@@ -30,10 +30,10 @@ public class ReceiptPrinting implements Printable {
     final String tfield4 = "|TOTAL";
     final String Sub_Total = "SubTotal";
     final String Discount_ = "Discount";
-    final String S_Tax = "Service Tax(14.50)";
-    final String Vat_ = "VAT(12.50)";
+    final String S_Tax = "Service Tax(14.50 %)";
+    final String Vat_ = "VAT(5 %)";
     final String total_wt ="Total with Tax";
-    final String S_Charge = "Service Charge(5.0)";
+    final String S_Charge = "Service Charge(5.0 %)";
     final String Grettings = " Please visit again";
     final String website = "www.thehivecafe.com";
     final String blank=" ";
