@@ -5,23 +5,26 @@ package GUI;
 import java.awt.*;
 import java.applet.*;
 import java.awt.event.*;
-public class RegistrationForm extends Frame implements ActionListener
-{
+public class RegistrationForm extends Frame implements ActionListener{
+    private static CafeBill _cb;
+    public RegistrationForm(CafeBill cb){
+        _cb = cb;
+     }
     String msg;
     Button b1=new Button("Submit");
     Button b2=new Button("Clear");
     Label l11=new Label("Customer Details",Label.CENTER);
-    Label l1=new Label("First Name:",Label.LEFT);
-    Label l2=new Label("Last Name:",Label.LEFT);
-    Label l3=new Label("Phone no:",Label.LEFT);
-    Label l4=new Label("DOB:",Label.LEFT);
-    Label l5=new Label("Email Id:",Label.LEFT);
+    Label first_name=new Label("First Name:",Label.LEFT);
+    Label last_name=new Label("Last Name:",Label.LEFT);
+    Label phone_no=new Label("Phone no:",Label.LEFT);
+    Label d_o_b=new Label("DOB:",Label.LEFT);
+    Label email_id=new Label("Email Id:",Label.LEFT);
 
-    TextField t1=new TextField();
-    TextField t2=new TextField();
-    TextField t3=new TextField();
-    TextField t4=new TextField();
-    TextField t5=new TextField();
+    TextField firstname=new TextField();
+    TextField lastname=new TextField();
+    TextField phoneno=new TextField();
+    TextField dob=new TextField();
+    TextField email=new TextField();
 
     public RegistrationForm()
     {
@@ -30,38 +33,38 @@ public class RegistrationForm extends Frame implements ActionListener
         setForeground(Color.black);
         setLayout(null);
         add(l11);
-        add(l1);
-        add(t1);
+        add(first_name);
+        add(firstname);
 
-        add(l2);
-        add(t2);
+        add(last_name);
+        add(lastname);
 
-        add(l3);
-        add(t3);
+        add(phone_no);
+        add(phoneno);
 
-        add(l4);
-        add(t4);
+        add(d_o_b);
+        add(dob);
 
-        add(l5);
-        add(t5);
+        add(email_id);
+        add(email);
 
         add(b1);
         add(b2);
         b1.addActionListener(this);
         b2.addActionListener(this);
 
-        l1.setBounds(25,65,90,20);
-        l2.setBounds(25,90,90,20);
-        l3.setBounds(25,120,90,20);
-        l4.setBounds(25,150,90,20);
-        l5.setBounds(25,180,90,20);
+        first_name.setBounds(25,65,90,20);
+        last_name.setBounds(25,90,90,20);
+        phone_no.setBounds(25,120,90,20);
+        d_o_b.setBounds(25,150,90,20);
+        email_id.setBounds(25,180,90,20);
 
         l11.setBounds(10,40,280,20);
-        t1.setBounds(120,65,170,20);
-        t2.setBounds(120,90,170,20);
-        t3.setBounds(120,120,170,20);
-        t4.setBounds(120,150,170,20);
-        t5.setBounds(120,180,170,20);
+        firstname.setBounds(120,65,170,20);
+        lastname.setBounds(120,90,170,20);
+        phoneno.setBounds(120,120,170,20);
+        dob.setBounds(120,150,170,20);
+        email.setBounds(120,180,170,20);
         b1.setBounds(120,210,70,20);
         b2.setBounds(220,210,70,20);
     }
@@ -81,11 +84,11 @@ public class RegistrationForm extends Frame implements ActionListener
         else 
             if(ae.getActionCommand().equals("Clear"))
             {
-                t1.setText(" ");
-                t2.setText(" ");
-                t3.setText(" ");
-                t4.setText(" ");
-                t5.setText(" ");
+                firstname.setText(" ");
+                lastname.setText(" ");
+                phoneno.setText(" ");
+                dob.setText(" ");
+                email.setText(" ");
                 System.out.println("Text Cleared" );
             }
     }
@@ -93,10 +96,15 @@ public class RegistrationForm extends Frame implements ActionListener
 
     public static void main(String g[])
     {
-        RegistrationForm stu=new RegistrationForm();
-        stu.setSize(new Dimension(500,500));
-        stu.setTitle("student registration");
-        stu.setVisible(true);
+        RegistrationForm crf=new RegistrationForm();
+        crf.setSize(new Dimension(500,500));
+        crf.setTitle("Customer Registration");
+        crf.setVisible(true);
+        
+    }
+
+    private void createAndShowGUI() {
+        // TODO Auto-generated method stub 
     }
 }
 
