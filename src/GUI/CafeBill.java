@@ -47,10 +47,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
+
 import javax.swing.table.TableColumn;
 import javax.swing.JDialog;
 import java.awt.Dialog;
 
+import javax.swing.JOptionPane;
 
 public class CafeBill extends JFrame {
 
@@ -186,7 +188,7 @@ public class CafeBill extends JFrame {
         final int x = (screenSize.width - objPay.getWidth()) / 2;
         final int y = (screenSize.height - objPay.getHeight()) / 2;
         objPay.setLocation(x, y);
-        objPay.setSize(250, 110);
+        objPay.setSize(500, 250);
         objPay.setVisible(true);
     }
     
@@ -741,6 +743,12 @@ public class CafeBill extends JFrame {
         JButton btnClear = new JButton("Clear Order");
         btnClear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String msg = "Do you want to clear the screen? ";
+                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "alert", JOptionPane.YES_NO_OPTION);
+
+                if (result != JOptionPane.YES_OPTION) {
+                    return;
+                }
                 for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
                     System.out.println(dataModel.getRowCount());
@@ -797,6 +805,13 @@ public class CafeBill extends JFrame {
                 //code for cancel the order
    //             new CafeBill().setVisible(true);
                 //System.exit(0);
+
+                String msg = "Are you sure about Logout action? ";
+                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "alert", JOptionPane.YES_NO_OPTION);
+
+                if (result != JOptionPane.YES_OPTION) {
+                    return;
+                }
                 for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
                     System.out.println(dataModel.getRowCount());
