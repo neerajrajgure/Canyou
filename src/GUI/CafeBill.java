@@ -35,6 +35,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,10 +47,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
+
 import javax.swing.table.TableColumn;
 import javax.swing.JDialog;
 import java.awt.Dialog;
 
+import javax.swing.JOptionPane;
 
 public class CafeBill extends JFrame {
 
@@ -102,6 +105,7 @@ public class CafeBill extends JFrame {
     public float db_tax2 = (float)0.0;
     public float db_tax3 =(float) 0.0;
     public float db_totalTaxPerc = (float)0.0;
+
     private java.sql.Time getCurrentTime() {
         java.util.Date today = new java.util.Date();
         return new java.sql.Time(today.getTime());
@@ -188,7 +192,7 @@ public class CafeBill extends JFrame {
         final int x = (screenSize.width - objPay.getWidth()) / 2;
         final int y = (screenSize.height - objPay.getHeight()) / 2;
         objPay.setLocation(x, y);
-        objPay.setSize(250, 110);
+        objPay.setSize(500, 250);
         objPay.setVisible(true);
     }
     
@@ -265,7 +269,7 @@ public class CafeBill extends JFrame {
         return true;
     }
     public long getNextOid() {
-        connectDatabase();
+        //connectDatabase();
         long maxoid=0;
         try {
             preparedStatement = connect.prepareStatement("SELECT MAX(oid) FROM menu_order WHERE orderDate=CURRENT_DATE()");
@@ -280,6 +284,24 @@ public class CafeBill extends JFrame {
         }
         return ++maxoid;
     }
+
+    public long getNextCid() {
+        //connectDatabase();
+        long maxcid=0;
+        try {
+            preparedStatement = connect.prepareStatement("SELECT MAX(cid) FROM customer");
+            ResultSet rs=preparedStatement.executeQuery();
+            while(rs.next())
+            {
+               maxcid=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return ++maxcid;
+    }
+
     public ResultSet readDBMS(String query){
         try {
             // This will load the MySQL driver, each DB has its own driver
@@ -614,9 +636,29 @@ public class CafeBill extends JFrame {
                 paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
                 pf.setPaper(paper);
                 int count=table.getRowCount();
+<<<<<<< HEAD
                 //ResultSet resultset=null;
 
                 // showOpenPayScreen();
+=======
+                //ResultSet resultset=null;    
+                
+                
+/*                
+                Customer cust = new Customer();
+                //c.DOB = null;
+                cust.FName ="Bill";
+                cust.LName ="Gates";
+                cust.phoneNum = 9873211111L;
+                cust.address = "Test addr";
+                cust.flag = 'N';
+                cust.emailid = "abcd";
+                cust.phone = "9873211111";
+                cust.DOB = getCurrentDate();
+                setCustomerInfo(cust);
+*/
+                showOpenPayScreen();
+>>>>>>> master
                 
                 //TODO: Should substring the transInfo so that the data in the db does not overflow.
                 System.out.println("Payment info: " + Payment.transInfo);
@@ -650,6 +692,30 @@ public class CafeBill extends JFrame {
                     setBillingInfo(itemId, "Test");
 
                 }
+
+                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
+                {
+                    System.out.println(dataModel.getRowCount());
+                    dataModel.removeRow(i);
+                    calculateTotal();
+                    menuExpansionPane.removeAll();
+                    menuExpansionPane.updateUI();
+                }
+
+                //Code for testing Customer Relations
+                //boolean flag = customerLookupExact(0, "Sam", "Smith", 0, null , null);
+                //System.out.println("Cusomer exists" +flag);
+                /*
+                ArrayList<Customer> cArr = customerLookup(0, "Sam", "Smith", 0, null , null);
+                for(int i=0;i<cArr.size();i++){
+                    System.out.println(cArr.get(i).FName+" "+cArr.get(i).LName);
+                }
+                */
+
+                CouponDiscount.couponValue=0.0;
+
+                System.out.println("incremet oid is" +oid);
+                oid++; // Do not change. Do not delete this line.
 
                 //JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
@@ -709,6 +775,12 @@ public class CafeBill extends JFrame {
         JButton btnClear = new JButton("Clear Order");
         btnClear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String msg = "Do you want to clear the screen? ";
+                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "alert", JOptionPane.YES_NO_OPTION);
+
+                if (result != JOptionPane.YES_OPTION) {
+                    return;
+                }
                 for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
                     System.out.println(dataModel.getRowCount());
@@ -765,6 +837,13 @@ public class CafeBill extends JFrame {
                 //code for cancel the order
    //             new CafeBill().setVisible(true);
                 //System.exit(0);
+
+                String msg = "Are you sure about Logout action? ";
+                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "alert", JOptionPane.YES_NO_OPTION);
+
+                if (result != JOptionPane.YES_OPTION) {
+                    return;
+                }
                 for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
                     System.out.println(dataModel.getRowCount());
@@ -835,6 +914,142 @@ public class CafeBill extends JFrame {
                e1.printStackTrace();
                }
 
+    }
+    public void setCustomerInfo(Customer c){
+        try {
+            //Check if Customer already exists
+            boolean flagCustEx = customerLookupExact(c.cid, c.FName, c.LName, c.phoneNum, c.emailid , c.DOB);
+            System.out.println(flagCustEx);
+            if (flagCustEx == false){
+                String query = "Insert into customer(cid, Fname, Lname, Address, phonenum, phone, emailid, DOB, flag) values (?,?,?,?,?,?,?,?,?)";
+                preparedStatement=connect.prepareStatement(query);
+                long custid = getNextCid();
+                System.out.println("Cust ID: = " + custid);
+                System.out.println("All flieds for insert: " + c.FName + "-->" + c.LName + "-->" + c.address + "-->" +
+                        c.phone + "-->" + c.phoneNum + "-->" + c.emailid + "-->" + c.DOB + "-->" + c.flag);
+                preparedStatement.setInt(1, 1);
+                preparedStatement.setString(2, c.FName);
+                preparedStatement.setString(3, c.LName);
+                preparedStatement.setString(4, c.address);
+                preparedStatement.setString(5, c.phone);
+                preparedStatement.setLong(6, c.phoneNum);
+                preparedStatement.setString(7, c.emailid);
+                preparedStatement.setDate(8, c.DOB);
+                // preparedStatement.setString(9, Character.toString(c.flag));
+                preparedStatement.setString(9,"c.flag");
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+                System.out.println("Customer updated ");
+            } else {
+                System.out.println("Customer already Exists ");
+            }
+
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+    }
+
+    public ArrayList<Customer> customerLookup(long cid, String FName, String LName, long phoneNum, String emailid , Date DOB){
+        Customer c = null;
+        String query = "Select * FROM customer WHERE ";
+        ArrayList<String> parameterList=  new ArrayList<String>();
+        ArrayList<Customer> CustList = new ArrayList<Customer>();
+        if (cid!=0) {
+            query = query+"cid ="+cid;
+        } else {
+            if (FName != null) {
+                parameterList.add(" FName Like '"+FName+"%'");
+            }
+            if (LName != null) {
+                parameterList.add(" LName Like '"+LName+"%'");
+            }
+            if (phoneNum != 0) {
+                parameterList.add(" phone = "+phoneNum);
+            }
+            if (emailid != null) {
+                parameterList.add(" emailid Like '"+emailid+"%'");
+            }
+            if (DOB != null) {
+                parameterList.add(" DOB = '"+DOB+"'");
+            }
+            query = query+parameterList.get(0);
+            for (int i = 1; i<parameterList.size(); i++) {
+                query = query+" AND "+parameterList.get(i);
+            }
+            System.out.println(" Customer Query - 1: "+ "'" + query + "'");
+        }
+
+        try {
+                preparedStatement = connect.prepareStatement(query);
+                ResultSet rs = preparedStatement.executeQuery();
+                while(rs.next())
+                {
+                   c = new Customer();
+                   c.cid=rs.getLong(1);
+                   c.FName = rs.getString(2);
+                   c.LName = rs.getString(3);
+                   c.address = rs.getString(4);
+                   c.phone = rs.getString(5);
+                   c.phoneNum = rs.getLong(6);
+                   c.emailid = rs.getString(7);
+                   c.DOB = rs.getDate(8);
+                   //c.flag = (rs.getString(9)).charAt(0);
+                   CustList.add(c);
+                }
+                preparedStatement.close();
+       } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return CustList;
+
+    }
+    public boolean customerLookupExact(long cid, String FName, String LName, long phoneNum, String emailid , Date DOB){
+        Customer c = null;
+        String query = "Select * FROM customer WHERE ";
+        ArrayList<String> parameterList=  new ArrayList<String>();
+        if (cid!=0) {
+            query = query+"cid ="+cid;
+        } else {
+            if (FName != null) {
+                parameterList.add(" FName ='"+FName+"'");
+            }
+            if (LName != null) {
+                parameterList.add(" LName = '"+LName+"'");
+            }
+            if (phoneNum != 0) {
+                parameterList.add(" phone = "+phoneNum);
+            }
+            if (emailid != null) {
+                parameterList.add(" emailid = '"+emailid+"'");
+            }
+            if (DOB != null) {
+                parameterList.add(" DOB = '"+DOB+"'");
+            }
+            query = query+parameterList.get(0);
+            for (int i = 1; i<parameterList.size(); i++) {
+                query = query + " AND " + parameterList.get(i);
+            }
+            System.out.println(" Customer Query - 2: " + "'" + query + "'");
+        }
+
+        try {
+            preparedStatement = connect.prepareStatement(query);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (!rs.next()) {
+                preparedStatement.close();
+                return false;
+            } else {
+                preparedStatement.close();
+                return true;
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /*

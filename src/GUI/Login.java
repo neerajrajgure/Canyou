@@ -50,6 +50,7 @@ class Login extends JDialog implements ActionListener
         add(panel,BorderLayout.CENTER);
         SUBMIT.addActionListener(this);
         setTitle("LOGIN FORM");
+        getRootPane().setDefaultButton(SUBMIT);
     }
 
     public void actionPerformed(ActionEvent ae)
