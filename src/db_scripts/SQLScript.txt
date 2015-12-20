@@ -53,28 +53,29 @@ INSERT into categories VALUES(105, 'Cake', './src/images/Cake.png' );
 
  
 /*COFFEE - HOT DRINKS (101)----------------*/
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 42.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 39.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Espresso', 101, 49.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Americano', 101, 48.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Americano', 101, 62.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Americano', 101, 44.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Americano', 101, 54.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1004, 'Irish', 101, 52.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1005, 'Large - Irish', 101, 62.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1004, 'Irish', 101, 48.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1005, 'Large - Irish', 101, 58.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1006, 'Mocha ', 101, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1006, 'Mocha ', 101, 54.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1007, 'Large - Mocha', 101, 69.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1008, 'Flat White ', 101, 55.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1009, 'Large - Flat White', 101, 69.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1008, 'Flat White ', 101, 48.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1009, 'Large - Flat White', 101, 58.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1010, 'Cappuccino  Natural', 101, 55.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1011, 'Large - Cappuccino Natural', 101, 68.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1010, 'Cappuccino  Natural', 101, 54.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1011, 'Large - Cappuccino Natural', 101, 69.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1012, 'Cappuccino  Flavoured', 101, 59.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1013, 'Large - Cappuccino Flavoured', 101, 72.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1014, 'Latte Natural', 101, 55.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1015, 'Large - Latte Natural', 101, 72.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1014, 'Latte Natural', 101, 54.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1015, 'Large - Latte Natural', 101, 69.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1016, 'Latte Flavoured', 101, 64.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1017, 'Large - Latte Flavoured', 101, 77.00);
@@ -126,3 +127,7 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicke
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1044, 'Cupcakes', 105, 25.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1045, 'Slice', 105, 25.00);
+
+/*WAFFLES------------------*/
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1046, 'Plain Waffle', 104, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1047, 'Special Waffle', 104, 70.00);

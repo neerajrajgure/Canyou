@@ -75,6 +75,8 @@ public class CafeBill extends JFrame {
     final JLabel lblTax3 = new JLabel("");
     final JLabel lblDiscount_1 = new JLabel("Discount");
     final JLabel lblDiscount = new JLabel("");
+//    final JLabel username = new JLabel("username");
+    JLabel welcomeLabel = new JLabel("Welcome user: ");
     private static Connection connect = null;
     //private static Statement statement = null;
     private static PreparedStatement preparedStatement = null;
@@ -94,6 +96,7 @@ public class CafeBill extends JFrame {
     //JTableX table ;
     JTable table ;
     ReceiptPrinting rp;
+    KitchenReceiptPrinting krp;
     public long oid = 0;
     public float db_tax1=(float) 0.0;
     public float db_tax2 = (float)0.0;
@@ -153,6 +156,7 @@ public class CafeBill extends JFrame {
                 e.printStackTrace();
             }
             rp = new ReceiptPrinting(this);
+            krp = new KitchenReceiptPrinting(this);
             getTax();
         } catch (Exception e) {
             e.printStackTrace();
@@ -171,7 +175,7 @@ public class CafeBill extends JFrame {
         loginScreen.setLocation(x, y);
         loginScreen.setSize(250, 110);
         loginScreen.setVisible(true);
-    }
+        }
 
     void showOpenPayScreen()
     {
@@ -595,16 +599,38 @@ public class CafeBill extends JFrame {
         c.gridy = 6;
         costPane.add(lblDiscount,c);
 
+        c.gridx = 15;
+        c.gridy = 10;
+        costPane.add(welcomeLabel,c);
         JButton btnPrintBill = new JButton("Submit Order");
         btnPrintBill.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                PrinterJob job = PrinterJob.getPrinterJob();
+                PageFormat pf = job.defaultPage();
+                Paper paper = new Paper();
+                double margin = 8; // half inch
+                System.out.println("width = " + paper.getWidth());
+                System.out.println("Calc width = " + (paper.getWidth() - margin * 2));
+                paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
+                pf.setPaper(paper);
                 int count=table.getRowCount();
                 //ResultSet resultset=null;
 
-                showOpenPayScreen();
+                // showOpenPayScreen();
                 
                 //TODO: Should substring the transInfo so that the data in the db does not overflow.
                 System.out.println("Payment info: " + Payment.transInfo);
+                System.out.println("Payment info: " + Payment.transInfo);
+                System.out.println(" before krp print " );
+                job.setPrintable(krp, pf);
+                if (job.printDialog()) {
+                    try {
+                        System.out.println(" inside try krp " );
+                        job.print();
+                    } catch (PrinterException printException) {
+                        System.out.println(printException);
+                    }
+                }
 
                 // Change Values customerId, transID, transInfo from the Credit Cash Dialog
                 setMenuOrder(1, 51, " ", Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, "discount Comment", Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
@@ -644,10 +670,10 @@ public class CafeBill extends JFrame {
                 }
 */
 
-                PrinterJob job = PrinterJob.getPrinterJob();
-                PageFormat pf = job.defaultPage();
-                Paper paper = new Paper();
-                double margin = 8; // half inch
+//                PrinterJob job = PrinterJob.getPrinterJob();
+//                PageFormat pf = job.defaultPage();
+//                Paper paper = new Paper();
+//                double margin = 8; // half inch
 
                 System.out.println("width = " + paper.getWidth());
                 System.out.println("Calc width = " + (paper.getWidth() - margin * 2));
@@ -900,7 +926,8 @@ public class CafeBill extends JFrame {
         if(CouponDiscount.couponValue!=0.0 && CouponDiscount.couponValue <=100)
         {
             totAmtAfterDiscount =  (float)( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100)));
-            lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
+            // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
+            lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
         }else{
             totAmtAfterDiscount = totalAmt;
             lblDiscount.setText("0.0");
