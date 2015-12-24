@@ -74,7 +74,7 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1010, 'Cappuccino
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1011, 'Large - Cappuccino Natural', 101, 69.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1012, 'Cappuccino  Flavoured', 101, 59.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1013, 'Large - Cappuccino Flavoured', 101, 72.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1013, 'Large - Cappuccino Flav.', 101, 72.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1014, 'Latte Natural', 101, 54.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1015, 'Large - Latte Natural', 101, 69.00);
@@ -113,17 +113,30 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1033, 'Strawberry
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1034, 'Butterscotch shake', 102, 69.00);
 
 /* VEG SANDWICHES  (103) ----------------------- */
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1035, 'Cheese', 103, 59.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1036, 'Corn Cheese', 103, 65.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1037, 'Club Sandwich', 103, 74.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1038, 'Paneer Tikka', 103, 79.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1039, 'Chocolate ', 103, 69.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1035, 'Cheese S/W WB', 103, 59.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1036, 'Corn Cheese S/W WB', 103, 65.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1037, 'Club S/W WB', 103, 74.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1038, 'Paneer Tikka S/W WB', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1039, 'Chocolate S/W WB', 103, 69.00);
 
 /* CHICKEN SANDWICHES ---------------------*/
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1040, 'Chicken Mayo', 103, 75.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1041, 'Grilled Chicken', 103, 79.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1042, 'Tandoori Chicken', 103, 89.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicken ', 103, 84.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1040, 'Chicken Mayo S/W WB', 103, 75.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1041, 'Grilled Chicken S/W WB', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1042, 'Tandoori Chicken S/W WB', 103, 89.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicken S/W WB', 103, 84.00);
+
+/* VEG SANDWICHES BB (103) ----------------------- */
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1048, 'Cheese S/W BB', 103, 64.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1049, 'Corn Cheese S/W BB', 103, 70.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1050, 'Club S/W BB', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1051, 'Paneer Tikka S/W BB', 103, 84.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1052, 'Chocolate S/W BB', 103, 74.00);
+
+/* CHICKEN SANDWICHES BB---------------------*/
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1053, 'Chicken Mayo S/W BB', 103, 80.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1054, 'Grilled Chicken S/W BB', 103, 84.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1055, 'Tandoori Chicken S/W BB', 103, 94.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1056, 'BBQ Chicken S/W BB', 103, 89.00);
 
 /* CAKES   ---------------- */
 

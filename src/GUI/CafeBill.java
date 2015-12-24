@@ -79,14 +79,14 @@ public class CafeBill extends JFrame {
     final JLabel lblDiscount_1 = new JLabel("Discount");
     final JLabel lblDiscount = new JLabel("");
 //    final JLabel username = new JLabel("username");
-    JLabel welcomeLabel = new JLabel("Welcome user: ");
+    String currEmpName;
+    JLabel welcomeLabel = new JLabel();
     private static Connection connect = null;
     //private static Statement statement = null;
     private static PreparedStatement preparedStatement = null;
     private static ResultSet resultSet = null;
     private int index;
     private int index2;
-    String currEmpName="tempUser";
     long currEmpID=0;
 
     //String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
@@ -347,6 +347,7 @@ public class CafeBill extends JFrame {
         contentPane.add(menuExpansionPane, BorderLayout.CENTER);
         contentPane.add(costPane, BorderLayout.EAST);
         contentPane.add(frequentItemsPane, BorderLayout.SOUTH);
+        welcomeLabel. setText("Welcome user: " + currEmpName );
         /*
          * Read Categories and Items from Database
          */
@@ -636,11 +637,11 @@ public class CafeBill extends JFrame {
                 paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
                 pf.setPaper(paper);
                 int count=table.getRowCount();
-<<<<<<< HEAD
+
                 //ResultSet resultset=null;
 
                 // showOpenPayScreen();
-=======
+
                 //ResultSet resultset=null;    
                 
                 
@@ -658,10 +659,10 @@ public class CafeBill extends JFrame {
                 setCustomerInfo(cust);
 */
                 showOpenPayScreen();
->>>>>>> master
+
                 
                 //TODO: Should substring the transInfo so that the data in the db does not overflow.
-                System.out.println("Payment info: " + Payment.transInfo);
+                System.out.println("Payment info: " + Payment.payCashOrCC);
                 System.out.println("Payment info: " + Payment.transInfo);
                 System.out.println(" before krp print " );
                 job.setPrintable(krp, pf);
@@ -675,7 +676,7 @@ public class CafeBill extends JFrame {
                 }
 
                 // Change Values customerId, transID, transInfo from the Credit Cash Dialog
-                setMenuOrder(1, 51, " ", Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, "discount Comment", Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
+                setMenuOrder(1, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, "discount Comment", Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
                 int iRowCnt = dataModel.getRowCount();
                 Object obj;
                 String objString;
@@ -860,6 +861,25 @@ public class CafeBill extends JFrame {
         c.gridx = 6;
         c.gridy = 11;
         costPane.add(btncanelOrder,c);
+        JButton btnCR = new JButton("Customer Registration");
+        btnCR.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new  RegistrationForm().setVisible(true);
+            }
+        });
+        c.gridx = 1;
+        c.gridy = 12;
+        costPane.add(btnCR,c);
+
+        JButton btnVS = new JButton("ViewSale");
+        btnVS.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new  ShowPreviousOrder().setVisible(true);
+            }
+        });
+        c.gridx = 1;
+        c.gridy = 13;
+        costPane.add(btnVS,c);
     }
 
     public void setMenuOrder(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, String discountDesc, float subTotal, float totalTaxPercent, float totalAmount){
