@@ -34,16 +34,18 @@ public class ReceiptPrinting implements Printable {
     //    final String S_Tax = "Service Tax(14.50)";
     //    final String Vat_ = "Service charge(12.50)";
     final String total_wt ="Total with Tax";
-    final String Vat_ = "VAT(5.0)";
+    final String Vat_ = "VAT(5.0 %)";
 
     final String S_Tax = "Service Tax(14.50 %)";
 //    final String Vat_ = "VAT(5 %)";
 //    final String total_wt ="Total with Tax";
     final String S_Charge = "Service Charge(5.0 %)";
 
-    final String Grettings = " Please visit again";
+    final String GREET_VISIT_AGAIN = " Please Visit Again!";
     final String website = "www.thehivecafe.com";
-    final String blank=" ";
+    final String blank = " ";
+    final String RsSymbol = "Rs";
+    final String GREET_THANKS = "Thank You!";
     private String Subtotal;
     private String Tax1;
     private String Tax2;
@@ -139,6 +141,8 @@ public class ReceiptPrinting implements Printable {
             g.drawString(Sub_Total, leftMargin, y += newline);
             g.drawString(Vat_, leftMargin, y += newline);
             g.drawString(total_wt, leftMargin, y += newline);
+            g.drawString(RsSymbol, leftMargin+150, y);
+
             //            g.drawString(S_Charge, leftMargin, y += newline);
             //            g.drawString(S_Tax, leftMargin, y += newline);
             //            g.drawString(Discount_, leftMargin,y += newline);
@@ -147,9 +151,12 @@ public class ReceiptPrinting implements Printable {
             //numeric values from GUI
             y += newline;
             int x=165;
-            g.drawString(Subtotal, x, y+= newline-60);
+            g.drawString(Subtotal, x, y+= newline-60); //TODO: NEED TO REMOVE THE -60 and put it few lines before where it belong without subtracting
             g.drawString(Tax2, x, y += newline);
             g.drawString(Total, x, y+=newline);
+            g.drawString(GREET_VISIT_AGAIN, leftMargin+120, y+=newline);
+            g.drawString(GREET_THANKS, leftMargin, y);
+            g.drawString(website, leftMargin+55, y+=newline);
             //            g.drawString(Tax1, x, y+= newline);
             //            g.drawString(Tax2, x, y += newline);
             ////            g.drawString(Tax3, x, y+=newline);
@@ -163,6 +170,7 @@ public class ReceiptPrinting implements Printable {
             g.drawString(Vat_, leftMargin, y += newline);
             g.drawString(Discount_, leftMargin, y += newline);
             g.drawString(total_wt, leftMargin, y += newline);
+            g.drawString(RsSymbol, leftMargin+150, y);
             //            g.drawString(S_Charge, leftMargin, y += newline);
             //            g.drawString(S_Tax, leftMargin, y += newline);
             //            g.drawString(Discount_, leftMargin, y += newline);
@@ -173,16 +181,15 @@ public class ReceiptPrinting implements Printable {
             int x=165;
             y += newline;
             y += newline;
-            g.drawString(Subtotal, x, y+= newline-87);
+            g.drawString(Subtotal, x , y += newline-89);
             //            g.drawString(Tax1, x, y+= newline);
-            g.drawString(Tax2, x, y += newline);
+            g.drawString(Tax2, x , y += newline);
             //            g.drawString(Tax3, x, y+=newline);
-            g.drawString(Discount, x, y+=newline);
-            g.drawString(Total, x, y+=newline);
-
-
-
-            //            g.drawString(website, x, y +=newline);
+            g.drawString(Discount, x , y+=newline);
+            g.drawString(Total, x , y+=newline);
+            g.drawString(GREET_THANKS, x-165 , y+=newline);
+            g.drawString(GREET_VISIT_AGAIN, x-50, y);
+            g.drawString(website, x-110, y+=newline);
         }
 
         /* tell the caller that this page is part of the printed document */
