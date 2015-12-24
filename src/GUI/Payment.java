@@ -18,7 +18,7 @@ public class Payment extends JDialog {
     
     public Payment() {
         setModal(true);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+       // setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         createAndShowGUI();
     }
     /**
@@ -28,27 +28,32 @@ public class Payment extends JDialog {
      */
     public void createAndShowGUI() {
         //Create and set up the window.
-
-        JRadioButton radioOptionCash = new JRadioButton("Cash");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        JRadioButton radioOptionCash = new JRadioButton("Cash",true);
         radioOptionCash.setToolTipText("Payment by Cash");
         JTextField jTxtCash = new JTextField(10);
         JRadioButton radioOptionCC = new JRadioButton("Credit/Debit Card");
         radioOptionCC.setToolTipText("Payment by Credit/Debit Card");
+        ButtonGroup btngroup=new ButtonGroup();
+        btngroup.add(radioOptionCash);
+        btngroup.add(radioOptionCC);
         JTextField jTxtCreditCard = new JTextField(10);
-       
+
         JButton btnsubmit = new JButton("Submit");
-        btnsubmit.setSize(100, 100);
         btnsubmit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(radioOptionCash.isSelected()) {
+                    System.out.println("In  if ActionListener");
                     payCashOrCC = CASH_PAY;
-                } else if(radioOptionCash.isSelected()) {
+                } else if(radioOptionCC.isSelected()) {
+                    System.out.println("In  else if ActionListener");
                     payCashOrCC = CC_DC_PAY;
                 } else {
                     transInfo = "jTxtCash='" + jTxtCash + "' jTxtCreditCard='" + jTxtCreditCard + "'";
                 }
             }
         });
+
         setLayout(new FlowLayout());
         getContentPane().add(radioOptionCash);
         getContentPane().add(jTxtCash);
