@@ -9,16 +9,16 @@ import javax.swing.*;
 /* FrameDemo.java requires no other files. */
 
 public class Payment extends JDialog {
-    
+
     final static int CASH_PAY = 51;  // Default payment if they do not select.
     final static int CC_DC_PAY = 52;
     public static int payCashOrCC;
     public static String transInfo;
-    
-    
+
+
     public Payment() {
         setModal(true);
-       // setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        // setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         createAndShowGUI();
     }
     /**
@@ -28,7 +28,7 @@ public class Payment extends JDialog {
      */
     public void createAndShowGUI() {
         //Create and set up the window.
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         JRadioButton radioOptionCash = new JRadioButton("Cash",true);
         radioOptionCash.setToolTipText("Payment by Cash");
         JTextField jTxtCash = new JTextField(10);
@@ -43,14 +43,18 @@ public class Payment extends JDialog {
         btnsubmit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(radioOptionCash.isSelected()) {
-                    System.out.println("In  if ActionListener");
+                    System.out.println("Payment::createAbdShowGUI - In  if ActionListener");
                     payCashOrCC = CASH_PAY;
+                    transInfo = jTxtCash.getText();
                 } else if(radioOptionCC.isSelected()) {
-                    System.out.println("In  else if ActionListener");
+                    System.out.println("Payment::createAbdShowGUI -In  else if ActionListener");
                     payCashOrCC = CC_DC_PAY;
+                    transInfo =  jTxtCreditCard.getText();
+
                 } else {
-                    transInfo = "jTxtCash='" + jTxtCash + "' jTxtCreditCard='" + jTxtCreditCard + "'";
+                    transInfo = "jTxtCash = '" + jTxtCash + "' jTxtCreditCard = '" + jTxtCreditCard + "'";
                 }
+                dispose();
             }
         });
 
@@ -60,16 +64,7 @@ public class Payment extends JDialog {
         getContentPane().add(radioOptionCC);
         getContentPane().add(jTxtCreditCard);
         getContentPane().add(btnsubmit);
+        this.dispose();
     }
 
-    public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
-        // javax.swing.SwingUtilities.invokeLater(new Runnable() {
-        //    public void run() {
-        Payment pay = new Payment();
-        pay.createAndShowGUI();
-        //    }
-        // });
-    }
 }
