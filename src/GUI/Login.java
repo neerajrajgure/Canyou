@@ -35,7 +35,7 @@ class Login extends JDialog implements ActionListener
         label2.setText("Password:");
         text2 = new JPasswordField(10);
 
-        SUBMIT=new JButton("SUBMIT");
+        SUBMIT=new JButton("LOGIN");
 
         SUBMIT.setLocation(50 , 40);
         SUBMIT.setBackground(new Color(59, 89, 182));
