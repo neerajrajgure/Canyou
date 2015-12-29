@@ -34,6 +34,10 @@ create table menu_order(oid int, cid int, orderDate Date, orderTime Time, transt
 
 create table billing_info(oid int ,itemId int references item(itemId), item_instruction varchar(35),FOREIGN KEY (oid) REFERENCES menu_order(oid ));
 
+create table male_age_group(id int(10), age_group_start int(10), age_group_end int(10));
+create table female_age_group(id int(10), age_group_start int(10), age_group_end int(10));
+create table kids_age_group(id int(10), age_group_start int(10), age_group_end int(10));
+
 
 CREATE TABLE Coupon (couponId int, couponName varchar(20), startDate date, startTime time, endDate date, endTime time , itemId int REFERENCES item(itemId), percentage int);
 
@@ -146,3 +150,20 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1045, 'Slice', 10
 /*WAFFLES------------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1046, 'Plain Waffle', 104, 55.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1047, 'Special Waffle', 104, 70.00);
+
+
+insert into male_age_group values (1, 15, 30);
+insert into male_age_group values (2, 31, 40);
+insert into male_age_group values (3, 41, 50);
+insert into male_age_group values (4, 51, 60);
+insert into male_age_group values (5, 61, 70);
+insert into male_age_group values (6, 71, 100);
+
+insert into female_age_group values (1, 15, 30);
+insert into female_age_group values (2, 31, 45);
+insert into female_age_group values (3, 45, 60);
+insert into female_age_group values (4, 61, 100);
+
+insert into kids_age_group values (1, 0, 3);
+insert into kids_age_group values (2, 4, 10);
+insert into kids_age_group values (3, 11, 15);
