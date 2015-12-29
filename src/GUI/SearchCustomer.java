@@ -9,9 +9,9 @@ public class SearchCustomer extends Frame implements ActionListener{
     private static CafeBill _cb;
     public SearchCustomer(CafeBill cb){
         _cb = cb;
-     }
+    }
     String msg;
-    Button btnSearch=new Button("Search_");
+    Button btnSearch=new Button("Search");
     Button b2=new Button("Clear");
     Label l11=new Label("Customer Details_1",Label.CENTER);
     Label first_name=new Label("First Name:",Label.LEFT);
@@ -71,15 +71,14 @@ public class SearchCustomer extends Frame implements ActionListener{
 
     /*  public void paint(Graphics g)
     {
-       //g.drawString(msg,200,450);
+       //g.drawString(msg,200,450s);
     }*/
 
     public void actionPerformed(ActionEvent ae)
     {
         if(ae.getActionCommand().equals("Search"))
         {
-            msg="Customer details Found!";
-            System.out.println("Text Submit" );
+            new CustomerReterivalForm().setVisible(true);
         }
         else 
             if(ae.getActionCommand().equals("Clear"))
@@ -98,9 +97,9 @@ public class SearchCustomer extends Frame implements ActionListener{
     {
         SearchCustomer scf=new SearchCustomer();
         scf.setSize(new Dimension(500,500));
-        scf.setTitle("Search Customer_1");
+        scf.setTitle("Search Customer");
         scf.setVisible(true);
-        
+
     }
 
     private void createAndShowGUI() {
@@ -113,6 +112,6 @@ class myWindowAdapter1 extends WindowAdapter
     public void windowClosing(WindowEvent we1)
     {
         System.exit(0);
-        
+
     }
 }
