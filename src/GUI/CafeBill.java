@@ -78,6 +78,7 @@ public class CafeBill extends JFrame {
     final JLabel lblTax3 = new JLabel("");
     final JLabel lblDiscount_1 = new JLabel("Discount");
     final JLabel lblDiscount = new JLabel("");
+    final String db_name= "HMS";
 //    final JLabel username = new JLabel("username");
     String currEmpName;
     JLabel welcomeLabel = new JLabel();
@@ -101,6 +102,7 @@ public class CafeBill extends JFrame {
     ReceiptPrinting rp;
     KitchenReceiptPrinting krp;
     public long oid = 0;
+    public long cid = 0;
     public float db_tax1=(float) 0.0;
     public float db_tax2 = (float)0.0;
     public float db_tax3 =(float) 0.0;
@@ -154,7 +156,9 @@ public class CafeBill extends JFrame {
             pack();
             try {
                 oid = getNextOid();
+                cid= getNextCid();
                 System.out.println(" Oid in frame is  : "+ oid);
+                System.out.println(" Cid in frame is  : "+ cid);
             } catch(Exception e) {
                 // Call the Fall back method to use text files as the backups
                 e.printStackTrace();
@@ -183,7 +187,8 @@ public class CafeBill extends JFrame {
 
     void showOpenPayScreen()
     {
-        Payment objPay = new Payment();
+        //CafeBill cfbl= new CafeBill();
+        Payment objPay = new Payment(this);
         // objPay.createAndShowGUI();
         System.out.println("Cash or CC: " + Payment.payCashOrCC);
         objPay.pack();
@@ -194,13 +199,16 @@ public class CafeBill extends JFrame {
         objPay.setLocation(x, y);
         objPay.setSize(500, 250);
         objPay.setVisible(true);
+        objPay.setTitle("PayScreen");
+        objPay.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        //this.dispose();
     }
     
     public void connectDatabase(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
             // Setup the connection with the DB
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?"+ "user=billing&password=hmsbilling");
         }
         catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
@@ -215,7 +223,7 @@ public class CafeBill extends JFrame {
     public boolean getTax() {
         connectDatabase();
         try {
-            preparedStatement = connect.prepareStatement("SELECT * FROM HMS.tax");
+            preparedStatement = connect.prepareStatement("SELECT * FROM "+db_name+".tax");
             ResultSet rs=preparedStatement.executeQuery();
             while(rs.next())
             {
@@ -351,7 +359,7 @@ public class CafeBill extends JFrame {
         /*
          * Read Categories and Items from Database
          */
-        ResultSet r = readDBMS("Select categoryName, imageIcon from HMS.categories");
+        ResultSet r = readDBMS("Select categoryName, imageIcon from "+db_name+".categories");
         try {
             while (r.next()) {
                 String categoryName = r.getString("categoryName");
@@ -648,6 +656,7 @@ public class CafeBill extends JFrame {
 /*                
                 Customer cust = new Customer();
                 //c.DOB = null;
+                cust.cid = cid;
                 cust.FName ="Bill";
                 cust.LName ="Gates";
                 cust.phoneNum = 9873211111L;
@@ -656,15 +665,15 @@ public class CafeBill extends JFrame {
                 cust.emailid = "abcd";
                 cust.phone = "9873211111";
                 cust.DOB = getCurrentDate();
-                setCustomerInfo(cust);
-*/
-                showOpenPayScreen();
+                setCustomerInfo_old(cust);
+
+   */             showOpenPayScreen();
 
                 
                 //TODO: Should substring the transInfo so that the data in the db does not overflow.
-                System.out.println("Payment info: " + Payment.payCashOrCC);
-                System.out.println("Payment info: " + Payment.transInfo);
-                System.out.println(" before krp print " );
+                System.out.println("CafeBill::Submit_order - Payment type: " + Payment.payCashOrCC);
+                System.out.println("CafeBill::Submit_order - Payment info: " + Payment.transInfo);
+                System.out.println("CafeBill::Submit_order - before krp print " );
                 job.setPrintable(krp, pf);
                 if (job.printDialog()) {
                     try {
@@ -676,6 +685,7 @@ public class CafeBill extends JFrame {
                 }
 
                 // Change Values customerId, transID, transInfo from the Credit Cash Dialog
+                setMenuOrder_Test(1, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, "discount Comment", Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
                 setMenuOrder(1, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, "discount Comment", Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
                 int iRowCnt = dataModel.getRowCount();
                 Object obj;
@@ -694,14 +704,14 @@ public class CafeBill extends JFrame {
 
                 }
 
-                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
+/*                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
                     System.out.println(dataModel.getRowCount());
                     dataModel.removeRow(i);
                     calculateTotal();
                     menuExpansionPane.removeAll();
                     menuExpansionPane.updateUI();
-                }
+                }*/
 
                 //Code for testing Customer Relations
                 //boolean flag = customerLookupExact(0, "Sam", "Smith", 0, null , null);
@@ -717,7 +727,7 @@ public class CafeBill extends JFrame {
 
                 System.out.println("incremet oid is" +oid);
                 oid++; // Do not change. Do not delete this line.
-
+                cid++;
                 //JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
                 //new ReceiptPrinting().setVisible(true);
@@ -767,6 +777,7 @@ public class CafeBill extends JFrame {
                 CouponDiscount.couponValue=0.0;
                 System.out.println("incremet oid is" + oid);
                 oid++;
+                cid++;
             }
         });
         c.gridx = 1;
@@ -804,11 +815,11 @@ public class CafeBill extends JFrame {
 /*                try {
                     Class.forName("com.mysql.jdbc.Driver");
                     // Setup the connection with the DB
-                    connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
+                    connect = DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?"+ "user=billing&password=hmsbilling");
                     String query="Insert into coupon(couponId,couponName,startDate,startTime,endDate,endTime,itemId,percentage) values (?,?,?,?,?,?,?,?)";
                     preparedStatement=connect.prepareStatement(query);
-                    preparedStatement.setString(1, "TEST10");
-                    preparedStatement.setString(2, "HIVE100");
+                    preparedStatement.setInt(1, 101);
+                    preparedStatement.setString(2, "HIVE10");
                     preparedStatement.setDate(3, getCurrentDate());
                     preparedStatement.setTime(4, getCurrentTime());
                     preparedStatement.setDate(5, getCurrentDate());
@@ -882,28 +893,25 @@ public class CafeBill extends JFrame {
         costPane.add(btnVS,c);
     }
 
-    public void setMenuOrder(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, String discountDesc, float subTotal, float totalTaxPercent, float totalAmount){
+    public void setMenuOrder_Test(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, String discountDesc, float subTotal, float totalTaxPercent, float totalAmount){
         try {
-                String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                String query="Insert into customer (cid,FName,LName,Address,phonenum,phone,emailid,DOB,flag) values (?,?,?,?,?,?,?,?,?)";
                 preparedStatement=connect.prepareStatement(query);
-                System.out.println("New Oid: " );
-                preparedStatement.setLong(1, oid);
-                System.out.println(" Oid in menu_order is  : "+ oid);
-                preparedStatement.setInt(2, customerId);
-                preparedStatement.setDate(3, getCurrentDate());
-                preparedStatement.setTime(4, getCurrentTime());
-                preparedStatement.setInt(5, transID);
-                preparedStatement.setString(6, transInfo);
-                preparedStatement.setLong(7, currEmpID);
-                preparedStatement.setFloat(8, discounAmount);
-                preparedStatement.setFloat(9, discountPercent);
-                preparedStatement.setString(10, discountDesc);
-                preparedStatement.setFloat(11, subTotal);
-                preparedStatement.setFloat(12, totalTaxPercent);
-                preparedStatement.setFloat(13, totalAmount);
+                System.out.println("New Cid: " );
+                preparedStatement.setLong(1, cid);
+                System.out.println(" Cid in customer is  : "+ cid);
+//                preparedStatement.setInt(2, customerId);
+                preparedStatement.setString(2, "amit");
+                preparedStatement.setString(3, "chaugule");
+                preparedStatement.setString(4, "pune");
+                preparedStatement.setString(5, "9673452211");
+                preparedStatement.setInt(6, 80878116);
+                preparedStatement.setString(7, "amitchaugule@gmail.com");
+                preparedStatement.setDate(8,  getCurrentDate());
+                preparedStatement.setString(9, "1");
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
-                System.out.println("menu order updated " );
+                System.out.println("Customer Test updated " );
 
                 } catch (SQLException e1) {
                     // TODO Auto-generated catch block
@@ -935,34 +943,67 @@ public class CafeBill extends JFrame {
                }
 
     }
-    public void setCustomerInfo(Customer c){
+    public void setMenuOrder(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, String discountDesc, float subTotal, float totalTaxPercent, float totalAmount){
+        try {
+                String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                preparedStatement=connect.prepareStatement(query);
+                System.out.println("New Oid: " );
+                preparedStatement.setLong(1, oid);
+                System.out.println(" Oid in menu_order is  : "+ oid);
+                preparedStatement.setInt(2, customerId);
+                preparedStatement.setDate(3, getCurrentDate());
+                preparedStatement.setTime(4, getCurrentTime());
+                preparedStatement.setInt(5, transID);
+                preparedStatement.setString(6, transInfo);
+                preparedStatement.setLong(7, currEmpID);
+                preparedStatement.setFloat(8, discounAmount);
+                preparedStatement.setFloat(9, discountPercent);
+                preparedStatement.setString(10, discountDesc);
+                preparedStatement.setFloat(11, subTotal);
+                preparedStatement.setFloat(12, totalTaxPercent);
+                preparedStatement.setFloat(13, totalAmount);
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+                System.out.println("menu order updated " );
+
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+   }
+
+/*
+    public void setCustomerInfo_old(Customer c){
         try {
             //Check if Customer already exists
-            boolean flagCustEx = customerLookupExact(c.cid, c.FName, c.LName, c.phoneNum, c.emailid , c.DOB);
-            System.out.println(flagCustEx);
-            if (flagCustEx == false){
-                String query = "Insert into customer(cid, Fname, Lname, Address, phonenum, phone, emailid, DOB, flag) values (?,?,?,?,?,?,?,?,?)";
+//            boolean flagCustEx = customerLookupExact(c.cid, c.FName, c.LName, c.phoneNum, c.emailid , c.DOB);
+//            System.out.println(flagCustEx);
+//            if (flagCustEx == false)
+            {
+//                String query = "Insert into customer(cid, Fname, Lname, Address, phonenum, phone, emailid, DOB, flag) values (?,?,?,?,?,?,?,?,?)";
+                String query = "Insert into customer(cid, Fname, Lname) values (?,?,?)";
                 preparedStatement=connect.prepareStatement(query);
                 long custid = getNextCid();
                 System.out.println("Cust ID: = " + custid);
                 System.out.println("All flieds for insert: " + c.FName + "-->" + c.LName + "-->" + c.address + "-->" +
                         c.phone + "-->" + c.phoneNum + "-->" + c.emailid + "-->" + c.DOB + "-->" + c.flag);
-                preparedStatement.setInt(1, 1);
-                preparedStatement.setString(2, c.FName);
-                preparedStatement.setString(3, c.LName);
-                preparedStatement.setString(4, c.address);
-                preparedStatement.setString(5, c.phone);
-                preparedStatement.setLong(6, c.phoneNum);
-                preparedStatement.setString(7, c.emailid);
-                preparedStatement.setDate(8, c.DOB);
-                // preparedStatement.setString(9, Character.toString(c.flag));
-                preparedStatement.setString(9,"c.flag");
+                preparedStatement.setLong(1, 6);
+                preparedStatement.setString(2, "asdf");
+                preparedStatement.setString(3, "ertt");
+//                preparedStatement.setString(4, c.address);
+//                preparedStatement.setString(5, c.phone);
+//                preparedStatement.setLong(6, c.phoneNum);
+//                preparedStatement.setString(7, c.emailid);
+//                preparedStatement.setDate(8, c.DOB);
+//                // preparedStatement.setString(9, Character.toString(c.flag));
+//                preparedStatement.setString(9,"c.flag");
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
                 System.out.println("Customer updated ");
-            } else {
-                System.out.println("Customer already Exists ");
             }
+//            else {
+//                System.out.println("Customer already Exists ");
+//            }
 
             } catch (SQLException e1) {
                 // TODO Auto-generated catch block
@@ -971,7 +1012,7 @@ public class CafeBill extends JFrame {
 
     }
 
-    public ArrayList<Customer> customerLookup(long cid, String FName, String LName, long phoneNum, String emailid , Date DOB){
+  */  public ArrayList<Customer> customerLookup(long cid, String FName, String LName, long phoneNum, String emailid , Date DOB){
         Customer c = null;
         String query = "Select * FROM customer WHERE ";
         ArrayList<String> parameterList=  new ArrayList<String>();
