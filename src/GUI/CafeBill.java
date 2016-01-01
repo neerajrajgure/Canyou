@@ -78,7 +78,10 @@ public class CafeBill extends JFrame {
     final JLabel lblTax3 = new JLabel("");
     final JLabel lblDiscount_1 = new JLabel("Discount");
     final JLabel lblDiscount = new JLabel("");
-    final String db_name= "HMS";
+    final static String db_name= "HMS";
+    final static String username = "billing";
+    final static String password = "hmsbilling";
+    final static String hmsDbUrl ="jdbc:mysql://localhost/"+db_name+"?"+ "user=" + username + "&" + "password=" + password;
 //    final JLabel username = new JLabel("username");
     String currEmpName;
     JLabel welcomeLabel = new JLabel();
@@ -193,11 +196,11 @@ public class CafeBill extends JFrame {
         System.out.println("Cash or CC: " + Payment.payCashOrCC);
         objPay.pack();
         final Toolkit toolkit = Toolkit.getDefaultToolkit();
-        final Dimension screenSize = toolkit.getScreenSize();
-        final int x = (screenSize.width - objPay.getWidth()) / 2;
-        final int y = (screenSize.height - objPay.getHeight()) / 2;
-        objPay.setLocation(x, y);
-        objPay.setSize(500, 250);
+//        final Dimension screenSize = toolkit.getScreenSize();
+//        final int x = (screenSize.width - objPay.getWidth()) / 2;
+//        final int y = (screenSize.height - objPay.getHeight()) / 2;
+        objPay.setLocation(850, 350);
+        objPay.setSize(300, 250);
         objPay.setVisible(true);
         objPay.setTitle("PayScreen");
         objPay.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -208,7 +211,7 @@ public class CafeBill extends JFrame {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             // Setup the connection with the DB
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?"+ "user=billing&password=hmsbilling");
+            connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
         }
         catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
@@ -815,7 +818,7 @@ public class CafeBill extends JFrame {
 /*                try {
                     Class.forName("com.mysql.jdbc.Driver");
                     // Setup the connection with the DB
-                    connect = DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?"+ "user=billing&password=hmsbilling");
+                    connect = DriverManager.getConnection(db_url);
                     String query="Insert into coupon(couponId,couponName,startDate,startTime,endDate,endTime,itemId,percentage) values (?,?,?,?,?,?,?,?)";
                     preparedStatement=connect.prepareStatement(query);
                     preparedStatement.setInt(1, 101);
@@ -875,7 +878,7 @@ public class CafeBill extends JFrame {
         JButton btnCR = new JButton("Customer Registration");
         btnCR.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new  RegistrationForm().setVisible(true);
+                new  CustRegForm().setVisible(true);
             }
         });
         c.gridx = 1;

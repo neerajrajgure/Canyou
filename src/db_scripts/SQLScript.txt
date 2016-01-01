@@ -167,3 +167,6 @@ insert into female_age_group values (4, 61, 100);
 insert into kids_age_group values (1, 0, 3);
 insert into kids_age_group values (2, 4, 10);
 insert into kids_age_group values (3, 11, 15);
+
+create table demography(num_of_guests int, num_of_males int, m_age_group_1 int, m_age_group_2 int, m_age_group_3 int , m_age_group_4 int , m_age_group_5 int, m_age_group_6 int, num_of_females int, f_age_group_1 int, f_age_group_2 int, f_age_group_3 int , f_age_group_4 int , f_age_group_5 int, f_age_group_6 int,
+ num_of_kids int, k_age_group_1 int, k_age_group_2 int, k_age_group_3 int , k_age_group_4 int , k_age_group_5 int, k_age_group_6 int);

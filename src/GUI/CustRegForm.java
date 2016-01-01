@@ -5,12 +5,25 @@ package GUI;
 import java.awt.*;
 import java.applet.*;
 import java.awt.event.*;
-public class RegistrationForm extends Frame implements ActionListener{
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class CustRegForm extends Frame implements ActionListener{
     private static CafeBill _cb;
-    public RegistrationForm(CafeBill cb){
+    public CustRegForm(CafeBill cb){
         _cb = cb;
-     }
+    }
+    // final String db_name = "HMS";
+    // final String username = "billing";
+    // final String password = "hmsbilling";
+    // final String db_url ="jdbc:mysql://localhost/"+CafeBill.db_name+"?"+ "user=" + username + "&" + "password=" + password;
     String msg;
+    private static Connection connect = null;
+    private static PreparedStatement preparedStatement = null;
+    private static ResultSet resultSet = null;
     Button b1=new Button("Submit");
     Button b2=new Button("Clear");
     Label l11=new Label("Customer Details",Label.CENTER);
@@ -26,7 +39,7 @@ public class RegistrationForm extends Frame implements ActionListener{
     TextField dob=new TextField();
     TextField email=new TextField();
 
-    public RegistrationForm()
+    public CustRegForm()
     {
         addWindowListener(new myWindowAdapter());
         setBackground(Color.LIGHT_GRAY);
@@ -78,11 +91,31 @@ public class RegistrationForm extends Frame implements ActionListener{
     {
         if(ae.getActionCommand().equals("Submit"))
         {
+            try {
+            Class.forName("com.mysql.jdbc.Driver");
+            // Setup the connection with the DB
+            connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
+            String query="Insert into customer (cid,FName,LName,Address,phonenum,phone,emailid,DOB,flag) values (?,?,?,?,?,?,?,?,?)";
+            preparedStatement=connect.prepareStatement(query);
+            preparedStatement.setString(1, firstname.getText() );
+            preparedStatement.setString(2, lastname.getText() );
+            preparedStatement.setString(3, phoneno.getText() );
+            preparedStatement.setString(4, dob.getText() );
+            preparedStatement.setString(5, email.getText() );
+
+        }
+        catch (ClassNotFoundException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        }
+        catch (SQLException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        }
             msg="Customer details saved!";
             System.out.println("Text Submit" );
         }
-        else 
-            if(ae.getActionCommand().equals("Clear"))
+        if(ae.getActionCommand().equals("Clear"))
             {
                 firstname.setText(" ");
                 lastname.setText(" ");
@@ -96,11 +129,11 @@ public class RegistrationForm extends Frame implements ActionListener{
 
     public static void main(String g[])
     {
-        RegistrationForm crf=new RegistrationForm();
+        CustRegForm crf=new CustRegForm();
         crf.setSize(new Dimension(500,500));
         crf.setTitle("Customer Registration");
         crf.setVisible(true);
-        
+
     }
 
     private void createAndShowGUI() {
