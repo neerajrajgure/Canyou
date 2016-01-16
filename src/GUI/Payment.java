@@ -9,18 +9,30 @@ import javax.swing.*;
 /* FrameDemo.java requires no other files. */
 
 public class Payment extends JDialog {
+    private static CafeBill _cp;
 
     final static int CASH_PAY = 51;  // Default payment if they do not select.
     final static int CC_DC_PAY = 52;
     public static int payCashOrCC;
     public static String transInfo;
+    public String Total;
 
+    JRadioButton radioOptionCash = new JRadioButton("Cash");
+    JRadioButton radioOptionCC = new JRadioButton("Credit/Debit Card");
+    JTextField jTxtCash = new JTextField(10);
+    final JLabel lblTotal1 = new JLabel("Return Amount");
+    final JLabel lblamount = new JLabel();
+    JTextField jTxtCreditCard = new JTextField(10);
 
-    public Payment() {
+    public Payment(CafeBill cp) {
+        getContentPane().setBackground(Color.LIGHT_GRAY);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setTitle("Payment Screen");
+        _cp=cp;
         setModal(true);
-        // setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         createAndShowGUI();
     }
+
     /**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
@@ -29,42 +41,67 @@ public class Payment extends JDialog {
     public void createAndShowGUI() {
         //Create and set up the window.
         //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        JRadioButton radioOptionCash = new JRadioButton("Cash",true);
         radioOptionCash.setToolTipText("Payment by Cash");
-        JTextField jTxtCash = new JTextField(10);
-        JRadioButton radioOptionCC = new JRadioButton("Credit/Debit Card");
-        radioOptionCC.setToolTipText("Payment by Credit/Debit Card");
         ButtonGroup btngroup=new ButtonGroup();
         btngroup.add(radioOptionCash);
         btngroup.add(radioOptionCC);
-        JTextField jTxtCreditCard = new JTextField(10);
-
+        jTxtCreditCard.setText("CC-");
+        Total=_cp.lblTotal.getText();
+        System.out.println("Total with tax in payment :"+Total);
         JButton btnsubmit = new JButton("Submit");
         btnsubmit.addActionListener(new ActionListener() {
+            @SuppressWarnings("static-access")
             public void actionPerformed(ActionEvent e) {
-                if(radioOptionCash.isSelected()) {
-                    System.out.println("Payment::createAbdShowGUI - In  if ActionListener");
-                    payCashOrCC = CASH_PAY;
-                    transInfo = jTxtCash.getText();
-                } else if(radioOptionCC.isSelected()) {
-                    System.out.println("Payment::createAbdShowGUI -In  else if ActionListener");
-                    payCashOrCC = CC_DC_PAY;
-                    transInfo =  jTxtCreditCard.getText();
+                calculatePay();
+                String msg = "Do you want to print? ";
+                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "Print", JOptionPane.YES_NO_OPTION);
 
-                } else {
-                    transInfo = "jTxtCash = '" + jTxtCash + "' jTxtCreditCard = '" + jTxtCreditCard + "'";
+                if (result != JOptionPane.YES_OPTION) {
+                    return;
                 }
                 dispose();
             }
         });
+        System.out.println("amount due change ioutside btnsubmit:"+transInfo);
 
-        setLayout(new FlowLayout());
+        JButton btncalculate = new JButton("Calculate");
+        btncalculate.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                calculatePay();
+            }
+        });
+        getContentPane().setLayout(new FlowLayout());
         getContentPane().add(radioOptionCash);
         getContentPane().add(jTxtCash);
         getContentPane().add(radioOptionCC);
         getContentPane().add(jTxtCreditCard);
+        getContentPane().add(lblTotal1);
+        getContentPane().add(lblamount);
+        getContentPane().add(btncalculate);
         getContentPane().add(btnsubmit);
+
         this.dispose();
+    }
+    public void calculatePay()
+    {
+        if(radioOptionCash.isSelected()) {
+            System.out.println("Payment::createAbdShowGUI - In  if ActionListener");
+            payCashOrCC = CASH_PAY;
+            transInfo = jTxtCash.getText();
+            System.out.println("transInfo on btnsubmit in if radiocash payment:"+transInfo);
+            float diff = CafeBill.roundDecimal(new Float(new Float(transInfo) - new Float(Total)), 2);
+            lblamount.setText((new Float(diff)).toString());
+        } else if(radioOptionCC.isSelected()) {
+            System.out.println("Payment::createAbdShowGUI -In  else if ActionListener");
+            payCashOrCC = CC_DC_PAY;
+            transInfo =  jTxtCreditCard.getText();
+            System.out.println("amount due change in else if transInfo:"+transInfo);
+
+        } else {
+            transInfo = "jTxtCash = '" + jTxtCash + "' jTxtCreditCard = '" + jTxtCreditCard + "'";
+            System.out.println("amount due change in else  transInfo:"+transInfo);
+        }
+        System.out.println("amount due change :"+lblamount);
     }
 
 }
