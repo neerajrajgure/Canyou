@@ -9,7 +9,7 @@ import javax.swing.*;
 /* FrameDemo.java requires no other files. */
 
 public class Payment extends JDialog {
-    private static CafeBill _cp;
+    private static CafeBill _cb;
 
     final static int CASH_PAY = 51;  // Default payment if they do not select.
     final static int CC_DC_PAY = 52;
@@ -24,11 +24,11 @@ public class Payment extends JDialog {
     final JLabel lblamount = new JLabel();
     JTextField jTxtCreditCard = new JTextField(10);
 
-    public Payment(CafeBill cp) {
+    public Payment(CafeBill cb) {
         getContentPane().setBackground(Color.LIGHT_GRAY);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setTitle("Payment Screen");
-        _cp=cp;
+        _cb = cb;
         setModal(true);
         createAndShowGUI();
     }
@@ -46,7 +46,7 @@ public class Payment extends JDialog {
         btngroup.add(radioOptionCash);
         btngroup.add(radioOptionCC);
         jTxtCreditCard.setText("CC-");
-        Total=_cp.lblTotal.getText();
+        Total = _cb.lblTotal.getText();
         System.out.println("Total with tax in payment :"+Total);
         JButton btnsubmit = new JButton("Submit");
         btnsubmit.addActionListener(new ActionListener() {
