@@ -26,7 +26,7 @@ create table tax(name varchar(20), description varchar(50), percentValue float, 
 /* insert into tax values ('Service Charge', 'Service Charge', '5', '2015-12-01', '2050-12-31'); */
 insert into tax values ('VAT', 'VAT', '5', '2015-12-01', '2050-12-31');
 
-
+UPDATE TAX SET percentValue = 5.6 WHERE NAME= 'VAT';
 
 create table emp(loginName varchar(20), firstName varchar(20), lastName varchar(20), password varchar(10), empid int PRIMARY KEY);
 
@@ -37,9 +37,12 @@ create table billing_info(oid int ,itemId int references item(itemId), item_inst
 create table male_age_group(id int(10), age_group_start int(10), age_group_end int(10));
 create table female_age_group(id int(10), age_group_start int(10), age_group_end int(10));
 create table kids_age_group(id int(10), age_group_start int(10), age_group_end int(10));
-
+create table demography(num_of_guests int, num_of_males int, m_age_group_1 int, m_age_group_2 int, m_age_group_3 int , m_age_group_4 int , m_age_group_5 int, m_age_group_6 int, num_of_females int, f_age_group_1 int, f_age_group_2 int, f_age_group_3 int , f_age_group_4 int , f_age_group_5 int, f_age_group_6 int,
+ num_of_kids int, k_age_group_1 int, k_age_group_2 int, k_age_group_3 int , k_age_group_4 int , k_age_group_5 int, k_age_group_6 int);
 
 CREATE TABLE Coupon (couponId int, couponName varchar(20), startDate date, startTime time, endDate date, endTime time , itemId int REFERENCES item(itemId), percentage int);
+
+CREATE TABLE discount(Discount_value int(20));
 
 INSERT INTO Coupon (couponId, couponName, startDate, startTime, endDate, endTime, itemId, percentage) VALUES ("TEST1", 'HIVE10)', '12-01-2015', '', '12-31-2015','', 1002, 10 );
 
@@ -167,6 +170,16 @@ insert into female_age_group values (4, 61, 100);
 insert into kids_age_group values (1, 0, 3);
 insert into kids_age_group values (2, 4, 10);
 insert into kids_age_group values (3, 11, 15);
-
-create table demography(num_of_guests int, num_of_males int, m_age_group_1 int, m_age_group_2 int, m_age_group_3 int , m_age_group_4 int , m_age_group_5 int, m_age_group_6 int, num_of_females int, f_age_group_1 int, f_age_group_2 int, f_age_group_3 int , f_age_group_4 int , f_age_group_5 int, f_age_group_6 int,
- num_of_kids int, k_age_group_1 int, k_age_group_2 int, k_age_group_3 int , k_age_group_4 int , k_age_group_5 int, k_age_group_6 int);
+insert into discount values (5);
+insert into discount values (10);
+insert into discount values (15);
+insert into discount values (20);
+insert into discount values (25);
+insert into discount values (30);
+insert into discount values (40);
+insert into discount values (50);
+insert into discount values (60);
+insert into discount values (70);
+insert into discount values (80);
+insert into discount values (90);
+insert into discount values (100);
