@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 class Login extends JDialog implements ActionListener
 {
     private CafeBill cb_;
-
+    final String db_name= "HMS";
     JButton SUBMIT;
     JPanel panel;
     JLabel label2;
@@ -35,7 +35,7 @@ class Login extends JDialog implements ActionListener
         label2.setText("Password:");
         text2 = new JPasswordField(10);
 
-        SUBMIT=new JButton("SUBMIT");
+        SUBMIT=new JButton("LOGIN");
 
         SUBMIT.setLocation(50 , 40);
         SUBMIT.setBackground(new Color(59, 89, 182));
@@ -67,7 +67,7 @@ class Login extends JDialog implements ActionListener
             //private static Statement statement = null;
             PreparedStatement preparedStatement = null;
             // Setup the connection with the DB
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?"+ "user=billing&password=hmsbilling");
             String query=("Select * from emp");
             preparedStatement = connect.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
@@ -81,9 +81,11 @@ class Login extends JDialog implements ActionListener
                 {
                     result = true; 
                     empName = rs.getString(2);
+                    System.out.println("employ name:-" + empName );
                     empID = Integer.parseInt(rs.getString(5));
                     cb_ = new CafeBill();
                     cb_.currEmpName = empName;
+                    System.out.println("cb employ nama:-"+ cb_.currEmpName );
                     cb_.currEmpID = empID;
                     cb_.init();
                     cb_.setVisible(true);

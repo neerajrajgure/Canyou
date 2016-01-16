@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -20,6 +21,7 @@ public class CouponDiscount extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
+    final String db_name= "HMS";
     private static CafeBill cf;
     public  static double couponValue;
     public String couponString;
@@ -209,21 +211,20 @@ public class CouponDiscount extends javax.swing.JFrame {
             // ArrayList<coupons> cp = new ArrayList<coupons>();
             if(couponString.length()==6)
             {
-                System.out.println(" AFter Conversion :"+couponString.replaceAll("\\D+",""));
-                couponValue=Float.parseFloat(couponString.replaceAll("\\D+",""));
+
                 Class.forName("com.mysql.jdbc.Driver");
 
                 Connection connect = null;
                 //private static Statement statement = null;
                 PreparedStatement preparedStatement = null;
                 // Setup the connection with the DB
-                connect = DriverManager.getConnection("jdbc:mysql://localhost/HMS?"+ "user=billing&password=hmsbilling");
+                connect = DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?"+ "user=billing&password=hmsbilling");
                 String query=("Select * from coupon");
                 preparedStatement = connect.prepareStatement(query);
                 ResultSet r1 = preparedStatement.executeQuery();
-                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-mm-dd");
-                java.util.Date today = new java.util.Date();
-                System.out.println("TODAYS DATE :"+today.getDate());
+                // SimpleDateFormat sdf= new SimpleDateFormat("yyyy-mm-dd");
+                //java.util.Date today = new java.util.Date();
+                //System.out.println("TODAYS DATE :"+today.getDate());
                 ArrayList<Coupons> couponlist = new ArrayList<Coupons>();
 
                 try{
@@ -241,7 +242,7 @@ public class CouponDiscount extends javax.swing.JFrame {
                         couponlist.add(c);
 
 
-                        // System.out.println("Coupon List Size :"+couponlist.size());
+                        System.out.println("Coupon List Size :"+couponlist.size());
 
                     }
 
@@ -257,31 +258,33 @@ public class CouponDiscount extends javax.swing.JFrame {
                             // java.util.Date today = new java.util.Date();
 
                             String startDate=cp.getStartDate();
+                            System.out.println("Satrt Date :"+startDate);
                             String  endDate=cp.getEndDate();
                             String startTime=cp.getStartTime();
-                            String endtime=cp.getEndTime();
+                            String endTime=cp.getEndTime();
+                            boolean bstartDate=checkdate("StartDate",startDate);
+                            boolean bendDate= checkdate("EndDate",endDate);
 
-                            /*   if(today.getDate()|| today.getDate().after(startDate) )
-                     {
-                         if(today.getTime().equals(startTime) || today.getTime().after(startTime) )
-                         {
-                             if(today.getDate().equals(endDate) || today.Date().after(endDate) )
-                             {
-                                 if( today.getTime().equals(endTime) || today.getTime().before(endTime) )
-                                     {
-                                         //couponPercentageValue=cp.getPercentage
-                                     }
-                             }
-                         }
-                     }
-                     else
-                     {
-                     JOptionPane.showMessageDialog(panel, "Invalid Coupon Code", "Error", JOptionPane.ERROR_MESSAGE);
+                            boolean bstartTime=checkTime("StartTime",startTime);
+                            boolean bendTime= checkTime("EndTime",endTime);
 
-                     }
-                             */
 
+                            if( bstartDate && bendDate)
+                            {
+                                if( bstartTime && bendTime)
+                                {
+                                    System.out.println(" AFter Conversion :"+couponString.replaceAll("\\D+",""));
+                                    couponValue=Float.parseFloat(couponString.replaceAll("\\D+",""));
+                                }
+                            }
+                            else
+                            {
+                                System.out.println("Boolean Check else");
+                                JOptionPane.showMessageDialog(null, "Expired Coupon Code", "Error", JOptionPane.ERROR_MESSAGE);
+                                break;
+                            }
                         }
+                        break;
                     }
 
                     cf.calculateTotal();
@@ -292,6 +295,10 @@ public class CouponDiscount extends javax.swing.JFrame {
                 {
                     e.printStackTrace();
                 }
+            }
+            else
+            {   System.out.println("Insde most outer ELSE");
+            JOptionPane.showMessageDialog(null, "Invalid Coupon Code", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         catch (NumberFormatException e)
@@ -304,23 +311,90 @@ public class CouponDiscount extends javax.swing.JFrame {
             // TODO Auto-generated method stub
             return null;
         }*/
-    public boolean checkdate(String inputdate)
+    public boolean checkdate(String type, String inputdate)
     {   
-        DateFormat formatter= new SimpleDateFormat("yyyy/mm/dd");
+        System.out.println("Method Input :"+inputdate);
+        DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         String date=formatter.format(new Date());
         ParsePosition position=new ParsePosition(0);
         Date systemDate=(Date) formatter.parse(date, position);
-        
+        System.out.println("SYSTEM DATE :"+systemDate);
         ParsePosition position1=new ParsePosition(0);
         Date dbDate=formatter.parse(inputdate, position1);
-        
-        if(dbDate.equals(systemDate) || systemDate.after(dbDate))
+        System.out.println("Database Date :"+dbDate);
+
+        if(type=="StartDate")
         {
-            
+
+            if(dbDate.equals(systemDate) || systemDate.after(dbDate))
+            {
+                System.out.println("Inside start date IF");
+                return true;
+            }
+            else
+            {
+                System.out.println("Inside start date ELSE");
+                return false;
+            }
         }
-        
-        return true;
+        else if(type=="EndDate")
+        {
+            if(systemDate.before(dbDate) || dbDate.equals(systemDate))
+            {
+                System.out.println("Inside end date IF");
+                return true;
+            }
+            else
+            {
+                System.out.println("Inside end date ELSE");
+                return false;
+            }
+        }
+        return false;
     }
+
+    public boolean checkTime(String type, String inputTime)
+    {
+        System.out.println("Inside CheckTime");
+        System.out.println("INPUT TIME :"+inputTime);
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(inputTime.substring(0,2)));
+        System.out.println(Integer.parseInt(inputTime.substring(0,2)));
+        cal.set(Calendar.MINUTE, Integer.parseInt(inputTime.substring(3,5)));
+        System.out.println(Integer.parseInt(inputTime.substring(3,5)));
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        System.out.println(cal);
+        if(type=="StartTime"){
+
+            if((cal).equals(Calendar.getInstance()) || Calendar.getInstance().after(cal))
+            {
+                System.out.println("Inside start time IF");
+                return true;
+            }
+            else
+            {
+                System.out.println("Inside start time ELSE");
+                return false;
+            }
+        }
+        else if(type=="EndTime")
+        {
+            if((cal).equals(Calendar.getInstance()) || Calendar.getInstance().before(cal))
+            {
+                System.out.println("Inside end time IF");
+                return true;
+            }
+            else
+            {
+                System.out.println("Inside end time ELSE");
+                return false;
+            }
+        }
+        return false;
+    }
+
     private ResultSet readDBMS(String string) {
         // TODO Auto-generated method stub
         return null;

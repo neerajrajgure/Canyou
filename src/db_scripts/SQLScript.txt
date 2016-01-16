@@ -21,9 +21,10 @@ create table categories(categoryId int, categoryName varchar(35), imageIcon varc
 
 create table tax(name varchar(20), description varchar(50), percentValue float, startDate date, endDate date);
 
-insert into tax values ('Service Tax', 'serviceTax', '14.5', '2015-12-1', '2050-12-1');
-insert into tax values ('VAT', 'VAT', '12.5', '2015-12-1', '2050-12-1');
-insert into tax values ('Service Charge', 'Service Charge', '5', '2015-12-1', '2050-12-1');
+/* insert into tax values ('Service Tax', 'serviceTax', '14.5', '2015-12-01', '2050-12-31'); */
+/* insert into tax values ('VAT', 'VAT', '12.5', '2015-12-01', '2050-12-31'); */
+/* insert into tax values ('Service Charge', 'Service Charge', '5', '2015-12-01', '2050-12-31'); */
+insert into tax values ('VAT', 'VAT', '5', '2015-12-01', '2050-12-31');
 
 
 
@@ -32,6 +33,10 @@ create table emp(loginName varchar(20), firstName varchar(20), lastName varchar(
 create table menu_order(oid int, cid int, orderDate Date, orderTime Time, transtypeid int, transtypeinfo varchar(20), empid int, discounAmount float, discountPercent float, discountDesc varchar(100), subTotal float, totalTaxPercent float, totalAmount float, PRIMARY KEY(oid, orderDate), FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (empid) REFERENCES emp(empid));
 
 create table billing_info(oid int ,itemId int references item(itemId), item_instruction varchar(35),FOREIGN KEY (oid) REFERENCES menu_order(oid ));
+
+create table male_age_group(id int(10), age_group_start int(10), age_group_end int(10));
+create table female_age_group(id int(10), age_group_start int(10), age_group_end int(10));
+create table kids_age_group(id int(10), age_group_start int(10), age_group_end int(10));
 
 
 CREATE TABLE Coupon (couponId int, couponName varchar(20), startDate date, startTime time, endDate date, endTime time , itemId int REFERENCES item(itemId), percentage int);
@@ -54,28 +59,29 @@ INSERT into categories VALUES(105, 'Cake', './src/images/Cake.png' );
 
  
 /*COFFEE - HOT DRINKS (101)----------------*/
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 42.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 39.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Espresso', 101, 49.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Americano', 101, 48.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Americano', 101, 62.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Americano', 101, 44.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Americano', 101, 54.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1004, 'Irish', 101, 52.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1005, 'Large - Irish', 101, 62.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1004, 'Irish', 101, 48.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1005, 'Large - Irish', 101, 58.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1006, 'Mocha ', 101, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1006, 'Mocha ', 101, 54.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1007, 'Large - Mocha', 101, 69.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1008, 'Flat White ', 101, 55.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1009, 'Large - Flat White', 101, 69.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1008, 'Flat White ', 101, 48.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1009, 'Large - Flat White', 101, 58.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1010, 'Cappuccino  Natural', 101, 55.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1011, 'Large - Cappuccino Natural', 101, 68.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1010, 'Cappuccino  Natural', 101, 54.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1011, 'Large - Cappuccino Natural', 101, 69.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1012, 'Cappuccino  Flavoured', 101, 59.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1013, 'Large - Cappuccino Flavoured', 101, 72.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1013, 'Large - Cappuccino Flav.', 101, 72.00);
 
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1014, 'Latte Natural', 101, 55.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1015, 'Large - Latte Natural', 101, 72.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1014, 'Latte Natural', 101, 54.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1015, 'Large - Latte Natural', 101, 69.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1016, 'Latte Flavoured', 101, 64.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1017, 'Large - Latte Flavoured', 101, 77.00);
@@ -111,19 +117,56 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1033, 'Strawberry
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1034, 'Butterscotch shake', 102, 69.00);
 
 /* VEG SANDWICHES  (103) ----------------------- */
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1035, 'Cheese', 103, 59.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1036, 'Corn Cheese', 103, 65.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1037, 'Club Sandwich', 103, 74.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1038, 'Paneer Tikka', 103, 79.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1039, 'Chocolate ', 103, 69.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1035, 'Cheese S/W WB', 103, 59.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1036, 'Corn Cheese S/W WB', 103, 65.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1037, 'Club S/W WB', 103, 74.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1038, 'Paneer Tikka S/W WB', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1039, 'Chocolate S/W WB', 103, 69.00);
 
 /* CHICKEN SANDWICHES ---------------------*/
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1040, 'Chicken Mayo', 103, 75.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1041, 'Grilled Chicken', 103, 79.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1042, 'Tandoori Chicken', 103, 89.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicken ', 103, 84.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1040, 'Chicken Mayo S/W WB', 103, 75.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1041, 'Grilled Chicken S/W WB', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1042, 'Tandoori Chicken S/W WB', 103, 89.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1043, 'BBQ Chicken S/W WB', 103, 84.00);
+
+/* VEG SANDWICHES BB (103) ----------------------- */
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1048, 'Cheese S/W BB', 103, 64.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1049, 'Corn Cheese S/W BB', 103, 70.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1050, 'Club S/W BB', 103, 79.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1051, 'Paneer Tikka S/W BB', 103, 84.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1052, 'Chocolate S/W BB', 103, 74.00);
+
+/* CHICKEN SANDWICHES BB---------------------*/
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1053, 'Chicken Mayo S/W BB', 103, 80.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1054, 'Grilled Chicken S/W BB', 103, 84.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1055, 'Tandoori Chicken S/W BB', 103, 94.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1056, 'BBQ Chicken S/W BB', 103, 89.00);
 
 /* CAKES   ---------------- */
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1044, 'Cupcakes', 105, 25.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1045, 'Slice', 105, 25.00);
+
+/*WAFFLES------------------*/
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1046, 'Plain Waffle', 104, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1047, 'Special Waffle', 104, 70.00);
+
+
+insert into male_age_group values (1, 15, 30);
+insert into male_age_group values (2, 31, 40);
+insert into male_age_group values (3, 41, 50);
+insert into male_age_group values (4, 51, 60);
+insert into male_age_group values (5, 61, 70);
+insert into male_age_group values (6, 71, 100);
+
+insert into female_age_group values (1, 15, 30);
+insert into female_age_group values (2, 31, 45);
+insert into female_age_group values (3, 45, 60);
+insert into female_age_group values (4, 61, 100);
+
+insert into kids_age_group values (1, 0, 3);
+insert into kids_age_group values (2, 4, 10);
+insert into kids_age_group values (3, 11, 15);
+
+create table demography(num_of_guests int, num_of_males int, m_age_group_1 int, m_age_group_2 int, m_age_group_3 int , m_age_group_4 int , m_age_group_5 int, m_age_group_6 int, num_of_females int, f_age_group_1 int, f_age_group_2 int, f_age_group_3 int , f_age_group_4 int , f_age_group_5 int, f_age_group_6 int,
+ num_of_kids int, k_age_group_1 int, k_age_group_2 int, k_age_group_3 int , k_age_group_4 int , k_age_group_5 int, k_age_group_6 int);
