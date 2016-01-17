@@ -112,6 +112,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
         email.setBounds(120,180,170,20);
         btnSearch.setBounds(120,210,70,20);
         btnClear.setBounds(220,210,70,20);
+        //getContentPane().setDefaultButton(btnSearch);
     }
     /*  public void paint(Graphics g)
     {
