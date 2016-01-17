@@ -5,23 +5,32 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableColumn;
 import java.util.Vector;
+import javax.swing.JButton;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class CustomerRetrievalForm extends javax.swing.JDialog {
-
+    private static CafeBill _cb;
+    public CustomerRetrievalForm(CafeBill cb){
+        _cb = cb;
+    }
 
     // Variables declaration - do not modify                     
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration   
-	
+
     /**
      * Creates new form CustomerReterivalForm
      */
-    
+
     public CustomerRetrievalForm(Vector searchlist) {
-    	setTitle("Customer Data");
-    	setModal(true);
-    	
+        setTitle("Customer Data");
+        setModal(true);
+
         initComponents(searchlist);
     }
 
@@ -39,42 +48,60 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
 
 
         Vector colNames = new Vector();
-        
+
         String[] strColNames = new String []{ "cid-1", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"};
-        
+
         String str;
         for(int i = 0; i < strColNames.length; i++) {
             colNames.add(strColNames[i]);
         }
-        
+
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel( searchList, colNames)
-/*
+                /*
             new Object [][] {
                 {1, 2, 3, 4, 5, null, null, null, null},
               },
             new String [] {
                 "cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"
             }
-*/
-        );
+                 */
+                );
         jScrollPane1.setViewportView(jTable1);
 
+        JButton btnSelect = new JButton("Select");
+        btnSelect.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                for (int row : jTable1.getSelectedRows()) {
+                    long cid = new Long(jTable1.getValueAt(row ,0).toString()).longValue();
+                    GUI.CafeBill.cid = cid;
+                    System.out.println("Customre id on select in CustomeRetrivalform : " +cid  );
+                    dispose();
+                }
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 803, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 20, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 803, GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(btnSelect)))
+                        .addContainerGap(20, Short.MAX_VALUE))
+                );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 22, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 371, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addComponent(btnSelect)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                );
+        getContentPane().setLayout(layout);
 
         pack();
     }// </editor-fold>                        
@@ -88,7 +115,7 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-    	System.out.println(" in customer retival form - Start");
+        System.out.println(" in customer retival form - Start");
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -113,20 +140,5 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
                 // new CustomerRetrievalForm().setVisible(true);
             }
         });
-        // "cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"+
-/*        
-        String [] columnNames = {"cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"};
-        dataModel = new DefaultTableModel();
-        String[] row = { "1",  "Amit", "C", "Addr 1", "Phone num1", "Phone -1", "emailid@abc.com", "11/11/2011", "d"};
-        dataModel.setColumnIdentifiers(columnNames);
-		dataModel.addRow(row);
-
-        */
-
-        // CustomerRetrievalForm custRetForm = new CustomerRetrievalForm();
-        
-        //custRetForm.jTable1.getModel().addRow(row);
-       // javax.swing.table.DefaultTableModel
-       // System.out.println(" in customer retival form - end");
     }
 }
