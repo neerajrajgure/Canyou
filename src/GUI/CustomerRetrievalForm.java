@@ -4,7 +4,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableColumn;
-
+import java.util.Vector;
 
 public class CustomerRetrievalForm extends javax.swing.JDialog {
 
@@ -17,11 +17,12 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
     /**
      * Creates new form CustomerReterivalForm
      */
-    public CustomerRetrievalForm() {
+    
+    public CustomerRetrievalForm(Vector searchlist) {
     	setTitle("Customer Data");
     	setModal(true);
     	
-        initComponents();
+        initComponents(searchlist);
     }
 
     /**
@@ -31,23 +32,33 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
+    private void initComponents(Vector searchList) {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
 
+        Vector colNames = new Vector();
+        
+        String[] strColNames = new String []{ "cid-1", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"};
+        
+        String str;
+        for(int i = 0; i < strColNames.length; i++) {
+            colNames.add(strColNames[i]);
+        }
         
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel( searchList, colNames)
+/*
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
+                {1, 2, 3, 4, 5, null, null, null, null},
               },
             new String [] {
                 "cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"
             }
-        ));
+*/
+        );
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -99,7 +110,7 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CustomerRetrievalForm().setVisible(true);
+                // new CustomerRetrievalForm().setVisible(true);
             }
         });
         // "cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"+
@@ -112,7 +123,7 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
 
         */
 
-        CustomerRetrievalForm custRetForm = new CustomerRetrievalForm();
+        // CustomerRetrievalForm custRetForm = new CustomerRetrievalForm();
         
         //custRetForm.jTable1.getModel().addRow(row);
        // javax.swing.table.DefaultTableModel

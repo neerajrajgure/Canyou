@@ -14,24 +14,40 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Date;
-import javax.swing.JOptionPane;
 
-public class CouponDiscount extends javax.swing.JFrame {
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class CouponDiscount extends javax.swing.JDialog {
 
     /**
      * Creates new form NewJFrame
      */
-    final String db_name= "HMS";
     private static CafeBill cf;
     public  static double couponValue;
+    public static String DISCOUNTDEC;
     public String couponString;
+    private static Connection connect = null;
+    private static PreparedStatement preparedStatement = null;
+    private static ResultSet resultSet = null;
+
     public CouponDiscount() {
+        setTitle("Coupon And Discount");
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setModal(true);
         initComponents();
     }
     public CouponDiscount(CafeBill cf)
     {
         CouponDiscount.cf=cf;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,6 +56,20 @@ public class CouponDiscount extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            // Setup the connection with the DB
+            connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
+        }
+        catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
 
         jLabel3 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
@@ -49,7 +79,7 @@ public class CouponDiscount extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        //jTextField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
@@ -99,52 +129,82 @@ public class CouponDiscount extends javax.swing.JFrame {
         });
 
         jLabel2.setText("Type Discount Amount :-");
-
+        /*
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
             }
         });
+         */
+        //discount JComboBox
+        comboBox = new JComboBox();
+        try {
+            String query="SELECT * FROM discount ";
+            preparedStatement=connect.prepareStatement(query);
+            ResultSet rs = preparedStatement.executeQuery();
+            comboBox.addItem("None");
+
+            for(int i = 1; rs.next(); i ++)
+            {
+
+                String Discount_value= rs.getString("Discount_value");
+                String[] Dval = new String[] { "None" ,Discount_value };
+                System.out.println( "values from discount table  "+ Discount_value );
+                comboBox.addItem(Discount_value);
+
+            }
+        }
+        catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //Discount comboBox ActionListener
+        comboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                jPanel1Layout.createParallelGroup(Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addContainerGap()
                                         .addComponent(jLabel1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18)
+                                        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                                        .addGap(18)
+                                        .addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(128, 128, 128)
+                                        .addGap(128)
                                         .addComponent(jButton1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addPreferredGap(ComponentPlacement.RELATED)
                                         .addComponent(jButton2)))
                         .addContainerGap(155, Short.MAX_VALUE))
                 );
-        jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGap(33)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
                                 .addComponent(jLabel1)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGap(18)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
                                 .addComponent(jButton1)
                                 .addComponent(jButton2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
                                 .addComponent(jLabel2)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                //.addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
                 );
+        jPanel1.setLayout(jPanel1Layout);
 
         jScrollPane1.setAutoscrolls(true);
 
@@ -193,7 +253,10 @@ public class CouponDiscount extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         try {
-            couponValue=Float.parseFloat(jTextField2.getText());
+            couponValue=Float.parseFloat((String) comboBox.getSelectedItem());
+            DISCOUNTDEC =jTextArea1.getText();
+            System.out.println( "Combobox value in coupon discount "  +couponValue );
+            System.out.println( "Discount Description in coupon discount "  +DISCOUNTDEC );
             cf.calculateTotal();
             super.dispose();
 
@@ -218,13 +281,10 @@ public class CouponDiscount extends javax.swing.JFrame {
                 //private static Statement statement = null;
                 PreparedStatement preparedStatement = null;
                 // Setup the connection with the DB
-                connect = DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?"+ "user=billing&password=hmsbilling");
+                connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
                 String query=("Select * from coupon");
                 preparedStatement = connect.prepareStatement(query);
                 ResultSet r1 = preparedStatement.executeQuery();
-                // SimpleDateFormat sdf= new SimpleDateFormat("yyyy-mm-dd");
-                //java.util.Date today = new java.util.Date();
-                //System.out.println("TODAYS DATE :"+today.getDate());
                 ArrayList<Coupons> couponlist = new ArrayList<Coupons>();
 
                 try{
@@ -262,20 +322,39 @@ public class CouponDiscount extends javax.swing.JFrame {
                             String  endDate=cp.getEndDate();
                             String startTime=cp.getStartTime();
                             String endTime=cp.getEndTime();
-                            boolean bstartDate=checkdate("StartDate",startDate);
-                            boolean bendDate= checkdate("EndDate",endDate);
+                            boolean bequalstartDate=checkdate("eStartDate",startDate);
+                            boolean bequalendDate= checkdate("eEndDate",endDate);
+                            boolean bafterstartDate=checkdate("aStartDate",startDate);
+                            boolean bbeforeendDate= checkdate("bEndDate",endDate);
 
                             boolean bstartTime=checkTime("StartTime",startTime);
                             boolean bendTime= checkTime("EndTime",endTime);
 
 
-                            if( bstartDate && bendDate)
+                            if(bequalstartDate)
                             {
-                                if( bstartTime && bendTime)
+                                if(bstartTime)
                                 {
                                     System.out.println(" AFter Conversion :"+couponString.replaceAll("\\D+",""));
                                     couponValue=Float.parseFloat(couponString.replaceAll("\\D+",""));
+                                    //couponValue=cp.getPercentage();
+                                    break;
                                 }
+                            }
+                            else if(bequalendDate)
+                            {
+                                if(bendTime)
+                                {
+                                    System.out.println(" AFter Conversion :"+couponString.replaceAll("\\D+",""));
+                                    couponValue=Float.parseFloat(couponString.replaceAll("\\D+",""));
+                                    break;
+                                }
+                            }
+                            else if(bafterstartDate && bbeforeendDate)
+                            {
+                                System.out.println(" AFter Conversion :"+couponString.replaceAll("\\D+",""));
+                                couponValue=Float.parseFloat(couponString.replaceAll("\\D+",""));
+                                break;
                             }
                             else
                             {
@@ -284,7 +363,6 @@ public class CouponDiscount extends javax.swing.JFrame {
                                 break;
                             }
                         }
-                        break;
                     }
 
                     cf.calculateTotal();
@@ -323,10 +401,10 @@ public class CouponDiscount extends javax.swing.JFrame {
         Date dbDate=formatter.parse(inputdate, position1);
         System.out.println("Database Date :"+dbDate);
 
-        if(type=="StartDate")
+        if(type=="eStartDate")
         {
 
-            if(dbDate.equals(systemDate) || systemDate.after(dbDate))
+            if(dbDate.equals(systemDate))
             {
                 System.out.println("Inside start date IF");
                 return true;
@@ -337,9 +415,9 @@ public class CouponDiscount extends javax.swing.JFrame {
                 return false;
             }
         }
-        else if(type=="EndDate")
+        else if(type=="eEndDate")
         {
-            if(systemDate.before(dbDate) || dbDate.equals(systemDate))
+            if(dbDate.equals(systemDate))
             {
                 System.out.println("Inside end date IF");
                 return true;
@@ -347,6 +425,32 @@ public class CouponDiscount extends javax.swing.JFrame {
             else
             {
                 System.out.println("Inside end date ELSE");
+                return false;
+            }
+        }
+        else if(type=="aStartDate")
+        {
+            if(systemDate.after(dbDate))
+            {
+                System.out.println("Inside aStartDate IF");
+                return true;
+            }
+            else
+            {
+                System.out.println("Inside aStartDate ELSE");
+                return false;
+            }
+        }
+        else if(type=="bEndDate")
+        {
+            if(systemDate.before(dbDate))
+            {
+                System.out.println("Inside bEndDate IF");
+                return true;
+            }
+            else
+            {
+                System.out.println("Inside bEndDate ELSE");
                 return false;
             }
         }
@@ -460,6 +564,7 @@ public class CouponDiscount extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private JComboBox comboBox;
     // End of variables declaration
 }
 

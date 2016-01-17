@@ -109,7 +109,7 @@ public Component getTableCellRendererComponent(final JTable table,
 	    //As we do not need any scroll value
        // textPane.setText((value != null) ? value.toString() : "");
       //return scroll; 
-	  Object obj1 = table.getValueAt(row, column);
+	  Object obj1 = table.getValueAt(row, 0);
 	  
 	  if (obj1.toString().equals("") )
 	  {

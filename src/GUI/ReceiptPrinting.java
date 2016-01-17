@@ -29,12 +29,12 @@ public class ReceiptPrinting implements Printable {
     final String tfield3 = "|PRICE";
     final String tfield4 = "|TOTAL";
     final String Sub_Total = "SubTotal";
-    final String Discount_ = "Discount";
+    final String Discount_ = "SubTotal After Discount";
 
     //    final String S_Tax = "Service Tax(14.50)";
     //    final String Vat_ = "Service charge(12.50)";
     final String total_wt ="Total with Tax";
-    final String Vat_ = "VAT(5.0 %)";
+    final String Vat_ = "VAT(5.6 %)";
 
     final String S_Tax = "Service Tax(14.50 %)";
 //    final String Vat_ = "VAT(5 %)";
@@ -46,12 +46,16 @@ public class ReceiptPrinting implements Printable {
     final String blank = " ";
     final String RsSymbol = "Rs";
     final String GREET_THANKS = "Thank You!";
+    final String oid = "Order Id ";
+    final String custid = "Customer Id ";
     private String Subtotal;
     private String Tax1;
     private String Tax2;
     private String Tax3;
     private String Total;
     private String Discount;
+    private long OrderId;
+    private long CustomerId;
     /*
     private Paper receiptPaper;
     private double paperWidth = 0.2;
@@ -91,33 +95,43 @@ public class ReceiptPrinting implements Printable {
         g2d.translate(pf.getImageableX(), pf.getImageableY());
         Subtotal = _cb.lblSubtotal.getText();
         Tax1 = _cb.lblTax1.getText();
-        Tax2=_cb.lblTax2.getText();
-        Tax3=_cb.lblTax3.getText();
-        Total=_cb.lblTotal.getText();
-        Discount=_cb.lblDiscount.getText();
+        Tax2 =_cb.lblTax2.getText();
+        Tax3 =_cb.lblTax3.getText();
+        Total =_cb.lblTotal.getText();
+        Discount =_cb.lblDiscount.getText();
+        OrderId =_cb.oid;
+        CustomerId = _cb.cid;
+        System.out.println("OrderId in recipt printing is: "+OrderId);
+        System.out.println("CustomerId in recipt printing is: "+CustomerId);
         System.out.println("Discount is:"+Discount+"is the value");
         /* Now we perform our rendering */
-        g2d.drawString(companyName, 75, 10);
+        int y1 = 10;
+        g2d.drawString(companyName, 75 , y1);
         g.drawString(companyTag, 33, 20);
         g.drawString(dash, leftMargin, 30);
+        g.drawString(oid, leftMargin, 40);
+        g.drawString(String.valueOf(OrderId), 75, 40);
+        g.drawString(custid, leftMargin, 50);
+        g.drawString(String.valueOf(CustomerId), 75, 50);
+        g.drawString(dash, leftMargin, 60);
         g.drawString(sdf.format(date1) , 130, 40);
         g.drawString(sdf1.format(date1) , 152, 50);
-        g.drawString(addrLine1, leftMargin, 40);
-        g.drawString(addrLine2, leftMargin, 50);
-        g.drawString(addrLine3, leftMargin, 60);
-        g.drawString(dash, leftMargin, 70);
-        g.drawString(tfield1, leftMargin, 80);
-        g.drawString(tfield2, 100, 80);
-        g.drawString(tfield3, 125, 80);
-        g.drawString(tfield4, 160, 80);
-        g.drawString(dash, leftMargin, 90);
+        g.drawString(addrLine1, leftMargin, 70);
+        g.drawString(addrLine2, leftMargin, 80);
+        g.drawString(addrLine3, leftMargin, 90);
+        g.drawString(dash, leftMargin, 100);
+        g.drawString(tfield1, leftMargin, 110);
+        g.drawString(tfield2, 100, 110);
+        g.drawString(tfield3, 125, 110);
+        g.drawString(tfield4, 160, 110);
+        g.drawString(dash, leftMargin, 120);
 
 
         int newline = g.getFont().getSize() + 5 ;
         System.out.println("Newline size :"+newline);
 
         String menuName,printQuantity,prinrtunitprice,prinrToatalprice;
-        int y = 100;
+        int y = 130;
         for (int row = 0; row <_cb.dataModel.getRowCount(); row++){
 
             menuName = _cb.dataModel.getValueAt(row ,1).toString();
