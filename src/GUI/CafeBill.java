@@ -688,8 +688,7 @@ public class CafeBill extends JFrame {
 				}
 
 				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
-				setMenuOrder_Test(1, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
-				setMenuOrder(1, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
+				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
 				Object obj;
 				String objString;
@@ -1003,32 +1002,24 @@ public class CafeBill extends JFrame {
 		c.gridx = 1;
 		c.gridy = 15;
 		costPane.add(btnviewtot,c);
-	}
 
-	public void setMenuOrder_Test(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, String discountDesc, float subTotal, float totalTaxPercent, float totalAmount){
-		try {
-			String query="Insert into customer (customerId,FName,LName,Address,phonenum,phone,emailid,DOB,flag) values (?,?,?,?,?,?,?,?,?)";
-			preparedStatement=connect.prepareStatement(query);
-			System.out.println("New Cid: " );
-			preparedStatement.setLong(1, customerId);
-			System.out.println(" Cid in customer is  : "+ customerId);
-			//                preparedStatement.setInt(2, customerId);
-			preparedStatement.setString(2, "amit");
-			preparedStatement.setString(3, "chaugule");
-			preparedStatement.setString(4, "pune");
-			preparedStatement.setString(5, "9673452211");
-			preparedStatement.setInt(6, 80878116);
-			preparedStatement.setString(7, "amitchaugule@gmail.com");
-			preparedStatement.setDate(8,  getCurrentDate());
-			preparedStatement.setString(9, "1");
-			preparedStatement.executeUpdate();
-			preparedStatement.close();
-			System.out.println("Customer Test updated " );
-
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        JButton btnSerachCust = new JButton("Customer LookUp");
+      btnSerachCust.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+              welcomeLabel. setText("Welcome user at - 1: " + cid );
+              SearchCustomer objCustSearch = new SearchCustomer();
+              objCustSearch.pack();
+              objCustSearch.setLocation(500, 300);
+              objCustSearch.setSize(800, 500);
+              objCustSearch.setVisible(true);
+              objCustSearch.setTitle("Search Customer");
+              objCustSearch.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+              welcomeLabel. setText("Welcome user at - 2 : " + cid );
+          }
+      });
+      c.gridx = 1;
+      c.gridy = 16;
+      costPane.add(btnSerachCust,c);
 	}
 
 	public void setBillingInfo( int itemId, String itemInstruction){
@@ -1055,14 +1046,14 @@ public class CafeBill extends JFrame {
 		}
 
 	}
-	public void setMenuOrder(int customerId, int transID, String transInfo, float discounAmount, float discountPercent, String DISCOUNTDEC, float subTotal, float totalTaxPercent, float totalAmount){
+	public void setMenuOrder(long customerId, int transID, String transInfo, float discounAmount, float discountPercent, String DISCOUNTDEC, float subTotal, float totalTaxPercent, float totalAmount){
 		try {
 			String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			preparedStatement=connect.prepareStatement(query);
 			System.out.println("New Oid: " );
 			preparedStatement.setLong(1, oid);
 			System.out.println(" Oid in menu_order is  : "+ oid);
-			preparedStatement.setInt(2, customerId);
+			preparedStatement.setLong(2, customerId);
 			preparedStatement.setDate(3, getCurrentDate());
 			preparedStatement.setTime(4, getCurrentTime());
 			preparedStatement.setInt(5, transID);

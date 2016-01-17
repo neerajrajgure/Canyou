@@ -34,9 +34,10 @@ public class SearchCustomer extends JDialog implements ActionListener{
     final static String COLUMN_DOB_D = "DOBD";
     //final static String COLUMN_DOB = "COLUMN_DOBY + COLUMN_DOB_M + COLUMN_DOB_D";
     final static String COLUMN_DOB = "DOB";
-    final static String COLUMN_PHONE = "PHONENUM";
+    final static String COLUMN_PHONENUM = "PHONENUM";
     final static String COLUMN_EMAIL = "EMAILID";
     final static String COLUMN_CID = "CID";
+    final static String COLUMN_ADDRESS = "ADDRESS";
 
     // ArrayList<search_info> searchlist = new ArrayList<search_info>();
     // Vector<search_info> searchlist = new Vector<search_info>();
@@ -112,6 +113,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
         email.setBounds(120,180,170,20);
         btnSearch.setBounds(120,210,70,20);
         btnClear.setBounds(220,210,70,20);
+        //getContentPane().setDefaultButton(btnSearch);
     }
     /*  public void paint(Graphics g)
     {
@@ -128,13 +130,13 @@ public class SearchCustomer extends JDialog implements ActionListener{
             String dobm = dobmm.getText();
             String dobd = dobdd.getText();
             String emal = email.getText();
-            System.out.println(" firstname from Search customer gui "+fname);
-            System.out.println(" LastName from Search customer gui "+lname);
-            System.out.println(" PHONENO from Search customer gui "+phno);
-            System.out.println(" DOB year from Search customer gui "+doby);
-            System.out.println(" DOB nonth from Search customer gui "+dobm);
-            System.out.println(" DOB date from Search customer gui "+dobd);
-            System.out.println(" Email from Search customer gui "+emal);
+            System.out.println(" firstname from Search customer gui : "+fname);
+            System.out.println(" LastName from Search customer gui : "+lname);
+            System.out.println(" PHONENO from Search customer gui :"+phno);
+            System.out.println(" DOB year from Search customer gui : "+doby);
+            System.out.println(" DOB nonth from Search customer gui : "+dobm);
+            System.out.println(" DOB date from Search customer gui :"+dobd);
+            System.out.println(" Email from Search customer gui : "+emal);
             String dobStr1 = doby + "-" + dobm + "-" + dobd;
             System.out.println("DOB in (YYYY-MM-DD) format: " + dobStr1 );
             String dobStr2 = dobd + "-" + dobm + "-" + doby;
@@ -179,7 +181,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
                 }
                 else if( phno.length() > 0 )
                 {
-                    queryParamName = COLUMN_PHONE;
+                    queryParamName = COLUMN_PHONENUM;
                     queryParamVal = phoneno.getText();
                 }
                 String queryCustSearch = querySelectPart1  + " " + queryParamName + " = '" + queryParamVal + "';";
@@ -198,7 +200,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
 
                     si.setFName(rs.getString(COLUMN_F_NAME));
                     si.setLName(rs.getString(COLUMN_L_NAME));
-                    si.setPhone(rs.getString(COLUMN_PHONE));
+                    si.setPhonenum(rs.getString(COLUMN_PHONENUM));
                     si.setDOB(rs.getString(COLUMN_DOB));
                     //si.setDOB(rs.getString(dobm));
                     //si.setDOB(rs.getString(dobd));
@@ -212,7 +214,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
                     searchData.add(si.getAddress());
                     searchData.add(si.getPhonenum());
                     searchData.add(si.getPhone());
-                    searchData.add("abc@pqr.com");
+                    searchData.add(si.getEmailid());
                     searchData.add(si.getDOB());
                     searchData.add(si.getFlag());
                     System.out.println( "Recordset data: CID = " + si.getCid() + " Name = " + si.getFName( ));
@@ -225,6 +227,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
             }
 
             System.out.println(" vector length is :" + searchlist.size());
+            dispose();
             CustomerRetrievalForm custRetrieval = new CustomerRetrievalForm(searchlist);
             custRetrieval.setVisible(true);
 
