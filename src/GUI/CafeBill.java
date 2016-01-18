@@ -86,7 +86,6 @@ public class CafeBill extends JFrame {
 	final static String hmsDbUrl ="jdbc:mysql://localhost/"+db_name+"?"+ "user=" + username + "&" + "password=" + password;
 	//    final JLabel username = new JLabel("username");
 	String currEmpName;
-	JLabel welcomeLabel = new JLabel();
 	private static Connection connect = null;
 	//private static Statement statement = null;
 	private static PreparedStatement preparedStatement = null;
@@ -157,6 +156,7 @@ public class CafeBill extends JFrame {
 	public void init() {
 		try {
 			// CafeBill frame = new CafeBill();
+            setTitle("The Hive - " + currEmpName); // Title name with Employee name
 			setVisible(true);
 			pack();
 			try {
@@ -336,7 +336,6 @@ public class CafeBill extends JFrame {
 	public CafeBill() {
 		CouponDiscount cd= new CouponDiscount(this);
 		connectDatabase();
-		setTitle("The Hive -Coffee & Fun Serverd Togethers");//Title name
 		setIconImage(Toolkit.getDefaultToolkit().getImage(("./src/images/THE_HIVE_Logo.jpg"))); //Title logo
 		categories = new ArrayList<String>();
 		imageIcons = new ArrayList<String>();
@@ -359,7 +358,6 @@ public class CafeBill extends JFrame {
 		contentPane.add(menuExpansionPane, BorderLayout.CENTER);
 		contentPane.add(costPane, BorderLayout.EAST);
 		contentPane.add(frequentItemsPane, BorderLayout.SOUTH);
-		//welcomeLabel. setText("Welcome user: " + currEmpName );
 		/*
 		 * Read Categories and Items from Database
 		 */
@@ -636,7 +634,6 @@ public class CafeBill extends JFrame {
 
 		c.gridx = 12;
 		c.gridy = 0;
-		costPane.add(welcomeLabel,c);
 		JButton btnPrintBill = new JButton("Submit Order");
 		btnPrintBill.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
