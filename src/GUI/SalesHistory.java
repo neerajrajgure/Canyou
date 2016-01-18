@@ -119,6 +119,7 @@ public class SalesHistory{
 		JScrollPane sp=new JScrollPane(obj.getTable(""));
 		frame.getContentPane().add(sp);
 		frame.setBounds(200,200,400,300);
+		frame.setSize(800, 300);
 		frame.setVisible(true);       
 		
 	}

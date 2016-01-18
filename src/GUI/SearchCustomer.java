@@ -290,7 +290,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
     public static void main(String g[])
     {
         SearchCustomer scf=new SearchCustomer();
-        scf.setSize(new Dimension(500,500));
+        scf.setSize(new Dimension(300,300));
         scf.setTitle("Search Customer");
         scf.setVisible(true);
 

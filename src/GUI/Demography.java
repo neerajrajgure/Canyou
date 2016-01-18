@@ -75,7 +75,7 @@ public class Demography extends javax.swing.JDialog {
             }
         });
         btnCancel = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox();// JComboBox 1,4,5,6,7,8 are of male TODO update there ProperName
+        omboBox_2 = new javax.swing.JComboBox();// JComboBox 1,4,5,6,7,8 are of male TODO update there ProperName
         jComboBox3 = new javax.swing.JComboBox();
         jComboBox4 = new javax.swing.JComboBox();
         jComboBox4.addComponentListener(new ComponentAdapter() {
@@ -169,7 +169,7 @@ public class Demography extends javax.swing.JDialog {
             String query="SELECT * FROM female_age_group";
             preparedStatement=connect.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
-            jComboBox2.addItem("None");
+            omboBox_2.addItem("None");
             jComboBox9.addItem("None");
             jComboBox10.addItem("None");
             jComboBox11.addItem("None");
@@ -186,8 +186,7 @@ public class Demography extends javax.swing.JDialog {
 
                 String ageCategoryfemale = (start + " - " + end);
                 String ageGroup [] = new String[] { "None" ,ageCategoryfemale };
-                System.out.println( "values from female_age_group table  "+ ageCategoryfemale );
-                jComboBox2.addItem(ageCategoryfemale);
+                System.out.println( "values from female_age_group table  "+ ageCategoryfemale );             
                 jComboBox9.addItem(ageCategoryfemale);
                 jComboBox10.addItem(ageCategoryfemale);
                 jComboBox11.addItem(ageCategoryfemale);
@@ -263,8 +262,8 @@ public class Demography extends javax.swing.JDialog {
                     preparedStatement.setInt(7, jComboBox7.getSelectedIndex());
                     preparedStatement.setInt(8, jComboBox8.getSelectedIndex() );
                     preparedStatement.setInt(9, comboBox_3.getSelectedIndex() );
-                    preparedStatement.setInt(10,jComboBox2.getSelectedIndex() );
-                    System.out.println(" value from jcombo box 2 female :  " +jComboBox2.getSelectedIndex());
+                    preparedStatement.setInt(10,omboBox_2.getSelectedIndex() );
+                    System.out.println(" value from jcombo box 2 female :  " +omboBox_2.getSelectedIndex());
                     preparedStatement.setInt(11, jComboBox9.getSelectedIndex() );
                     preparedStatement.setInt(12, jComboBox10.getSelectedIndex() );
                     preparedStatement.setInt(13, jComboBox11.getSelectedIndex() );
@@ -329,14 +328,14 @@ public class Demography extends javax.swing.JDialog {
         {
             comboBox_1.addItem(i);
         }
-        comboBox_2 = new JComboBox();
+        JComboBox  comboBox_2 = new JComboBox();
         comboBox_2.addItem("None");
         int number_to_add1 =10;
         for (int i = 1; i <= number_to_add1; i++)
         {
             comboBox_2.addItem(i);
         }
-        comboBox_3 = new JComboBox();
+        JComboBox  comboBox_3 = new JComboBox();
         comboBox_3.addItem("None");
         int number_to_add2 =10;
         for (int i = 1; i <= number_to_add2; i++)
@@ -388,7 +387,7 @@ public class Demography extends javax.swing.JDialog {
                                         .addComponent(jComboBox8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
                                         .addGroup(groupLayout.createSequentialGroup()
-                                                .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(omboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(ComponentPlacement.RELATED)
                                                 .addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18)
@@ -450,7 +449,7 @@ public class Demography extends javax.swing.JDialog {
                                         .addComponent(lblFemale))
                                 .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
                                         .addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(omboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jComboBox9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jComboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jComboBox11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -496,7 +495,7 @@ public class Demography extends javax.swing.JDialog {
         comboBox_2.setSelectedItem("None");
         comboBox_3.setSelectedItem("None");
         jComboBox1.setSelectedItem("None");
-        jComboBox2.setSelectedItem("None");
+        omboBox_2.setSelectedItem("None");
         jComboBox3.setSelectedItem("None");
         jComboBox4.setSelectedItem("None");
         jComboBox5.setSelectedItem("None");
@@ -554,7 +553,7 @@ public class Demography extends javax.swing.JDialog {
     private javax.swing.JButton btnSubmit;
     private javax.swing.JButton btnclear;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox omboBox_2;
     private javax.swing.JComboBox jComboBox3;
     private javax.swing.JComboBox jComboBox4;
     private javax.swing.JComboBox jComboBox5;
