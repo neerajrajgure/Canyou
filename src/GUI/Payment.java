@@ -24,13 +24,17 @@ public class Payment extends JDialog {
     final JLabel lblTotal1 = new JLabel("Return Amount");
     final JLabel lblamount = new JLabel();
     JTextField jTxtCreditCard = new JTextField(10);
+/*    
     {
         if(radioOptionCash.isSelected())
             jTxtCash.setEnabled(true);
+             jTxtCreditCard.setEnabled(false);
         else
-            jTxtCreditCard.setEnabled(false);
-
+          if(radioOptionCC.isSelected())
+            jTxtCash.setEnabled(false); 
+            TxtCreditCard.setEnabled(true);
     }
+  */  
  /*   
     {
         if(radioOptionCC.isSelected())
