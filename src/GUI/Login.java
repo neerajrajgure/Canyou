@@ -86,7 +86,6 @@ class Login extends JDialog implements ActionListener
                     empID = Integer.parseInt(rs.getString(5));
                     cb_ = new CafeBill();
                     cb_.currEmpName = empName;
-                    //cb_.welcomeLabel. setText("Welcome user: " + empName );
                     System.out.println("cb employ nama:-"+ cb_.currEmpName );
                     cb_.currEmpID = empID;
                     cb_.init();
