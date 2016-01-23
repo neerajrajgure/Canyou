@@ -16,6 +16,11 @@ insert into transactiontypes values(52, 'Credit Card');
 
 create table item(itemId integer, itemName varchar(35),categoryId int NOT NULL references categories(categoryId), price float);
 
+ALTER TABLE item ADD displaySeq int;
+
+delete from item where itemName ='Large - Espresso';
+
+
 create table categories(categoryId int, categoryName varchar(35), imageIcon varchar(50));
 
 
@@ -60,10 +65,11 @@ INSERT into categories VALUES(103, 'Sandwich', './src/images/Sandwich.png' );
 INSERT into categories VALUES(104, 'Waffle', './src/images/Waffle.png' );
 INSERT into categories VALUES(105, 'Cake', './src/images/Cake.png' );
 
+
  
 /*COFFEE - HOT DRINKS (101)----------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 39.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Espresso', 101, 49.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1057, 'Large - Espresso', 101, 49.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Americano', 101, 44.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Americano', 101, 54.00);
@@ -183,3 +189,63 @@ insert into discount values (70);
 insert into discount values (80);
 insert into discount values (90);
 insert into discount values (100);
+
+
+UPDATE item SET displaySeq = '5' where itemId = '1001';
+UPDATE item SET displaySeq = '10' where itemId = '1002';
+UPDATE item SET displaySeq = '15' where itemId = '1003';
+UPDATE item SET displaySeq = '20' where itemId = '1004';
+UPDATE item SET displaySeq = '25' where itemId = '1005';
+UPDATE item SET displaySeq = '30' where itemId = '1006';
+UPDATE item SET displaySeq = '35' where itemId = '1007';
+UPDATE item SET displaySeq = '40' where itemId = '1008';
+UPDATE item SET displaySeq = '45' where itemId = '1009';
+UPDATE item SET displaySeq = '50' where itemId = '1010';
+UPDATE item SET displaySeq = '55' where itemId = '1011';
+UPDATE item SET displaySeq = '60' where itemId = '1012';
+UPDATE item SET displaySeq = '65' where itemId = '1013';
+UPDATE item SET displaySeq = '70' where itemId = '1014';
+UPDATE item SET displaySeq = '75' where itemId = '1015';
+UPDATE item SET displaySeq = '80' where itemId = '1016';
+UPDATE item SET displaySeq = '85' where itemId = '1017';
+UPDATE item SET displaySeq = '90' where itemId = '1018';
+UPDATE item SET displaySeq = '95' where itemId = '1019';
+UPDATE item SET displaySeq = '100' where itemId = '1020';
+UPDATE item SET displaySeq = '105' where itemId = '1021';
+UPDATE item SET displaySeq = '110' where itemId = '1022';
+UPDATE item SET displaySeq = '115' where itemId = '1023';
+UPDATE item SET displaySeq = '120' where itemId = '1024';
+UPDATE item SET displaySeq = '125' where itemId = '1025';
+UPDATE item SET displaySeq = '130' where itemId = '1026';
+UPDATE item SET displaySeq = '135' where itemId = '1027';
+UPDATE item SET displaySeq = '140' where itemId = '1028';
+UPDATE item SET displaySeq = '145' where itemId = '1029';
+UPDATE item SET displaySeq = '150' where itemId = '1030';
+UPDATE item SET displaySeq = '155' where itemId = '1031';
+UPDATE item SET displaySeq = '160' where itemId = '1032';
+UPDATE item SET displaySeq = '165' where itemId = '1033';
+UPDATE item SET displaySeq = '170' where itemId = '1034';
+UPDATE item SET displaySeq = '175' where itemId = '1035';
+UPDATE item SET displaySeq = '180' where itemId = '1036';
+UPDATE item SET displaySeq = '185' where itemId = '1037';
+UPDATE item SET displaySeq = '190' where itemId = '1038';
+UPDATE item SET displaySeq = '195' where itemId = '1039';
+UPDATE item SET displaySeq = '200' where itemId = '1040';
+UPDATE item SET displaySeq = '205' where itemId = '1041';
+UPDATE item SET displaySeq = '210' where itemId = '1042';
+UPDATE item SET displaySeq = '215' where itemId = '1043';
+UPDATE item SET displaySeq = '220' where itemId = '1044';
+UPDATE item SET displaySeq = '225' where itemId = '1045';
+UPDATE item SET displaySeq = '230' where itemId = '1046';
+UPDATE item SET displaySeq = '235' where itemId = '1047';
+UPDATE item SET displaySeq = '240' where itemId = '1048';
+UPDATE item SET displaySeq = '245' where itemId = '1049';
+UPDATE item SET displaySeq = '250' where itemId = '1050';
+UPDATE item SET displaySeq = '255' where itemId = '1051';
+UPDATE item SET displaySeq = '260' where itemId = '1052';
+UPDATE item SET displaySeq = '265' where itemId = '1053';
+UPDATE item SET displaySeq = '270' where itemId = '1054';
+UPDATE item SET displaySeq = '275' where itemId = '1055';
+UPDATE item SET displaySeq = '280' where itemId = '1056';
+UPDATE item SET displaySeq = '290' where itemId = '1057';
+
