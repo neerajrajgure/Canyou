@@ -24,6 +24,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -33,6 +36,10 @@ import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
@@ -45,6 +52,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -84,6 +92,7 @@ public class CafeBill extends JFrame {
 	final static String username = "billing";
 	final static String password = "hmsbilling";
 	final static String hmsDbUrl ="jdbc:mysql://localhost/"+db_name+"?"+ "user=" + username + "&" + "password=" + password;
+	final int PAY_OPTION_CANCEL_CLICKED = -1;
 	//    final JLabel username = new JLabel("username");
 	String currEmpName;
 	private static Connection connect = null;
@@ -93,6 +102,12 @@ public class CafeBill extends JFrame {
 	private int index;
 	private int index2;
 	long currEmpID=0;
+    public JMenuBar menuBar;
+    private JMenu fileMenu;
+    private JMenuItem ViewTotalMenuItem;
+    private JMenuItem ViewSaleMenuItem;
+    private JMenuItem CustomerLookUpMenuItem;
+    private JMenuItem AboutMenuItem;
 
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
 	// " 5 Item Five" };
@@ -190,7 +205,7 @@ public class CafeBill extends JFrame {
 		loginScreen.setVisible(true);
 	}
 
-	void showOpenPayScreen()
+	int showOpenPayScreen()
 	{
 		CafeBill cfbl= new CafeBill();
 		Payment objPay = new Payment(this);
@@ -201,29 +216,17 @@ public class CafeBill extends JFrame {
 		//		final Dimension screenSize = toolkit.getScreenSize();
 		//		final int x = (screenSize.width - objPay.getWidth()) / 2;
 		//		final int y = (screenSize.height - objPay.getHeight()) / 2;
-		objPay.setLocation(850, 350);
+		objPay.setLocation(750, 150);
 		objPay.setSize(300, 250);
+        System.out.println("Cancel button station at - 1 = " + objPay.cancelPressed);
 		objPay.setVisible(true);
-		objPay.setTitle("PayScreen");
-		objPay.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		//this.dispose();
+		System.out.println("Cancel button station at - 2 = " + objPay.cancelPressed);
+		if(objPay.cancelPressed == true) {
+		    return PAY_OPTION_CANCEL_CLICKED;
+		}
+		return 1;
 	}
 
-	void showOpenCustRegFormScreen()
-	{
-		//this.dispose();
-		CustRegForm crf = new CustRegForm(this);
-		crf.pack();
-		//		final Toolkit toolkit = Toolkit.getDefaultToolkit();
-		//		final Dimension screenSize = toolkit.getScreenSize();
-		//		final int x = (screenSize.width - crf.getWidth()) / 2;
-		//		final int y = (screenSize.height - crf.getHeight()) / 2;
-		int  x = 850; 
-		int y= 350;
-		crf.setLocation(x, y);
-		crf.setSize(200, 250);
-		crf.setVisible(true);
-	}
 	
 	public void connectDatabase(){
 		try {
@@ -358,6 +361,72 @@ public class CafeBill extends JFrame {
 		contentPane.add(menuExpansionPane, BorderLayout.CENTER);
 		contentPane.add(costPane, BorderLayout.EAST);
 		contentPane.add(frequentItemsPane, BorderLayout.SOUTH);
+        menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        fileMenu = new JMenu("File");
+        ViewTotalMenuItem = new JMenuItem("View Total");
+        ViewSaleMenuItem = new JMenuItem("View Sale");
+        CustomerLookUpMenuItem = new JMenuItem("Customer LookUp");
+        AboutMenuItem = new JMenuItem("About");
+        fileMenu.add(ViewTotalMenuItem);
+        fileMenu.add(ViewSaleMenuItem);
+        fileMenu.add(CustomerLookUpMenuItem);
+        fileMenu.add(AboutMenuItem);
+        ViewTotalMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    String query = ("select round(sum(totalAmount)) from menu_order where DATE(orderDate)=CURDATE()");
+                    preparedStatement = connect.prepareStatement(query);
+                    ResultSet rs = preparedStatement.executeQuery();
+                    rs.next();
+                    String sum = rs.getString(1);
+                    System.out.println(" TOTAL SALE IS: " +sum);
+                    JOptionPane.showMessageDialog ( null, "Total Sale of Today is Rs " + sum, "TOTAL SALE AMOUNT", JOptionPane.PLAIN_MESSAGE);
+                }
+                catch (ClassNotFoundException e2) {
+                    // TODO Auto-generated catch block
+                    e2.printStackTrace();
+                }
+                catch (SQLException e2) {
+                    // TODO Auto-generated catch block
+                    e2.printStackTrace();
+                }
+            }
+        });
+        CustomerLookUpMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                searchCust();
+            }
+        });
+
+        ViewSaleMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                viewSaleFrame();
+            }
+        });
+
+        AboutMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File file = new File("./src/GUI/HiveCafe.properties");
+                    FileInputStream fileInput = new FileInputStream(file);
+                    Properties properties = new Properties();
+                    properties.load(fileInput);
+                    fileInput.close();
+                    String majorVer = properties.getProperty("MajorVersion");
+                    System.out.println("Data ==> " + ": " + majorVer);
+                    String minorVer = properties.getProperty("MinorVersion");
+                    System.out.println("Data ==> " + ": " + minorVer);
+                    JOptionPane.showMessageDialog ( null, "The Hive - Billing System : " + majorVer + "." + minorVer, "HIVE CAFE", JOptionPane.PLAIN_MESSAGE);
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        menuBar.add(fileMenu);
 		/*
 		 * Read Categories and Items from Database
 		 */
@@ -669,7 +738,9 @@ public class CafeBill extends JFrame {
                 setCustomerInfo_old(cust);
 
 				 */ 
-				showOpenPayScreen();
+				if(showOpenPayScreen() == PAY_OPTION_CANCEL_CLICKED) {
+				    return;
+				}
 				//TODO: Should substring the transInfo so that the data in the db does not overflow.
 				System.out.println("CafeBill::Submit_order - Payment type: " + Payment.payCashOrCC);
 				System.out.println("CafeBill::Submit_order - Payment info: " + Payment.transInfo);
@@ -683,7 +754,6 @@ public class CafeBill extends JFrame {
 						System.out.println(printException);
 					}
 				}
-
 				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
@@ -886,8 +956,8 @@ public class CafeBill extends JFrame {
 				showOpenLoginScreen();
 			}
 		});
-		c.gridx = 15;
-		c.gridy = 0;
+		c.gridx = 1;
+		c.gridy = 15;
 		costPane.add(btncanelOrder,c);
 		JButton btnCR = new JButton("Customer Registration");
 		btnCR.addActionListener(new ActionListener() {
@@ -899,39 +969,6 @@ public class CafeBill extends JFrame {
 		c.gridy = 12;
 		costPane.add(btnCR,c);
 
-		JButton btnVS = new JButton("View Sale");
-        
-		btnVS.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        System.out.println("in viewsale action listener");
-		        try {
-		            JFrame frame=new JFrame("Today orders");
-		            Class.forName("com.mysql.jdbc.Driver");
-		            connect = DriverManager.getConnection(SalesHistory.hmsDbUrl);
-		            GUI.SalesHistory obj = new GUI.SalesHistory(connect);
-		            JScrollPane sp=new JScrollPane(obj.getTable("menu_order"));
-		            // JScrollPane sp=new JScrollPane(obj.getTable(""));
-		            frame.getContentPane().add(sp);
-		            frame.setBounds(200,200,400,300);
-		            frame.setVisible(true); 
-		        }
-		        catch (ClassNotFoundException e2) {
-		            // TODO Auto-generated catch block
-		            e2.printStackTrace();
-		        }
-		        catch (SQLException e2) {
-		            // TODO Auto-generated catch block
-		            e2.printStackTrace();
-		        } catch (Exception e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-
-		    }
-		});
-		c.gridx = 1;
-		c.gridy = 13;
-		costPane.add(btnVS,c);
 
 		JButton btndemography = new JButton("Demography");
 		btndemography.addActionListener(new ActionListener() {
@@ -942,83 +979,45 @@ public class CafeBill extends JFrame {
 		c.gridx = 1;
 		c.gridy = 14;
 		costPane.add(btndemography,c);
+		}
 
-		JButton btnviewtot = new JButton("View Total ");
-		btnviewtot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+   public  void searchCust() {
+        //welcomeLabel. setText("Welcome user at - 1: " + cid );
+        SearchCustomer objCustSearch = new SearchCustomer();
+        objCustSearch.pack();
+        objCustSearch.setLocation(400, 200);
+        objCustSearch.setSize(500, 300);
+        objCustSearch.setVisible(true);
+        objCustSearch.setTitle("Search Customer");
+        objCustSearch.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        //welcomeLabel. setText("Welcome user at - 2 : " + cid );
+    }
 
-				try {
-					Class.forName("com.mysql.jdbc.Driver");
-					// Setup the connection with the DB
-					//String query = ("select sum(totalAmount) from menu_order");
-					String query = ("select round(sum(totalAmount)) from menu_order where DATE(orderDate)=CURDATE()"); //for current day total
-					//String query=("select round(sum(totalAmount)) from menu_order;");
-					preparedStatement = connect.prepareStatement(query);
-					ResultSet rs = preparedStatement.executeQuery();
-					rs.next();
-					String sum = rs.getString(1);
-					System.out.println(" TOTAL SALE IS: " +sum);
-					//JOptionPane.showInputDialog(this,  "TOTAL TILL NOW IS :" + sum );
-					JOptionPane.showMessageDialog ( null, "Total Sale of Today is Rs " + sum, "TOTAL SALE AMOUNT", JOptionPane.PLAIN_MESSAGE); 
-				}
-				catch (ClassNotFoundException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-
-				/*				
-				try {
-					Class.forName("com.mysql.jdbc.Driver");
-					// Setup the connection with the DB
-					//String query = ("select sum(totalAmount) from menu_order");
-					//String query = ("select round(sum(totalAmount)) from menu_order where DATE(orderDate)=CURDATE()"); //for current day total
-					String query=("select round(sum(totalAmount)) from menu_order;");
-					preparedStatement = connect.prepareStatement(query);
-					ResultSet rs = preparedStatement.executeQuery();
-					rs.next();
-					String sum = rs.getString(1);
-					System.out.println(" TOTAL SALE IS: " +sum);
-					//JOptionPane.showInputDialog(this,  "TOTAL TILL NOW IS :" + sum );
-					JOptionPane.showMessageDialog ( null, "Sum of  Total is RS " + sum, "TOTAL SALE AMOUNT", JOptionPane.PLAIN_MESSAGE); 
-				}
-				catch (ClassNotFoundException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				 */			
-			}
-		});
-		c.gridx = 1;
-		c.gridy = 15;
-		costPane.add(btnviewtot,c);
-
-        JButton btnSerachCust = new JButton("Customer LookUp");
-      btnSerachCust.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-              welcomeLabel. setText("Welcome user at - 1: " + cid );
-              SearchCustomer objCustSearch = new SearchCustomer();
-              objCustSearch.pack();
-              objCustSearch.setLocation(500, 300);
-              objCustSearch.setSize(800, 500);
-              objCustSearch.setVisible(true);
-              objCustSearch.setTitle("Search Customer");
-              objCustSearch.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-              welcomeLabel. setText("Welcome user at - 2 : " + cid );
-          }
-      });
-      c.gridx = 1;
-      c.gridy = 16;
-      costPane.add(btnSerachCust,c);
-	}
-
+   private void viewSaleFrame() {
+       // TODO Auto-generated method stub
+       try {
+           JFrame frame=new JFrame("Today orders");
+           Class.forName("com.mysql.jdbc.Driver");
+           connect = DriverManager.getConnection(SalesHistory.hmsDbUrl);
+           GUI.SalesHistory obj = new GUI.SalesHistory(connect);
+           JScrollPane sp=new JScrollPane(obj.getTable("menu_order"));
+           frame.setSize(1000, 800);
+           frame.getContentPane().add(sp);
+           frame.setBounds(200,200,400,300);
+           frame.setVisible(true);
+       }
+       catch (ClassNotFoundException e2) {
+           // TODO Auto-generated catch block
+           e2.printStackTrace();
+       }
+       catch (SQLException e2) {
+           // TODO Auto-generated catch block
+           e2.printStackTrace();
+       } catch (Exception e1) {
+           // TODO Auto-generated catch block
+           e1.printStackTrace();
+       }
+   }
 	public void setBillingInfo( int itemId, String itemInstruction){
 		try {
 			String query="Insert into billing_info(oid,itemid,item_instruction) values (?,?,?)";

@@ -25,6 +25,7 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
 
     /**
      * Creates new form CustomerReterivalForm
+     * @wbp.parser.constructor
      */
 
     public CustomerRetrievalForm(Vector searchlist) {
@@ -61,7 +62,7 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
         jTable1.setModel(new javax.swing.table.DefaultTableModel( searchList, colNames)
                 /*
             new Object [][] {
-                {1, 2, 3, 4, 5, null, null, null, null},
+                {1, 2, 3, 4, 5, null, null, null, null},-
               },
             new String [] {
                 "cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"
@@ -77,6 +78,11 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
                     long cid = new Long(jTable1.getValueAt(row ,0).toString()).longValue();
                     GUI.CafeBill.cid = cid;
                     System.out.println("Customre id on select in CustomeRetrivalform : " +cid  );
+                    DefaultTableModel dm = (DefaultTableModel)jTable1.getModel();
+                    while(dm.getRowCount() > 0)
+                    {
+                        dm.removeRow(0);
+                    }
                     dispose();
                 }
             }

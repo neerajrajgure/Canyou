@@ -16,6 +16,7 @@ public class Payment extends JDialog {
     public static int payCashOrCC;
     public static String transInfo;
     public String Total;
+    public boolean cancelPressed = false;
 
     JRadioButton radioOptionCash = new JRadioButton("Cash");
     JRadioButton radioOptionCC = new JRadioButton("Credit/Debit Card");
@@ -23,12 +24,36 @@ public class Payment extends JDialog {
     final JLabel lblTotal1 = new JLabel("Return Amount");
     final JLabel lblamount = new JLabel();
     JTextField jTxtCreditCard = new JTextField(10);
+/*    
+    {
+        if(radioOptionCash.isSelected())
+            jTxtCash.setEnabled(true);
+             jTxtCreditCard.setEnabled(false);
+        else
+          if(radioOptionCC.isSelected())
+            jTxtCash.setEnabled(false); 
+            TxtCreditCard.setEnabled(true);
+    }
+  */  
+ /*   
+    {
+        if(radioOptionCC.isSelected())
+            jTxtCash.setEnabled(false);
+        else
+            jTxtCreditCard.setEnabled(true);
+
+    }
+  */  
+    private final JButton btnCancel = new JButton("Cancel");
 
     public Payment(CafeBill cb) {
-        getContentPane().setBackground(Color.LIGHT_GRAY);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        cancelPressed = false;
+        setResizable(false);
+        getContentPane().setBackground(Color.WHITE);
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setTitle("Payment Screen");
         _cb = cb;
+        // setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setModal(true);
         createAndShowGUI();
     }
@@ -53,12 +78,12 @@ public class Payment extends JDialog {
             @SuppressWarnings("static-access")
             public void actionPerformed(ActionEvent e) {
                 calculatePay();
-                String msg = "Do you want to print? ";
-                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "Print", JOptionPane.YES_NO_OPTION);
-
-                if (result != JOptionPane.YES_OPTION) {
-                    return;
-                }
+//                String msg = "Do you want to print? ";
+//                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "Print", JOptionPane.YES_NO_OPTION);
+//
+//                if (result != JOptionPane.YES_OPTION) {
+//                    return;
+//                }
                 dispose();
             }
         });
@@ -79,7 +104,14 @@ public class Payment extends JDialog {
         getContentPane().add(lblamount);
         getContentPane().add(btncalculate);
         getContentPane().add(btnsubmit);
+        getContentPane().add(btnCancel);
 
+        btnCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cancelPressed = true;
+                dispose();
+            }
+        });
         this.dispose();
     }
     public void calculatePay()
