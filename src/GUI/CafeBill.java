@@ -14,12 +14,14 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -86,7 +88,8 @@ public class CafeBill extends JFrame {
 	final JLabel lblTax2 = new JLabel("");
 	final JLabel lblTax3_1 = new JLabel("");
 	final JLabel lblTax3 = new JLabel("");
-	final JLabel lblDiscount_1 = new JLabel("Discount");
+	final JLabel lblDiscountvalue = new JLabel();
+	final JLabel lblDiscount_1 = new JLabel("Discount"); //new JLabellblDiscount_1.set("Discount" + "( " + lblDiscountvalue.getText() + " % )" );
 	final JLabel lblDiscount = new JLabel("");
 	final static String db_name= "HMS";
 	final static String username = "billing";
@@ -601,15 +604,17 @@ public class CafeBill extends JFrame {
 			{
 				if (table.getSelectedColumn() == 2) {
 					TableCellListener tcl = (TableCellListener)e.getSource();
-					Float priceVal =Float.parseFloat((String) table.getValueAt(tcl.getRow(), 3));
-					Float newTotalPrice =Float.parseFloat((String)tcl.getNewValue())* priceVal;
+					float priceVal = new Float((table.getValueAt(tcl.getRow(), 3).toString())).floatValue();
+					//float newTotalPrice =Float.parseFloat((String)tcl.getNewValue())* priceVal;
+					float val = new Float((tcl.getNewValue().toString())).floatValue();
+					float newTotalPrice = val * priceVal;
 					dataModel.setValueAt(newTotalPrice, tcl.getRow(), 4);
 					calculateTotal();
 				}
 
 			}
 		};
-
+		setUpquantyColumn(table, table.getColumnModel().getColumn(2));
 		TableCellListener tcl = new TableCellListener(table, action);
 
 		//Adding the table column renderor for each cell
@@ -641,7 +646,7 @@ public class CafeBill extends JFrame {
 				if (selRow != -1) {
 					Object [] data = {"","","1","20.0","20.0"};
 					int col = 0;
-					dataModel.insertRow(selRow+1, data);
+					dataModel.insertRow(selRow + 1, data);
 					TableColumn cm = table.getColumnModel().getColumn(1); //hard code value
 					//This is cell Editor return appropriate combobox This need s to happen as soon as the table is created
 					cm.setCellEditor(new TextAreaCellRenderer());
@@ -697,7 +702,12 @@ public class CafeBill extends JFrame {
 		c.gridx = 1;
 		c.gridy = 6;
 		costPane.add(lblDiscount_1,c);
-		c.gridx = 3;
+/*
+		c.gridx = 2;
+		c.gridy = 6;
+		costPane.add(lblDiscountvalue,c);
+
+*/		c.gridx = 3;
 		c.gridy = 6;
 		costPane.add(lblDiscount,c);
 
@@ -847,6 +857,7 @@ public class CafeBill extends JFrame {
 				System.out.println("incremet oid is" + oid);
 				oid++;
 				//cid++;
+				new Demography().setVisible(true);
 				/*				 
 	                String msg = "Change Printer Name to adobe pdf And save";
 	                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "Print", JOptionPane.OK_OPTION);
@@ -866,7 +877,7 @@ public class CafeBill extends JFrame {
 				 */			}
 		});
 		c.gridx = 1;
-		c.gridy = 9;
+		c.gridy = 10;
 		costPane.add(btnPrintBill,c);
 
 		JButton btnClear = new JButton("Clear Order");
@@ -890,7 +901,7 @@ public class CafeBill extends JFrame {
 			}
 		});
 		c.gridx = 1;
-		c.gridy = 8;
+		c.gridy = 11;
 		costPane.add(btnClear,c);
 		JButton btnac = new JButton("Apply Coupon & Discount");
 		btnac.setSize(100, 100);
@@ -901,7 +912,7 @@ public class CafeBill extends JFrame {
 				      try {
                     Class.forName("com.mysql.jdbc.Driver");
                     // Setup the connection with the DB
-                    connect = DriverManager.getConnection(db_url);
+                    connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
                     String query="Insert into coupon(couponId,couponName,startDate,startTime,endDate,endTime,itemId,percentage) values (?,?,?,?,?,?,?,?)";
                     preparedStatement=connect.prepareStatement(query);
                     preparedStatement.setInt(1, 101);
@@ -928,7 +939,7 @@ public class CafeBill extends JFrame {
 			//}
 		});
 		c.gridx = 1;
-		c.gridy = 10;
+		c.gridy = 9;
 		costPane.add(btnac,c);
 		JButton btncanelOrder = new JButton("Logout");
 		btncanelOrder.addActionListener(new ActionListener() {
@@ -957,7 +968,7 @@ public class CafeBill extends JFrame {
 			}
 		});
 		c.gridx = 1;
-		c.gridy = 15;
+		c.gridy = 12;
 		costPane.add(btncanelOrder,c);
 		JButton btnCR = new JButton("Customer Registration");
 		btnCR.addActionListener(new ActionListener() {
@@ -966,7 +977,7 @@ public class CafeBill extends JFrame {
 			}
 		});
 		c.gridx = 1;
-		c.gridy = 12;
+		c.gridy = 8;
 		costPane.add(btnCR,c);
 
 
@@ -978,10 +989,29 @@ public class CafeBill extends JFrame {
 		});
 		c.gridx = 1;
 		c.gridy = 14;
-		costPane.add(btndemography,c);
+		//costPane.add(btndemography,c);
 		}
 
-   public  void searchCust() {
+	private void setUpquantyColumn(JTable table2, TableColumn Quantity) {
+	    // TODO Auto-generated method stub
+	    //Set up the editor for the sport cells.
+	    JComboBox comboBox = new JComboBox();
+	    final int number_to_add_max =10;
+	    for (int i = 1; i <= number_to_add_max; i++)
+	    {
+	        comboBox.addItem(i);
+	    }
+
+	    Quantity.setCellEditor(new DefaultCellEditor(comboBox));
+
+	    //Set up tool tips for the sport cells.
+	    DefaultTableCellRenderer renderer =
+	            new DefaultTableCellRenderer();
+	    renderer.setToolTipText("Click for combo box");
+	    Quantity.setCellRenderer(renderer);
+
+	}
+public  void searchCust() {
         //welcomeLabel. setText("Welcome user at - 1: " + cid );
         SearchCustomer objCustSearch = new SearchCustomer();
         objCustSearch.pack();
@@ -998,7 +1028,7 @@ public class CafeBill extends JFrame {
        try {
            JFrame frame=new JFrame("Today orders");
            Class.forName("com.mysql.jdbc.Driver");
-           connect = DriverManager.getConnection(SalesHistory.hmsDbUrl);
+           connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
            GUI.SalesHistory obj = new GUI.SalesHistory(connect);
            JScrollPane sp=new JScrollPane(obj.getTable("menu_order"));
            frame.setSize(1000, 800);
@@ -1260,7 +1290,7 @@ public class CafeBill extends JFrame {
 	  */
 	 public void calculateTotal()
 	 {
-		 float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0;
+		 float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
 		 int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
 		 iRowCnt = dataModel.getRowCount();
 		 Object obj;
@@ -1300,12 +1330,16 @@ public class CafeBill extends JFrame {
 		 //        System.out.println(db_tax1 );
 		 if(CouponDiscount.couponValue!=0.0 && CouponDiscount.couponValue <=100)
 		 {
-			 totAmtAfterDiscount =  (float)( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100)));
+			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
+		     totAmtAfterDiscount =  (float)( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100)));
 			 // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
-			 lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
+			 //lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
+			 lblDiscount.setText("-"+new Float(discountValue).toString());
+			 lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
 		 }else{
 			 totAmtAfterDiscount = totalAmt;
 			 lblDiscount.setText("0.0");
+			 lblDiscount_1.setText("Discount" + "( 0.0 % )" );
 		 }
 		 ftax1 = (float) ((totAmtAfterDiscount *  db_tax1)/100);
 		 ftax1 = roundDecimal(ftax1,2);
@@ -1320,6 +1354,8 @@ public class CafeBill extends JFrame {
 		 lblTax2.setText(Float.toString(ftax2));
 		 lblTax3.setText(Float.toString(ftax3));
 		 lblTotal.setText (Float.toString(totAmtWithTax));
+		 lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
+		 System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
 	 }
 	 /*
 	  *
