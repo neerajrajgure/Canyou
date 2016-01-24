@@ -956,6 +956,7 @@ public class CafeBill extends JFrame {
 				showOpenLoginScreen();
 			}
 		});
+
 		c.gridx = 1;
 		c.gridy = 15;
 		costPane.add(btncanelOrder,c);
@@ -979,6 +980,20 @@ public class CafeBill extends JFrame {
 		c.gridx = 1;
 		c.gridy = 14;
 		costPane.add(btndemography,c);
+
+        JButton btnClockInClockOut = new JButton("Clock-in / Clock-out");
+        btnClockInClockOut.setSize(100, 100);
+        btnClockInClockOut.setVisible(false);
+        btnClockInClockOut.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClockInClockOut objCICO = new ClockInClockOut();
+                objCICO.setVisible(true);
+            }
+        });
+        c.gridx = 1;
+        c.gridy = 16;
+        costPane.add(btnClockInClockOut,c);
+
 		}
 
    public  void searchCust() {
@@ -1017,31 +1032,25 @@ public class CafeBill extends JFrame {
            // TODO Auto-generated catch block
            e1.printStackTrace();
        }
-   }
-	public void setBillingInfo( int itemId, String itemInstruction){
-		try {
-			String query="Insert into billing_info(oid,itemid,item_instruction) values (?,?,?)";
-			preparedStatement=connect.prepareStatement(query);
-			//    for(int i=0;i<count;i++)
-			{
-				//    int OId= (int) table.getValueAt(i, 1);
-				//    int CId= (int) table.getValueAt(i, 2);
-				//    String orderDate=(String) table.getValueAt(i, 3);
-				//    int Transtypeid=(int) table.getValueAt(i, 4);
-				//    String TrantypeInfo=(String) table.getValueAt(i, 5);
-				preparedStatement.setLong(1, oid);
-				System.out.println(" Oid in billing_info is  : "+ oid);
-				preparedStatement.setInt(2, itemId);
-				preparedStatement.setString(3, itemInstruction);
-				preparedStatement.executeUpdate();
-				preparedStatement.close();
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+    }
 
-	}
+    public void setBillingInfo( int itemId, String itemInstruction) {
+        try {
+            String query="Insert into billing_info(oid, orderDate, itemid,item_instruction) values (?,?,?,?)";
+            preparedStatement=connect.prepareStatement(query);
+            preparedStatement.setLong(1, oid);
+            System.out.println(" Oid in billing_info is  : "+ oid);
+            preparedStatement.setDate(2, getCurrentDate());
+            preparedStatement.setInt(3, itemId);
+            preparedStatement.setString(4, itemInstruction);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
 	public void setMenuOrder(long customerId, int transID, String transInfo, float discounAmount, float discountPercent, String DISCOUNTDEC, float subTotal, float totalTaxPercent, float totalAmount){
 		try {
 			String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
