@@ -967,7 +967,6 @@ public class CafeBill extends JFrame {
 				showOpenLoginScreen();
 			}
 		});
-
 		c.gridx = 1;
 		c.gridy = 12;
 		costPane.add(btncanelOrder,c);
