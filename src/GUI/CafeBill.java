@@ -990,8 +990,8 @@ public class CafeBill extends JFrame {
 		});
 		c.gridx = 1;
 		c.gridy = 14;
-		costPane.add(btndemography,c);
-
+		//costPane.add(btndemography,c);
+/*
         JButton btnClockInClockOut = new JButton("Clock-in / Clock-out");
         btnClockInClockOut.setSize(100, 100);
         btnClockInClockOut.setVisible(false);
@@ -1004,6 +1004,7 @@ public class CafeBill extends JFrame {
         c.gridx = 1;
         c.gridy = 16;
         costPane.add(btnClockInClockOut,c);
+*/
 		}
 
 	private void setUpquantyColumn(JTable table2, TableColumn Quantity) {
