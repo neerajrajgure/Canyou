@@ -2,7 +2,7 @@ create database HMS;
 use HMS;
 create user billing identified by 'hmsbilling';
 grant usage on *.* to billing@localhost identified by 'hmsbilling'; 
-grant all privileges on HMS.* to billing@localhost; 
+grant all privileges on HMS.* to billing@localhost;
 
 create table customer(cid Numeric(9), FName varchar(32) NOT NULL, LName varchar(32) NOT NULL, Address varchar(50), phonenum varchar(12) , phone Numeric(12), emailid varchar(64), DOB Date, flag char(1), Primary Key(cid));
 insert into customer values(1,'Sam','Smith','xyz','1234567890',1234567890,'samsmith@gmail.com','1997-08-04','');
@@ -34,7 +34,6 @@ create table menu_order(oid int, cid int, orderDate Date, orderTime Time, transt
 
 create table billing_info(oid int, orderDate Date, itemId int references item(itemId), item_instruction varchar(35), FOREIGN KEY (oid, orderDate) REFERENCES menu_order(oid, orderDate));
 
-
 create table male_age_group(id int(10), age_group_start int(10), age_group_end int(10));
 create table female_age_group(id int(10), age_group_start int(10), age_group_end int(10));
 create table kids_age_group(id int(10), age_group_start int(10), age_group_end int(10));
@@ -45,11 +44,12 @@ CREATE TABLE Coupon (couponId int, couponName varchar(20), startDate date, start
 
 CREATE TABLE discount(Discount_value int(20));
 
-INSERT INTO Coupon (couponId, couponName, startDate, startTime, endDate, endTime, itemId, percentage) VALUES ("TEST1", 'HIVE10)', '12-01-2015', '', '12-31-2015','', 1002, 10 );
+INSERT INTO Coupon (couponId, couponName, startDate, startTime, endDate, endTime, itemId, percentage) VALUES (111, 'HIVE10)', '2016-01-01', '', '2016-02-29','', 1002, 10 );
 
 
 /*-------------------------------------------------*/
 
+INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Admin', ' ', 122015, 1);
 INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Suhas', ' ', 73412, 31);
 INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Swapnil', ' ', 43489, 32);
 INSERT INTO emp(loginName, firstName, lastName, password, empid) VALUES (' ', 'Abhijeet', ' ', 64781, 33);
@@ -60,11 +60,12 @@ insert into categories values(102, 'Cold Beverage','./src/images/ColdBeverage.pn
 INSERT into categories VALUES(103, 'Sandwich', './src/images/Sandwich.png' );
 INSERT into categories VALUES(104, 'Waffle', './src/images/Waffle.png' );
 INSERT into categories VALUES(105, 'Cake', './src/images/Cake.png' );
+INSERT into categories VALUES(106, 'Combo', './src/images/Combo.png' );
 
  
 /*COFFEE - HOT DRINKS (101)----------------*/
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1001, 'Espresso', 101, 39.00);
-INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Espresso', 101, 49.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1057, 'Large - Espresso', 101, 49.00);
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1002, 'Americano', 101, 44.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1003, 'Large - Americano', 101, 54.00);
@@ -156,32 +157,38 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1046, 'Plain Waff
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1047, 'Special Waffle', 104, 70.00);
 
 
-insert into male_age_group values (1, 15, 30);
-insert into male_age_group values (2, 31, 40);
-insert into male_age_group values (3, 41, 50);
-insert into male_age_group values (4, 51, 60);
-insert into male_age_group values (5, 61, 70);
-insert into male_age_group values (6, 71, 100);
+/* COMBO   ---------------- */
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1058, 'Veg, Combo', 106, 129.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1059, 'Non-Veg, Combo', 106, 145.00);
 
-insert into female_age_group values (1, 15, 30);
-insert into female_age_group values (2, 31, 45);
-insert into female_age_group values (3, 45, 60);
-insert into female_age_group values (4, 61, 100);
+/* Demography */
+INSERT INTO male_age_group VALUES (1, 15, 30);
+INSERT INTO male_age_group VALUES (2, 31, 40);
+INSERT INTO male_age_group VALUES (3, 41, 50);
+INSERT INTO male_age_group VALUES (4, 51, 60);
+INSERT INTO male_age_group VALUES (5, 61, 70);
+INSERT INTO male_age_group VALUES (6, 71, 100);
 
-insert into kids_age_group values (1, 0, 3);
-insert into kids_age_group values (2, 4, 10);
-insert into kids_age_group values (3, 11, 15);
-insert into discount values (5);
-insert into discount values (10);
-insert into discount values (15);
-insert into discount values (20);
-insert into discount values (25);
-insert into discount values (30);
-insert into discount values (40);
-insert into discount values (50);
-insert into discount values (60);
-insert into discount values (70);
-insert into discount values (80);
-insert into discount values (90);
-insert into discount values (100);
+INSERT INTO female_age_group VALUES (1, 15, 30);
+INSERT INTO female_age_group VALUES (2, 31, 45);
+INSERT INTO female_age_group VALUES (3, 45, 60);
+INSERT INTO female_age_group VALUES (4, 61, 100);
 
+INSERT INTO kids_age_group VALUES (1, 0, 3);
+INSERT INTO kids_age_group VALUES (2, 4, 10);
+INSERT INTO kids_age_group VALUES (3, 11, 15);
+
+/* Discount percentages */
+INSERT INTO discount VALUES (5);
+INSERT INTO discount VALUES (10);
+INSERT INTO discount VALUES (15);
+INSERT INTO discount VALUES (20);
+INSERT INTO discount VALUES (25);
+INSERT INTO discount VALUES (30);
+INSERT INTO discount VALUES (40);
+INSERT INTO discount VALUES (50);
+INSERT INTO discount VALUES (60);
+INSERT INTO discount VALUES (70);
+INSERT INTO discount VALUES (80);
+INSERT INTO discount VALUES (90);
+INSERT INTO discount VALUES (100);
