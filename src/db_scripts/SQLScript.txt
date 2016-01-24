@@ -32,7 +32,8 @@ create table emp(loginName varchar(20), firstName varchar(20), lastName varchar(
 
 create table menu_order(oid int, cid int, orderDate Date, orderTime Time, transtypeid int, transtypeinfo varchar(20), empid int, discounAmount float, discountPercent float, discountDesc varchar(100), subTotal float, totalTaxPercent float, totalAmount float, PRIMARY KEY(oid, orderDate), FOREIGN KEY (transtypeid) REFERENCES transactiontypes(transtypeid), FOREIGN KEY (empid) REFERENCES emp(empid));
 
-create table billing_info(oid int ,itemId int references item(itemId), item_instruction varchar(35),FOREIGN KEY (oid) REFERENCES menu_order(oid ));
+create table billing_info(oid int, orderDate Date, itemId int references item(itemId), item_instruction varchar(35), FOREIGN KEY (oid, orderDate) REFERENCES menu_order(oid, orderDate));
+
 
 create table male_age_group(id int(10), age_group_start int(10), age_group_end int(10));
 create table female_age_group(id int(10), age_group_start int(10), age_group_end int(10));
@@ -183,3 +184,4 @@ insert into discount values (70);
 insert into discount values (80);
 insert into discount values (90);
 insert into discount values (100);
+
