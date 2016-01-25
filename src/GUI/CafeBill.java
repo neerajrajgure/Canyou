@@ -89,7 +89,7 @@ public class CafeBill extends JFrame {
 	final JLabel lblTax3_1 = new JLabel("");
 	final JLabel lblTax3 = new JLabel("");
 	final JLabel lblDiscountvalue = new JLabel();
-	final JLabel lblDiscount_1 = new JLabel("Discount"); //new JLabellblDiscount_1.set("Discount" + "( " + lblDiscountvalue.getText() + " % )" );
+	final JLabel lblDiscount_1 = new JLabel("Discount" + "( 0.0 % )" ); //new JLabellblDiscount_1.set("Discount" + "( " + lblDiscountvalue.getText() + " % )" );
 	final JLabel lblDiscount = new JLabel("");
 	final static String db_name= "HMS";
 	final static String username = "billing";
@@ -123,8 +123,8 @@ public class CafeBill extends JFrame {
 	JTable table ;
 	ReceiptPrinting rp;
 	KitchenReceiptPrinting krp;
-	public long oid = 0;
-	public static long cid = 0;
+	public static long oid = 0;
+	public static long cid = 0; // Change this to foundCustCid
 	public float db_tax1=(float) 0.0;
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
@@ -179,9 +179,7 @@ public class CafeBill extends JFrame {
 			pack();
 			try {
 				oid = getNextOid();
-				// cid= getNextCid();
 				System.out.println(" Oid in frame is  : "+ oid);
-				System.out.println(" Cid in frame is  : "+ cid);
 			} catch(Exception e) {
 				// Call the Fall back method to use text files as the backups
 				e.printStackTrace();
@@ -660,7 +658,7 @@ public class CafeBill extends JFrame {
 		c.weighty = 1;
 		c.gridwidth = 1;
 		costPane.add(btnDeleteRow,c);
-		c.gridx = 3;
+		c.gridx = 2;
 		c.gridy = 1;
 		c.gridwidth = 1;
 		c.weightx =1;
@@ -806,7 +804,6 @@ public class CafeBill extends JFrame {
 
 				System.out.println("incremet oid is" +oid);
 				oid++; // Do not change. Do not delete this line.
-				//cid++;
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
 				//new ReceiptPrinting().setVisible(true);
@@ -855,8 +852,7 @@ public class CafeBill extends JFrame {
 				}
 				CouponDiscount.couponValue=0.0;
 				System.out.println("incremet oid is" + oid);
-				oid++;
-				//cid++;
+				// oid++;
 				new Demography().setVisible(true);
 				/*				 
 	                String msg = "Change Printer Name to adobe pdf And save";
@@ -980,6 +976,15 @@ public class CafeBill extends JFrame {
 		c.gridy = 8;
 		costPane.add(btnCR,c);
 
+		JButton btnCl = new JButton("Customer Lookup");
+		btnCl.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        new SearchCustomer ().setVisible(true);
+		    }
+		});
+		c.gridx = 2;
+		c.gridy = 8;
+		costPane.add(btnCl,c);
 
 		JButton btndemography = new JButton("Demography");
 		btndemography.addActionListener(new ActionListener() {
