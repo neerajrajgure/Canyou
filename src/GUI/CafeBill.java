@@ -660,7 +660,7 @@ public class CafeBill extends JFrame {
 		c.weighty = 1;
 		c.gridwidth = 1;
 		costPane.add(btnDeleteRow,c);
-		c.gridx = 3;
+		c.gridx = 2;
 		c.gridy = 1;
 		c.gridwidth = 1;
 		c.weightx =1;
@@ -980,6 +980,15 @@ public class CafeBill extends JFrame {
 		c.gridy = 8;
 		costPane.add(btnCR,c);
 
+		JButton btnCl = new JButton("Customer lookup");
+		btnCl.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        new SearchCustomer ().setVisible(true);
+		    }
+		});
+		c.gridx = 2;
+		c.gridy = 8;
+		costPane.add(btnCl,c);
 
 		JButton btndemography = new JButton("Demography");
 		btndemography.addActionListener(new ActionListener() {
