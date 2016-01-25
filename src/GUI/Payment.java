@@ -24,26 +24,8 @@ public class Payment extends JDialog {
     final JLabel lblTotal1 = new JLabel("Return Amount");
     final JLabel lblamount = new JLabel();
     JTextField jTxtCreditCard = new JTextField(10);
-/*    
     {
-        if(radioOptionCash.isSelected())
-            jTxtCash.setEnabled(true);
-             jTxtCreditCard.setEnabled(false);
-        else
-          if(radioOptionCC.isSelected())
-            jTxtCash.setEnabled(false); 
-            TxtCreditCard.setEnabled(true);
     }
-  */  
- /*   
-    {
-        if(radioOptionCC.isSelected())
-            jTxtCash.setEnabled(false);
-        else
-            jTxtCreditCard.setEnabled(true);
-
-    }
-  */  
     private final JButton btnCancel = new JButton("Cancel");
 
     public Payment(CafeBill cb) {
@@ -64,6 +46,12 @@ public class Payment extends JDialog {
      * event-dispatching thread.
      */
     public void createAndShowGUI() {
+        radioOptionCash.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jTxtCash.setEnabled(true);
+                jTxtCreditCard.setEnabled(false);
+            }
+        });
         //Create and set up the window.
         //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         radioOptionCash.setToolTipText("Payment by Cash");
@@ -98,6 +86,12 @@ public class Payment extends JDialog {
         getContentPane().setLayout(new FlowLayout());
         getContentPane().add(radioOptionCash);
         getContentPane().add(jTxtCash);
+        radioOptionCC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jTxtCash.setEnabled(false);
+                jTxtCreditCard.setEnabled(true);
+            }
+        });
         getContentPane().add(radioOptionCC);
         getContentPane().add(jTxtCreditCard);
         getContentPane().add(lblTotal1);
