@@ -996,7 +996,7 @@ public class CafeBill extends JFrame {
 		c.gridy = 8;
 		costPane.add(btnCR,c);
 
-		JButton btnCl = new JButton("Customer lookUp");
+		JButton btnCl = new JButton("Customer Lookup");
 		btnCl.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        new SearchCustomer ().setVisible(true);
