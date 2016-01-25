@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 
 /**
  *
@@ -23,10 +24,6 @@ import javax.swing.JComboBox;
  */
 
 public class Demography extends javax.swing.JDialog {
-    final static String db_name= "HMS";
-    final static String username = "billing";
-    final static String password = "hmsbilling";
-    final static String hmsDbUrl ="jdbc:mysql://localhost/"+db_name+"?"+ "user=" + username + "&" + "password=" + password;
     private static Connection connect = null;
     private static PreparedStatement preparedStatement = null;
     private static ResultSet resultSet = null;
@@ -122,7 +119,7 @@ public class Demography extends javax.swing.JDialog {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             // Setup the connection with the DB
-            connect = DriverManager.getConnection(Demography.hmsDbUrl);
+            connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
         }
         catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
@@ -252,7 +249,7 @@ public class Demography extends javax.swing.JDialog {
         btnSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
-                    connect = DriverManager.getConnection(Demography.hmsDbUrl);
+                    connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
                     String query="Insert into demography(num_of_guests ,num_of_males, m_age_group_1,m_age_group_2 ,m_age_group_3, m_age_group_4, m_age_group_5,m_age_group_6, num_of_females,f_age_group_1,f_age_group_2,f_age_group_3,f_age_group_4,f_age_group_5,f_age_group_6,num_of_kids,k_age_group_1,k_age_group_2,k_age_group_3,k_age_group_4,k_age_group_5,k_age_group_6)"
                             + " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     preparedStatement=connect.prepareStatement(query);
@@ -363,6 +360,10 @@ public class Demography extends javax.swing.JDialog {
             comboBox_3.addItem(i);
         }
 
+        JLabel lblNewLabel = new JLabel("Cid : " + CafeBill.cid);
+
+        JLabel lblNewLabel_1 = new JLabel("Oid :"+ CafeBill.oid);
+
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         groupLayout.setHorizontalGroup(
             groupLayout.createParallelGroup(Alignment.LEADING)
@@ -400,38 +401,45 @@ public class Demography extends javax.swing.JDialog {
                 .addGroup(groupLayout.createSequentialGroup()
                     .addGap(31)
                     .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(lblFemale)
-                        .addComponent(lblKids))
-                    .addGap(18)
-                    .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
                         .addGroup(groupLayout.createSequentialGroup()
-                            .addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNewLabel)
                             .addGap(18)
-                            .addComponent(jComboBox3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(18)
-                            .addComponent(jComboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(ComponentPlacement.UNRELATED)
-                            .addComponent(jComboBox15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(ComponentPlacement.UNRELATED)
-                            .addComponent(jComboBox16, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(18)
-                            .addComponent(jComboBox17, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(18)
-                            .addComponent(jComboBox18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblNewLabel_1))
                         .addGroup(groupLayout.createSequentialGroup()
-                            .addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+                                .addComponent(lblFemale)
+                                .addComponent(lblKids))
                             .addGap(18)
-                            .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(18)
-                            .addComponent(jComboBox9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(18)
-                            .addComponent(jComboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addComponent(jComboBox11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addComponent(jComboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(ComponentPlacement.UNRELATED)
-                            .addComponent(jComboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                    .addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18)
+                                    .addComponent(jComboBox3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18)
+                                    .addComponent(jComboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                                    .addComponent(jComboBox15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                                    .addComponent(jComboBox16, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18)
+                                    .addComponent(jComboBox17, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18)
+                                    .addComponent(jComboBox18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addGroup(groupLayout.createSequentialGroup()
+                                    .addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18)
+                                    .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18)
+                                    .addComponent(jComboBox9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18)
+                                    .addComponent(jComboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(ComponentPlacement.RELATED)
+                                    .addComponent(jComboBox11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(ComponentPlacement.RELATED)
+                                    .addComponent(jComboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                                    .addComponent(jComboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+                    .addGap(2353))
         );
         groupLayout.setVerticalGroup(
             groupLayout.createParallelGroup(Alignment.LEADING)
@@ -481,7 +489,11 @@ public class Demography extends javax.swing.JDialog {
                             .addComponent(jComboBox17, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBox18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                    .addGap(60)
+                    .addGap(25)
+                    .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(lblNewLabel)
+                        .addComponent(lblNewLabel_1))
+                    .addGap(21)
                     .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
                         .addComponent(btnSubmit)
                         .addComponent(btnclear)
@@ -595,5 +607,4 @@ public class Demography extends javax.swing.JDialog {
     private JComboBox comboBox_1;
     private JComboBox comboBox_2;
     private JComboBox comboBox_3;
-    // End of variables declaration
 }
