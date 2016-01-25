@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.awt.Dialog.ModalExclusionType;
+import javax.swing.JButton;
 
 public class CustRegForm extends JDialog implements ActionListener{
     private static CafeBill _cb;
@@ -51,10 +52,10 @@ public class CustRegForm extends JDialog implements ActionListener{
         setModal(true);
         createAndShowGUI();
         setTitle("Customer Registration");
-        setSize(500,300);
+        setSize(413,300);
         setLocation(500, 200);
         setResizable(false);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     }
     public long getNextCid() {
         //connectDatabase();
@@ -209,6 +210,15 @@ public class CustRegForm extends JDialog implements ActionListener{
         email.setBounds(140,180,170,20);
         b1.setBounds(140,210,70,20);
         b2.setBounds(220,210,70,20);
+
+        JButton btnClose = new JButton("Close");
+        btnClose.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        btnClose.setBounds(296, 207, 89, 23);
+        getContentPane().add(btnClose);
     }
 }
 
