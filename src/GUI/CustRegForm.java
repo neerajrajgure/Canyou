@@ -96,9 +96,9 @@ public class CustRegForm extends JDialog implements ActionListener{
                 connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
                 String query="Insert into customer (cid,FName,LName,Address,phonenum,phone,emailid,DOB,flag) values (?,?,?,?,?,?,?,?,?)";
                 preparedStatement=connect.prepareStatement(query);
-                System.out.println("New Cid: " );
-                preparedStatement.setLong(1,CafeBill.cid);
-                System.out.println(" Cid in customer is  : "+ CafeBill.cid);
+                long newCid = getNextCid();
+                System.out.println("Customer will get this Cid: " + newCid );
+                preparedStatement.setLong(1, newCid);
                 //                preparedStatement.setInt(2, customerId);
                 preparedStatement.setString(2, firstname.getText());
                 preparedStatement.setString(3, lastname.getText());

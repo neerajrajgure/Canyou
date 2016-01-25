@@ -124,7 +124,7 @@ public class CafeBill extends JFrame {
 	ReceiptPrinting rp;
 	KitchenReceiptPrinting krp;
 	public static long oid = 0;
-	public static long cid = 0;
+	public static long cid = 0; // Change this to foundCustCid
 	public float db_tax1=(float) 0.0;
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
@@ -179,9 +179,7 @@ public class CafeBill extends JFrame {
 			pack();
 			try {
 				oid = getNextOid();
-				cid= getNextCid();
 				System.out.println(" Oid in frame is  : "+ oid);
-				System.out.println(" Cid in frame is  : "+ cid);
 			} catch(Exception e) {
 				// Call the Fall back method to use text files as the backups
 				e.printStackTrace();
@@ -319,22 +317,6 @@ public class CafeBill extends JFrame {
 		}
 		return ++maxoid;
 	}
-    public long getNextCid() {
-        //connectDatabase();
-        long maxcid=0;
-        try {
-            preparedStatement = connect.prepareStatement("SELECT MAX(cid) FROM customer");
-            ResultSet rs=preparedStatement.executeQuery();
-            while(rs.next())
-            {
-                maxcid=rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return ++maxcid;
-    }
 
 	public ResultSet readDBMS(String query){
 		try {
@@ -822,7 +804,6 @@ public class CafeBill extends JFrame {
 
 				System.out.println("incremet oid is" +oid);
 				oid++; // Do not change. Do not delete this line.
-				cid++;
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
 				//new ReceiptPrinting().setVisible(true);
@@ -871,8 +852,7 @@ public class CafeBill extends JFrame {
 				}
 				CouponDiscount.couponValue=0.0;
 				System.out.println("incremet oid is" + oid);
-				oid++;
-				cid++;
+				// oid++;
 				new Demography().setVisible(true);
 				/*				 
 	                String msg = "Change Printer Name to adobe pdf And save";
