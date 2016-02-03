@@ -24,6 +24,10 @@ import javax.swing.JLabel;
  */
 
 public class Demography extends javax.swing.JDialog {
+    private static CafeBill _cb;
+    public Demography(CafeBill cb){
+        _cb = cb;
+    }
     private static Connection connect = null;
     private static PreparedStatement preparedStatement = null;
     private static ResultSet resultSet = null;
@@ -250,14 +254,12 @@ public class Demography extends javax.swing.JDialog {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
-                    String query="Insert into demography(num_of_guests ,num_of_males, m_age_group_1,m_age_group_2 ,m_age_group_3, m_age_group_4, m_age_group_5,m_age_group_6, num_of_females,f_age_group_1,f_age_group_2,f_age_group_3,f_age_group_4,f_age_group_5,f_age_group_6,num_of_kids,k_age_group_1,k_age_group_2,k_age_group_3,k_age_group_4,k_age_group_5,k_age_group_6)"
-                            + " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    String query="Insert into demography(num_of_guests ,num_of_males, m_age_group_1,m_age_group_2 ,m_age_group_3, m_age_group_4, m_age_group_5,m_age_group_6, num_of_females,f_age_group_1,f_age_group_2,f_age_group_3,f_age_group_4,f_age_group_5,f_age_group_6,num_of_kids,k_age_group_1,k_age_group_2,k_age_group_3,k_age_group_4,k_age_group_5,k_age_group_6,oid,cid)"
+                            + " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     preparedStatement=connect.prepareStatement(query);
                     preparedStatement.setInt(1, comboBox.getSelectedIndex());
-                    System.out.println(" value from comboBox no of Guest :  " +comboBox.getSelectedIndex());
                     preparedStatement.setInt(2, comboBox_1.getSelectedIndex());
                     preparedStatement.setInt(3, jComboBox1.getSelectedIndex());
-                    System.out.println(" value from jcombo box 1 male :  " +comboBox_1.getSelectedIndex());
                     preparedStatement.setInt(4, jComboBox4.getSelectedIndex());
                     preparedStatement.setInt(5, jComboBox5.getSelectedIndex());
                     preparedStatement.setInt(6, jComboBox6.getSelectedIndex());
@@ -265,7 +267,6 @@ public class Demography extends javax.swing.JDialog {
                     preparedStatement.setInt(8, jComboBox8.getSelectedIndex());
                     preparedStatement.setInt(9, comboBox_2.getSelectedIndex());
                     preparedStatement.setInt(10,jComboBox2.getSelectedIndex());
-                    System.out.println(" value from jcombo box 2 female :  " +comboBox_2.getSelectedIndex());
                     preparedStatement.setInt(11, jComboBox9.getSelectedIndex());
                     preparedStatement.setInt(12, jComboBox10.getSelectedIndex());
                     preparedStatement.setInt(13, jComboBox11.getSelectedIndex());
@@ -273,12 +274,17 @@ public class Demography extends javax.swing.JDialog {
                     preparedStatement.setInt(15, jComboBox13.getSelectedIndex());
                     preparedStatement.setInt(16, comboBox_3.getSelectedIndex());
                     preparedStatement.setInt(17, jComboBox3.getSelectedIndex());
-                    System.out.println(" value from jcombo box 3 kids :  " +comboBox_3.getSelectedIndex());
                     preparedStatement.setInt(18, jComboBox14.getSelectedIndex());
                     preparedStatement.setInt(19, jComboBox15.getSelectedIndex());
                     preparedStatement.setInt(20, jComboBox16.getSelectedIndex());
                     preparedStatement.setInt(21, jComboBox17.getSelectedIndex());
                     preparedStatement.setInt(22, jComboBox18.getSelectedIndex());
+                    OrderId =_cb.oid;
+                    CustomerId = _cb.cid;
+                    System.out.println("OrderId in Demography is: "+OrderId);
+                    System.out.println("CustomerId in Demography is: "+CustomerId);
+                    preparedStatement.setLong(23, OrderId );
+                    preparedStatement.setLong(24, CustomerId );
                     preparedStatement.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Data inserted", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
                     btnclearActionPerformed(evt);
@@ -608,4 +614,6 @@ public class Demography extends javax.swing.JDialog {
     private JComboBox comboBox_1;
     private JComboBox comboBox_2;
     private JComboBox comboBox_3;
+    private long OrderId;
+    private long CustomerId;
 }
