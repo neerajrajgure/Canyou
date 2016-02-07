@@ -18,6 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import java.util.Vector;
+import javax.swing.JButton;
 public class SearchCustomer extends JDialog implements ActionListener{
     private static CafeBill _cb;
     public SearchCustomer(CafeBill cb){
@@ -63,12 +64,16 @@ public class SearchCustomer extends JDialog implements ActionListener{
     TextField dobmm=new TextField();
     TextField dobdd=new TextField();
     TextField email=new TextField();
+    private final JButton btnNewButton = new JButton("Close");
 
     public SearchCustomer()
     {
-        setTitle("Search Customer");
         setModal(true);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setSize(464,300);
+        setLocation(500, 200);
+        setResizable(false);
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        setTitle("Search Customer");
         createAndShowGUI();
         addWindowListener(new myWindowAdapter1());
         setBackground(Color.LIGHT_GRAY);
@@ -112,7 +117,14 @@ public class SearchCustomer extends JDialog implements ActionListener{
         dobdd.setBounds(250,150,50,20);
         email.setBounds(120,180,170,20);
         btnSearch.setBounds(120,210,70,20);
-        btnClear.setBounds(220,210,70,20);
+        btnClear.setBounds(207,210,70,20);
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        btnNewButton.setBounds(292, 207, 89, 23);
+        getContentPane().add(btnNewButton);
         //getContentPane().setDefaultButton(btnSearch);
     }
     /*  public void paint(Graphics g)

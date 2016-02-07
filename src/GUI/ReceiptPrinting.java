@@ -99,8 +99,8 @@ public class ReceiptPrinting implements Printable {
         Tax3 =_cb.lblTax3.getText();
         Total =_cb.lblTotal.getText();
         Discount =_cb.lblDiscount.getText();
-        OrderId =_cb.currentOid;
-        CustomerId = _cb.cid;
+        OrderId =_cb.currentOid; // Should change this to pass oid to the constructor instead of accessing the static variable
+        CustomerId = _cb.cid; // Should change this to pass cid to the constructor instead of accessing the static variable
         System.out.println("OrderId in recipt printing is: "+OrderId);
         System.out.println("CustomerId in recipt printing is: "+CustomerId);
         System.out.println("Discount is:"+Discount+"is the value");

@@ -40,6 +40,9 @@ create table kids_age_group(id int(10), age_group_start int(10), age_group_end i
 create table demography(num_of_guests int, num_of_males int, m_age_group_1 int, m_age_group_2 int, m_age_group_3 int , m_age_group_4 int , m_age_group_5 int, m_age_group_6 int, num_of_females int, f_age_group_1 int, f_age_group_2 int, f_age_group_3 int , f_age_group_4 int , f_age_group_5 int, f_age_group_6 int,
  num_of_kids int, k_age_group_1 int, k_age_group_2 int, k_age_group_3 int , k_age_group_4 int , k_age_group_5 int, k_age_group_6 int);
 
+ALTER TABLE demography ADD oid int(20);
+ALTER TABLE demography ADD cid int(20);
+
 CREATE TABLE Coupon (couponId int, couponName varchar(20), startDate date, startTime time, endDate date, endTime time , itemId int REFERENCES item(itemId), percentage int);
 
 CREATE TABLE discount(Discount_value int(20));
