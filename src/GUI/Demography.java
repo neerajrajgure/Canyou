@@ -279,7 +279,7 @@ public class Demography extends javax.swing.JDialog {
                     preparedStatement.setInt(20, jComboBox16.getSelectedIndex());
                     preparedStatement.setInt(21, jComboBox17.getSelectedIndex());
                     preparedStatement.setInt(22, jComboBox18.getSelectedIndex());
-                    OrderId =_cb.oid;
+                    OrderId =_cb.currentOid; // Should change this to pass oid to the constructor instead of accessing the static variable
                     CustomerId = _cb.cid;
                     System.out.println("OrderId in Demography is: "+OrderId);
                     System.out.println("CustomerId in Demography is: "+CustomerId);

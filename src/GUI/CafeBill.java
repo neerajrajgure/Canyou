@@ -123,8 +123,9 @@ public class CafeBill extends JFrame {
 	JTable table ;
 	ReceiptPrinting rp;
 	KitchenReceiptPrinting krp;
-	public static long oid = 0;
-	public static long cid = 0; // Change this to foundCustCid
+	public long nextOid = 0;
+	public static long currentOid = 0; // Should change this to pass oid to the constructor of the classes that need it (instead of accessing the static variable)
+	public static long cid = 0; // Should change this to pass cid to the constructor of the classes that need it (instead of accessing the static variable)
 	public float db_tax1=(float) 0.0;
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
@@ -178,8 +179,11 @@ public class CafeBill extends JFrame {
 			setVisible(true);
 			pack();
 			try {
-				oid = getNextOid();
-				System.out.println(" Oid in frame is  : "+ oid);
+				nextOid = getNextOid();
+				currentOid = nextOid;
+				// cid= getNextCid();
+				System.out.println("Current Oid in frame is  : "+ currentOid);
+				System.out.println("Cid in frame is  : "+ cid);
 			} catch(Exception e) {
 				// Call the Fall back method to use text files as the backups
 				e.printStackTrace();
@@ -780,6 +784,8 @@ public class CafeBill extends JFrame {
 					setBillingInfo(itemId, "Test");
 
 				}
+				nextOid++; // Do not change. Do not delete this line.
+                System.out.println("New oid for next transaction will be: " + nextOid);
 
 				/*                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
@@ -802,8 +808,6 @@ public class CafeBill extends JFrame {
 
 				CouponDiscount.couponValue=0.0;
 
-				System.out.println("incremet oid is" +oid);
-				oid++; // Do not change. Do not delete this line.
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
 				//new ReceiptPrinting().setVisible(true);
@@ -851,8 +855,6 @@ public class CafeBill extends JFrame {
 					menuExpansionPane.updateUI();
 				}
 				CouponDiscount.couponValue=0.0;
-				System.out.println("incremet oid is" + oid);
-				// oid++;
 				new Demography().setVisible(true);
 				/*				 
 	                String msg = "Change Printer Name to adobe pdf And save";
@@ -1072,8 +1074,8 @@ public  void searchCust() {
         try {
             String query="Insert into billing_info(oid, orderDate, itemid,item_instruction) values (?,?,?,?)";
             preparedStatement=connect.prepareStatement(query);
-            preparedStatement.setLong(1, oid);
-            System.out.println(" Oid in billing_info is  : "+ oid);
+            preparedStatement.setLong(1, currentOid);
+            System.out.println(" Oid in billing_info is  : "+ currentOid);
             preparedStatement.setDate(2, getCurrentDate());
             preparedStatement.setInt(3, itemId);
             preparedStatement.setString(4, itemInstruction);
@@ -1090,8 +1092,8 @@ public  void searchCust() {
 			String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			preparedStatement=connect.prepareStatement(query);
 			System.out.println("New Oid: " );
-			preparedStatement.setLong(1, oid);
-			System.out.println(" Oid in menu_order is  : "+ oid);
+			preparedStatement.setLong(1, currentOid);
+			System.out.println(" Oid in menu_order is  : "+ currentOid);
 			preparedStatement.setLong(2, customerId);
 			preparedStatement.setDate(3, getCurrentDate());
 			preparedStatement.setTime(4, getCurrentTime());
