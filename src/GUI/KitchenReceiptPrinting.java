@@ -81,7 +81,7 @@ public class KitchenReceiptPrinting implements Printable {
 		Total = _cb.lblTotal.getText();
 		Discount = _cb.lblDiscount.getText();
 		//		System.out.println("Discount is in krp frame:"+Discount+"is the value");
-		OrderId =_cb.oid;
+		OrderId =_cb.currentOid;
 		CustomerId = _cb.cid;
 
 		int x_startpos = 5 ;

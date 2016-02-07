@@ -99,7 +99,7 @@ public class ReceiptPrinting implements Printable {
         Tax3 =_cb.lblTax3.getText();
         Total =_cb.lblTotal.getText();
         Discount =_cb.lblDiscount.getText();
-        OrderId =_cb.oid;
+        OrderId =_cb.currentOid;
         CustomerId = _cb.cid;
         System.out.println("OrderId in recipt printing is: "+OrderId);
         System.out.println("CustomerId in recipt printing is: "+CustomerId);
