@@ -18,6 +18,8 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
+import java.sql.Date;
+
 /**
  *
  * @author AMIT
@@ -254,8 +256,8 @@ public class Demography extends javax.swing.JDialog {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
-                    String query="Insert into demography(num_of_guests ,num_of_males, m_age_group_1,m_age_group_2 ,m_age_group_3, m_age_group_4, m_age_group_5,m_age_group_6, num_of_females,f_age_group_1,f_age_group_2,f_age_group_3,f_age_group_4,f_age_group_5,f_age_group_6,num_of_kids,k_age_group_1,k_age_group_2,k_age_group_3,k_age_group_4,k_age_group_5,k_age_group_6,oid,cid)"
-                            + " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    String query="Insert into demography(num_of_guests ,num_of_males, m_age_group_1,m_age_group_2 ,m_age_group_3, m_age_group_4, m_age_group_5,m_age_group_6, num_of_females,f_age_group_1,f_age_group_2,f_age_group_3,f_age_group_4,f_age_group_5,f_age_group_6,num_of_kids,k_age_group_1,k_age_group_2,k_age_group_3,k_age_group_4,k_age_group_5,k_age_group_6,oid,orderDate,cid)"
+                            + " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     preparedStatement=connect.prepareStatement(query);
                     preparedStatement.setInt(1, comboBox.getSelectedIndex());
                     preparedStatement.setInt(2, comboBox_1.getSelectedIndex());
@@ -284,10 +286,12 @@ public class Demography extends javax.swing.JDialog {
                     System.out.println("OrderId in Demography is: "+OrderId);
                     System.out.println("CustomerId in Demography is: "+CustomerId);
                     preparedStatement.setLong(23, OrderId );
-                    preparedStatement.setLong(24, CustomerId );
+                    preparedStatement.setDate(24, CafeBill.getCurrentDate() );
+                    preparedStatement.setLong(25, CustomerId );
                     preparedStatement.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Data inserted", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
                     btnclearActionPerformed(evt);
+                    dispose();
                 }
                 catch (SQLException e2) {
                     // TODO Auto-generated catch block

@@ -139,7 +139,7 @@ public class CafeBill extends JFrame {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	private java.sql.Date getCurrentDate() {
+	public static java.sql.Date getCurrentDate() {
 		java.util.Date today = new java.util.Date();
 		return new java.sql.Date(today.getTime());
 	}
