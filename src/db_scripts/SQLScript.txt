@@ -4,9 +4,8 @@ create user billing identified by 'hmsbilling';
 grant usage on *.* to billing@localhost identified by 'hmsbilling'; 
 grant all privileges on HMS.* to billing@localhost;
 
-create table customer(cid Numeric(9), FName varchar(32) NOT NULL, LName varchar(32) NOT NULL, Address varchar(50), phonenum varchar(12) , phone Numeric(12), emailid varchar(64), DOB Date, flag char(1), Primary Key(cid));
-insert into customer values(1,'Sam','Smith','xyz','1234567890',1234567890,'samsmith@gmail.com','1997-08-04','');
-insert into customer values(2,'Sammy','Smith','wyz','1234567891',1234567891,'sammysmith@gmail.com','1997-08-03','');
+create table customer(cid Numeric(9), FName varchar(32) NOT NULL, LName varchar(32), Address varchar(150), phonenum varchar(12) , phone Numeric(12), emailid varchar(64), DOB Date, flag char(1), Primary Key(cid));
+insert into customer values(200,'First','User','Address - 1','1234567890',1234567890,'TestHiveUser@gmail.com','1901-01-01','D');
 
 # create table transactiontypes(transtypeid int, transdesc varchar(10));
 # CREATE TABLE transactiontypes(transtypeid int AUTO_INCREMENT PRIMARY KEY,transdesc varchar(10));
