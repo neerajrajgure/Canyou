@@ -77,14 +77,19 @@ public class Payment extends JDialog {
         btnsubmit.addActionListener(new ActionListener() {
             @SuppressWarnings("static-access")
             public void actionPerformed(ActionEvent e) {
-                calculatePay();
+                if((radioOptionCash.isSelected() && jTxtCash.getText().length() >= 1 ) || radioOptionCC.isSelected()) {
+                    calculatePay();
 //                String msg = "Do you want to print? ";
 //                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "Print", JOptionPane.YES_NO_OPTION);
 //
 //                if (result != JOptionPane.YES_OPTION) {
 //                    return;
 //                }
-                dispose();
+                    dispose();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Make a selection 'Cash' or 'Credit/Debit card. If 'Cash' selected enter amount in test box.'");
+                }
             }
         });
         System.out.println("amount due change ioutside btnsubmit:"+transInfo);
@@ -92,7 +97,9 @@ public class Payment extends JDialog {
         JButton btncalculate = new JButton("Calculate");
         btncalculate.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                calculatePay();
+                if((radioOptionCash.isSelected() && jTxtCash.getText().length() >= 1 ) || radioOptionCC.isSelected()) {
+                    calculatePay();
+                }
             }
         });
         getContentPane().setLayout(new FlowLayout());
@@ -122,6 +129,7 @@ public class Payment extends JDialog {
             transInfo = jTxtCash.getText();
             System.out.println("transInfo on btnsubmit in if radiocash payment:"+transInfo);
             float diff = CafeBill.roundDecimal(new Float(new Float(transInfo) - new Float(Total)), 2);
+            System.out.println("amount due change (diff):" + diff);
             lblamount.setText((new Float(diff)).toString());
         } else if(radioOptionCC.isSelected()) {
             System.out.println("Payment::createAbdShowGUI -In  else if ActionListener");
@@ -130,10 +138,10 @@ public class Payment extends JDialog {
             System.out.println("amount due change in else if transInfo:"+transInfo);
 
         } else {
-            transInfo = "jTxtCash = '" + jTxtCash + "' jTxtCreditCard = '" + jTxtCreditCard + "'";
+            transInfo = "jTxtCash = '" + jTxtCash.getText() + "' jTxtCreditCard = '" + jTxtCreditCard.getText() + "'";
             System.out.println("amount due change in else  transInfo:"+transInfo);
         }
-        System.out.println("amount due change :"+lblamount);
+        System.out.println("amount due change :"+lblamount.getText());
     }
 
 }
