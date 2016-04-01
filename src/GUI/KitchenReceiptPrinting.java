@@ -37,7 +37,6 @@ public class KitchenReceiptPrinting implements Printable {
 	private String Discount;
 	private long OrderId;
 	private long CustomerId;
-	final String Vat_ = "VAT(5.6 %)";
 	/*
     private Paper receiptPaper;
     private double paperWidth = 0.2;
@@ -129,7 +128,17 @@ public class KitchenReceiptPrinting implements Printable {
 		if(Discount.matches("0.0")){
 			int yPosition1 = yPosition + 30;
 			g.drawString(Sub_Total, leftMargin, yPosition1+= newline );
-			g.drawString(Vat_, leftMargin, yPosition1 += newline );
+
+			if( _cb.lblTax1_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax1_1.getText(), leftMargin, yPosition1 += newline );
+			}
+			else if( _cb.lblTax2_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax2_1.getText(), leftMargin, yPosition1 += newline );
+			}
+			else if( _cb.lblTax3_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax3_1.getText(), leftMargin, yPosition1 += newline );
+			}
+
 			g.drawString(total_wt, leftMargin, yPosition1 += newline);
 			g.drawString(RsSymbol, 150, yPosition1);
 			yPosition1 += newline;
@@ -142,7 +151,17 @@ public class KitchenReceiptPrinting implements Printable {
 
 			int yPosition1 = yPosition + 30;
 			g.drawString(Sub_Total, leftMargin, yPosition1+= newline );
-			g.drawString(Vat_, leftMargin, yPosition1 += newline );
+
+			if( _cb.lblTax1_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax1_1.getText(), leftMargin, yPosition1 += newline );
+			}
+			else if( _cb.lblTax2_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax2_1.getText(), leftMargin, yPosition1 += newline );
+			}
+			else if( _cb.lblTax3_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax3_1.getText(), leftMargin, yPosition1 += newline );
+			}
+
 			g.drawString(Discount_, leftMargin, yPosition1 += newline);
 			g.drawString(total_wt, leftMargin, yPosition1 += newline);
 			g.drawString(RsSymbol, 150, yPosition1);

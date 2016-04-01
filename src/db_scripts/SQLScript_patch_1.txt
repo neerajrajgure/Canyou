@@ -1,0 +1,4 @@
+# Replacing 'VAT' with 'Service Tax'.
+update tax set endDate='2016-03-31' where name='VAT';
+insert into tax values ('Service Tax', 'Service Tax', '5.6', '2016-04-01', '2050-12-31');
+
