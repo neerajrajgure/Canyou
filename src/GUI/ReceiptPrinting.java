@@ -153,13 +153,13 @@ public class ReceiptPrinting implements Printable {
             g.drawString(dash, leftMargin, y += newline);
             g.drawString(Sub_Total, leftMargin, y += newline);
 
-            if( _cb.lblTax1_1.getText().length() >= 0 ) {
+            if( _cb.lblTax1_1.getText().length() > 0 ) {
                 g.drawString(_cb.lblTax1.getText(), leftMargin, y += newline );
             }
-            if( _cb.lblTax2_1.getText().length() >= 0 ) {
+            if( _cb.lblTax2_1.getText().length() > 0 ) {
                 g.drawString(_cb.lblTax2.getText(), leftMargin, y += newline );
             }
-            if( _cb.lblTax3_1.getText().length() >= 0 ) {
+            if( _cb.lblTax3_1.getText().length() > 0 ) {
                 g.drawString(_cb.lblTax3.getText(), leftMargin, y += newline );
             }
 
@@ -175,7 +175,17 @@ public class ReceiptPrinting implements Printable {
             y += newline;
             int x=165;
             g.drawString(Subtotal, x, y+= newline-60); //TODO: NEED TO REMOVE THE -60 and put it few lines before where it belong without subtracting
-            g.drawString(Tax2, x, y += newline);
+
+            if( _cb.lblTax1_1.getText().length() > 0 ) {
+                g.drawString(Tax1, x, y += newline);
+            }
+            if( _cb.lblTax2_1.getText().length() > 0 ) {
+                g.drawString(Tax2, x, y += newline);
+            }
+            if( _cb.lblTax3_1.getText().length() > 0 ) {
+                g.drawString(Tax3, x, y += newline);
+            }
+
             g.drawString(Total, x, y+=newline);
             g.drawString(GREET_VISIT_AGAIN, leftMargin+120, y+=newline);
             g.drawString(GREET_THANKS, leftMargin, y);
@@ -191,13 +201,13 @@ public class ReceiptPrinting implements Printable {
             g.drawString(dash, leftMargin, y += newline);
             g.drawString(Sub_Total, leftMargin, y += newline);
 
-            if( _cb.lblTax1_1.getText().length() >= 0 ) {
+            if( _cb.lblTax1_1.getText().length() > 0 ) {
                 g.drawString(_cb.lblTax1.getText(), leftMargin, y += newline );
             }
-            if( _cb.lblTax2_1.getText().length() >= 0 ) {
+            if( _cb.lblTax2_1.getText().length() > 0 ) {
                 g.drawString(_cb.lblTax2.getText(), leftMargin, y += newline );
             }
-            if( _cb.lblTax3_1.getText().length() >= 0 ) {
+            if( _cb.lblTax3_1.getText().length() > 0 ) {
                 g.drawString(_cb.lblTax3.getText(), leftMargin, y += newline );
             }
 
@@ -216,7 +226,17 @@ public class ReceiptPrinting implements Printable {
             y += newline;
             g.drawString(Subtotal, x , y += newline-89);
             //            g.drawString(Tax1, x, y+= newline);
-            g.drawString(Tax2, x , y += newline);
+
+            if( _cb.lblTax1_1.getText().length() > 0 ) {
+                g.drawString(Tax1, x, y += newline);
+            }
+            if( _cb.lblTax2_1.getText().length() > 0 ) {
+                g.drawString(Tax2, x, y += newline);
+            }
+            if( _cb.lblTax3_1.getText().length() > 0 ) {
+                g.drawString(Tax3, x, y += newline);
+            }
+
             //            g.drawString(Tax3, x, y+=newline);
             g.drawString(Discount, x , y+=newline);
             g.drawString(Total, x , y+=newline);
