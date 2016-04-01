@@ -682,13 +682,13 @@ public class CafeBill extends JFrame {
 		c.gridx = 3;
 		c.gridy = 3;
 		c.gridwidth = 1;
-		//costPane.add(lblTax1,c);
+		costPane.add(lblTax1,c);
 		c.gridx = 1;
 		c.gridy = 4;
-		costPane.add(lblTax2_1,c);
+		// costPane.add(lblTax2_1,c);
 		c.gridx = 3;
 		c.gridy = 4;
-		costPane.add(lblTax2,c);
+		// costPane.add(lblTax2,c);
 		c.gridx = 1;
 		c.gridy = 5;
 		//costPane.add(lblTax3_1,c);

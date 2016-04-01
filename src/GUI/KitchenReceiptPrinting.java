@@ -130,13 +130,13 @@ public class KitchenReceiptPrinting implements Printable {
 			g.drawString(Sub_Total, leftMargin, yPosition1+= newline );
 
 			if( _cb.lblTax1_1.getText().length() >= 0 ) {
-			    g.drawString(_cb.lblTax1_1.getText(), leftMargin, yPosition1 += newline );
+			    g.drawString(_cb.lblTax1.getText(), leftMargin, yPosition1 += newline );
 			}
-			else if( _cb.lblTax2_1.getText().length() >= 0 ) {
-			    g.drawString(_cb.lblTax2_1.getText(), leftMargin, yPosition1 += newline );
+			if( _cb.lblTax2_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax2.getText(), leftMargin, yPosition1 += newline );
 			}
-			else if( _cb.lblTax3_1.getText().length() >= 0 ) {
-			    g.drawString(_cb.lblTax3_1.getText(), leftMargin, yPosition1 += newline );
+			if( _cb.lblTax3_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax3.getText(), leftMargin, yPosition1 += newline );
 			}
 
 			g.drawString(total_wt, leftMargin, yPosition1 += newline);
@@ -153,13 +153,13 @@ public class KitchenReceiptPrinting implements Printable {
 			g.drawString(Sub_Total, leftMargin, yPosition1+= newline );
 
 			if( _cb.lblTax1_1.getText().length() >= 0 ) {
-			    g.drawString(_cb.lblTax1_1.getText(), leftMargin, yPosition1 += newline );
+			    g.drawString(_cb.lblTax1.getText(), leftMargin, yPosition1 += newline );
 			}
-			else if( _cb.lblTax2_1.getText().length() >= 0 ) {
-			    g.drawString(_cb.lblTax2_1.getText(), leftMargin, yPosition1 += newline );
+			if( _cb.lblTax2_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax2.getText(), leftMargin, yPosition1 += newline );
 			}
-			else if( _cb.lblTax3_1.getText().length() >= 0 ) {
-			    g.drawString(_cb.lblTax3_1.getText(), leftMargin, yPosition1 += newline );
+			if( _cb.lblTax3_1.getText().length() >= 0 ) {
+			    g.drawString(_cb.lblTax3.getText(), leftMargin, yPosition1 += newline );
 			}
 
 			g.drawString(Discount_, leftMargin, yPosition1 += newline);

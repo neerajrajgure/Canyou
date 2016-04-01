@@ -154,13 +154,13 @@ public class ReceiptPrinting implements Printable {
             g.drawString(Sub_Total, leftMargin, y += newline);
 
             if( _cb.lblTax1_1.getText().length() >= 0 ) {
-                g.drawString(_cb.lblTax1_1.getText(), leftMargin, y += newline );
+                g.drawString(_cb.lblTax1.getText(), leftMargin, y += newline );
             }
-            else if( _cb.lblTax2_1.getText().length() >= 0 ) {
-                g.drawString(_cb.lblTax2_1.getText(), leftMargin, y += newline );
+            if( _cb.lblTax2_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax2.getText(), leftMargin, y += newline );
             }
-            else if( _cb.lblTax3_1.getText().length() >= 0 ) {
-                g.drawString(_cb.lblTax3_1.getText(), leftMargin, y += newline );
+            if( _cb.lblTax3_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax3.getText(), leftMargin, y += newline );
             }
 
             g.drawString(total_wt, leftMargin, y += newline);
@@ -192,13 +192,13 @@ public class ReceiptPrinting implements Printable {
             g.drawString(Sub_Total, leftMargin, y += newline);
 
             if( _cb.lblTax1_1.getText().length() >= 0 ) {
-                g.drawString(_cb.lblTax1_1.getText(), leftMargin, y += newline );
+                g.drawString(_cb.lblTax1.getText(), leftMargin, y += newline );
             }
-            else if( _cb.lblTax2_1.getText().length() >= 0 ) {
-                g.drawString(_cb.lblTax2_1.getText(), leftMargin, y += newline );
+            if( _cb.lblTax2_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax2.getText(), leftMargin, y += newline );
             }
-            else if( _cb.lblTax3_1.getText().length() >= 0 ) {
-                g.drawString(_cb.lblTax3_1.getText(), leftMargin, y += newline );
+            if( _cb.lblTax3_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax3.getText(), leftMargin, y += newline );
             }
 
             g.drawString(Discount_, leftMargin, y += newline);
