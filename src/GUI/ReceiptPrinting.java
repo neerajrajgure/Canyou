@@ -34,7 +34,6 @@ public class ReceiptPrinting implements Printable {
     //    final String S_Tax = "Service Tax(14.50)";
     //    final String Vat_ = "Service charge(12.50)";
     final String total_wt ="Total with Tax";
-    final String Vat_ = "VAT(5.6 %)";
 
     final String S_Tax = "Service Tax(14.50 %)";
 //    final String Vat_ = "VAT(5 %)";
@@ -153,7 +152,17 @@ public class ReceiptPrinting implements Printable {
             System.out.println("Am in if");
             g.drawString(dash, leftMargin, y += newline);
             g.drawString(Sub_Total, leftMargin, y += newline);
-            g.drawString(Vat_, leftMargin, y += newline);
+
+            if( _cb.lblTax1_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax1_1.getText(), leftMargin, y += newline );
+            }
+            else if( _cb.lblTax2_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax2_1.getText(), leftMargin, y += newline );
+            }
+            else if( _cb.lblTax3_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax3_1.getText(), leftMargin, y += newline );
+            }
+
             g.drawString(total_wt, leftMargin, y += newline);
             g.drawString(RsSymbol, leftMargin+150, y);
 
@@ -181,7 +190,17 @@ public class ReceiptPrinting implements Printable {
             System.out.println("Am in else");
             g.drawString(dash, leftMargin, y += newline);
             g.drawString(Sub_Total, leftMargin, y += newline);
-            g.drawString(Vat_, leftMargin, y += newline);
+
+            if( _cb.lblTax1_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax1_1.getText(), leftMargin, y += newline );
+            }
+            else if( _cb.lblTax2_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax2_1.getText(), leftMargin, y += newline );
+            }
+            else if( _cb.lblTax3_1.getText().length() >= 0 ) {
+                g.drawString(_cb.lblTax3_1.getText(), leftMargin, y += newline );
+            }
+
             g.drawString(Discount_, leftMargin, y += newline);
             g.drawString(total_wt, leftMargin, y += newline);
             g.drawString(RsSymbol, leftMargin+150, y);

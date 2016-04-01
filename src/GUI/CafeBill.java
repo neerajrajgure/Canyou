@@ -252,7 +252,7 @@ public class CafeBill extends JFrame {
 	public boolean getTax() {
 		connectDatabase();
 		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM "+db_name+".tax");
+            preparedStatement = connect.prepareStatement("SELECT * FROM "+db_name+".tax where startDate <= CURDATE() and endDate >= CURDATE()");
 			ResultSet rs=preparedStatement.executeQuery();
 			while(rs.next())
 			{
@@ -275,19 +275,19 @@ public class CafeBill extends JFrame {
 				if (db_tax_name.compareTo("Service Tax")==0)
 				{
 					db_tax1 = rs.getFloat("percentValue");
-					lblTax1_1.setText(db_tax_name+ "(" + db_tax1 + ")");
+					lblTax1_1.setText(db_tax_name+ "(" + db_tax1 + "%)");
 					System.out.println("In tax if :"+ db_tax1);
 				}
 				else if (db_tax_name.compareTo("VAT")==0)
 				{
 					db_tax2 = rs.getFloat("percentValue");
-					lblTax2_1.setText(db_tax_name + "(" + db_tax2 + ")");
+					lblTax2_1.setText(db_tax_name + "(" + db_tax2 + "%)");
 					System.out.println("In tax else 1 : "+ db_tax2 );
 				}
 				else if(db_tax_name.compareTo("Service Charge") == 0)
 				{
 					db_tax3 = rs.getFloat("percentValue");
-					lblTax3_1.setText(db_tax_name+ "(" + db_tax3 + ")");
+					lblTax3_1.setText(db_tax_name+ "(" + db_tax3 + "%)");
 					System.out.println("Ins tax else 2: "+ db_tax3 );
 				}
 			}
@@ -678,7 +678,7 @@ public class CafeBill extends JFrame {
 		c.gridx = 1;
 		c.gridy = 3;
 		c.gridwidth = 1;
-		//costPane.add(lblTax1_1,c);
+		costPane.add(lblTax1_1,c);
 		c.gridx = 3;
 		c.gridy = 3;
 		c.gridwidth = 1;
