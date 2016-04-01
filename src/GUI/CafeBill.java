@@ -124,8 +124,8 @@ public class CafeBill extends JFrame {
 	ReceiptPrinting rp;
 	KitchenReceiptPrinting krp;
 	public long nextOid = 0;
-	public static long currentOid = 0; // Should change this to pass oid to the constructor of the classes that need it (instead of accessing the static variable)
-	public static long cid = 0; // Should change this to pass cid to the constructor of the classes that need it (instead of accessing the static variable)
+	public static long currentOid = 0; // This need to change pass oid to the constructor of the classes that need it (instead of accessing the static variable)
+	public static long cid = 0; // This need to change pass cid to the constructor of the classes that need it (instead of accessing the static variable)
 	public float db_tax1=(float) 0.0;
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
@@ -785,7 +785,10 @@ public class CafeBill extends JFrame {
 
 				}
 				nextOid++; // Do not change. Do not delete this line.
+                System.out.println("Current oid is: " + currentOid);
+				currentOid = nextOid;
                 System.out.println("New oid for next transaction will be: " + nextOid);
+                System.out.println("Current oid for next transaction will be: " + currentOid);
 
 				/*                for(int i=table.getModel().getRowCount()-1;i>=0;i--)
                 {
@@ -1091,7 +1094,6 @@ public  void searchCust() {
 		try {
 			String query="Insert into menu_order values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			preparedStatement=connect.prepareStatement(query);
-			System.out.println("New Oid: " );
 			preparedStatement.setLong(1, currentOid);
 			System.out.println(" Oid in menu_order is  : "+ currentOid);
 			preparedStatement.setLong(2, customerId);
