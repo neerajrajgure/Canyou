@@ -769,10 +769,13 @@ public class CafeBill extends JFrame {
 				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
+
 				Object obj;
+				Object objQty;
 				String objString;
 				int itemId;
 				int j= dataModel.findColumn("Sr_No");
+				int q = dataModel.findColumn("Quantity");
 				for (int i=0; i< iRowCnt; i++)
 				{
 					obj = dataModel.getValueAt(i, j);
@@ -781,7 +784,13 @@ public class CafeBill extends JFrame {
 						continue;
 					}
 					itemId = Integer.parseInt(obj.toString());
-					setBillingInfo(itemId, "Test");
+
+					objQty = dataModel.getValueAt(i, q);
+					int quantity = Integer.parseInt(objQty.toString());
+					for(int k = 0; k < quantity; k++)
+					{
+						setBillingInfo(itemId, "Test");
+					}
 
 				}
 				nextOid++; // Do not change. Do not delete this line.
