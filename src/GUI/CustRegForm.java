@@ -44,7 +44,6 @@ public class CustRegForm extends JDialog {
     TextField dobyyyy=new TextField();
     TextField email=new TextField();
 
-
     public CustRegForm()
     {
         setModal(true);

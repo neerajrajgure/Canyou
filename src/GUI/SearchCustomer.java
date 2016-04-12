@@ -32,16 +32,16 @@ public class SearchCustomer extends JDialog implements ActionListener
     private static ResultSet resultSet = null;
     final static String COLUMN_F_NAME = "FNAME";
     final static String COLUMN_L_NAME = "LNAME";
-    final static String COLUMN_DOBY = "DOBY";
+/*    final static String COLUMN_DOBY = "DOBY";
     final static String COLUMN_DOB_M = "DOBD";
     final static String COLUMN_DOB_D = "DOBD";
-    //final static String COLUMN_DOB = "COLUMN_DOBY + COLUMN_DOB_M + COLUMN_DOB_D";
+    //final static String COLUMN_DOB = "COLUMN_DOBY + COLUMN_DOB_M + COLUMN_DOB_D";*/
     final static String COLUMN_DOB = "DOB";
     final static String COLUMN_PHONENUM = "PHONENUM";
     final static String COLUMN_EMAIL = "EMAILID";
     final static String COLUMN_CID = "CID";
     final static String COLUMN_ADDRESS = "ADDRESS";
-    String quryPart1;
+    String quryPart1,cust;
     
     Vector<Vector> searchlist = new Vector<Vector>();
     ArrayList<CustInfo> searchlist1 = new ArrayList<CustInfo>();
@@ -56,6 +56,7 @@ public class SearchCustomer extends JDialog implements ActionListener
     Label phone_no=new Label("Phone no:",Label.LEFT);
     Label d_o_b=new Label("DOB (DD-MM-YY)",Label.LEFT);
     Label email_id=new Label("Email Id:",Label.LEFT);
+    Label cust_name = new Label();
 
     TextField firstname=new TextField();
     TextField lastname=new TextField();
@@ -73,7 +74,7 @@ public class SearchCustomer extends JDialog implements ActionListener
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setTitle("Search Customer");
         createAndShowGUI();
-        addWindowListener(new WindowListener());
+        addWindowListener(new myWindowAdapter1());
         setBackground(Color.LIGHT_GRAY);
         setForeground(Color.black);
         getContentPane().setLayout(null);
@@ -102,6 +103,7 @@ public class SearchCustomer extends JDialog implements ActionListener
         phone_no.setBounds(25,120,90,20);
         d_o_b.setBounds(10,150,105,20);
         email_id.setBounds(25,180,90,20);
+        cust_name.setBounds(300,150,105,20);
 
         l11.setBounds(10,40,280,20);
         firstname.setBounds(120,65,170,20);
@@ -155,18 +157,18 @@ public class SearchCustomer extends JDialog implements ActionListener
                 String querySelectPart1 = "select * from customer where ";
                 String queryParamName = null;
                 String queryParamVal = null;
-                if (fname.length() > 0 ) {
-                    queryParamName = COLUMN_F_NAME;
+                if (fname.length() != 0 ) {
+                    queryParamName = "FName";
                     queryParamVal = firstname.getText();
                 }
-                else if (lname.length() > 0 ) // lname
+                else if (lname.length() != 0 ) // lname
                 {
-                    queryParamName = COLUMN_L_NAME;
+                    queryParamName = "LName";
                     queryParamVal = lastname.getText();
                 }
-                else if( phno.length() > 0 )
+                else if( phno.length() != 0 )
                 {
-                    queryParamName = COLUMN_PHONENUM;
+                    queryParamName = "phonenum";
                     queryParamVal = phoneno.getText();
                 }
                 String queryCustSearch = querySelectPart1  + " " + queryParamName + " = '" + queryParamVal + "';";
@@ -178,16 +180,14 @@ public class SearchCustomer extends JDialog implements ActionListener
                     // "cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"
                     CustInfo si = new CustInfo();
                     //	            	si.setCid(rs.getString((int) CafeBill.cid));
-                    si.setCid(rs.getString(COLUMN_CID));
-                    
-
-                    si.setFName(rs.getString(COLUMN_F_NAME));
-                    si.setLName(rs.getString(COLUMN_L_NAME));
-                    si.setPhonenum(rs.getString(COLUMN_PHONENUM));
-                    si.setDOB(rs.getString(COLUMN_DOB));
+                    si.setCid(rs.getString("cid"));
+                    si.setFName(rs.getString("FName"));
+                    si.setLName(rs.getString("LName"));
+                    si.setPhonenum(rs.getString("Phonenum"));
+                    si.setDOB(rs.getString("dob"));
                     //si.setDOB(rs.getString(dobm));
                     //si.setDOB(rs.getString(dobd));
-                    si.setEmailid(rs.getString(COLUMN_EMAIL));
+                    si.setEmailid(rs.getString("emailId"));
                     // searchlist.add(si);
                     // searchlist.size();
                     @SuppressWarnings("rawtypes")
@@ -203,12 +203,26 @@ public class SearchCustomer extends JDialog implements ActionListener
                     searchData.add(si.getFlag());
                     System.out.println( "Recordset data: CID = " + si.getCid() + " Name = " + si.getFName( ));
                     searchlist.add(searchData);
+//                    cust_name.setText(text);(si.getFName());
+                    System.out.println(" serch list in serch customer" +searchData );
                 }
             }
             catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            System.out.println(" vector length is :" + searchlist.size());
+            dispose();
+
+            CustomerRetrievalForm custRetrieval = new CustomerRetrievalForm();
+            System.out.println("in Search Customerclass (at 10) " + custRetrieval.cust_name);
+
+            custRetrieval.init(searchlist);
+            System.out.println("in Search Customerclass (at 50) " + custRetrieval.cust_name);
+
+            custRetrieval.setVisible(true);
+            System.out.println("in Search Customerclass (at 100) " + custRetrieval.cust_name);
+            cust=custRetrieval.cust_name;
         }
         else if(ae.getActionCommand().equals("Clear"))
         {
