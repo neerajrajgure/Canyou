@@ -1,0 +1,11 @@
+# Add new menu items
+
+/* MORE COLD BEVERAGES    ---------------------- */
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1064, 'Vanilla Shake', 102, 49.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1065, 'Mango Shake', 102, 45.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1066, 'Caramel Frappe', 102, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1067, 'Green Apple Ice Tea', 102, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1068, 'Kiwi Lemonade (Soda)', 102, 49.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1069, 'Strawberry Lemonade (Soda)', 102, 42.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1070, 'Green Apple (Soda)', 102, 55.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1071, 'Blue Ocean', 102, 55.00);
