@@ -1,0 +1,13 @@
+# Add new menu items
+
+/* MORE COLD BEVERAGES    ---------------------- */
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1072, 'Bottled Water', 102, 12.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1073, 'Coleslaw S/W WB', 103, 69.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1074, 'Coleslaw S/W BB', 103, 74.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1075, 'Tomato Cheese S/W WB', 103, 65.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1076, 'Tomato Cheese S/W BB', 103, 70.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1077, 'Pasta (Marinara)', 102, 69.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1078, 'Corn mix', 102, 39.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1079, 'Chips', 103, 20.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1080, 'Cookies (1)', 105, 15.00);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1081, 'Cookies (2)', 105, 25.00);
