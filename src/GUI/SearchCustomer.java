@@ -61,7 +61,9 @@ public class SearchCustomer extends JDialog implements ActionListener
     TextField firstname=new TextField();
     TextField lastname=new TextField();
     TextField phoneno=new TextField();
-	TextField dobTxt=new TextField();
+    TextField dobyyyy=new TextField();
+    TextField dobmm=new TextField();
+    TextField dobdd=new TextField();
 	TextField email=new TextField();
     private final Button btnNewButton = new Button("Close");
 
@@ -89,7 +91,9 @@ public class SearchCustomer extends JDialog implements ActionListener
         getContentPane().add(phoneno);
 
         getContentPane().add(d_o_b);
-		getContentPane().add(dobTxt);
+        getContentPane().add(dobyyyy);
+        getContentPane().add(dobmm);
+        getContentPane().add(dobdd);
 		getContentPane().add(email_id);
         getContentPane().add(email);
 
@@ -109,7 +113,9 @@ public class SearchCustomer extends JDialog implements ActionListener
         firstname.setBounds(120,65,170,20);
         lastname.setBounds(120,90,170,20);
         phoneno.setBounds(120,120,170,20);
-        dobTxt.setBounds(120,150,170,20);
+        dobyyyy.setBounds(120,150,50,20);
+        dobmm.setBounds(180,150,50,20);
+        dobdd.setBounds(250,150,50,20);
         email.setBounds(120,180,170,20);
         btnSearch.setBounds(120,210,70,20);
         btnClear.setBounds(207,210,70,20);
@@ -130,13 +136,17 @@ public class SearchCustomer extends JDialog implements ActionListener
             String fname = firstname.getText();
             String lname = lastname.getText();
             String phno = phoneno.getText();
-            String dob = dobTxt.getText();
+            String doby = dobyyyy.getText();
+            String dobm = dobmm.getText();
+            String dobd = dobdd.getText();
 
             String emal = email.getText();
             System.out.println(" firstname from Search customer gui : "+fname);
             System.out.println(" LastName from Search customer gui : "+lname);
             System.out.println(" PHONENO from Search customer gui :"+phno);
-            System.out.println(" Date of birth from Search customer gui : "+dob);
+            System.out.println(" DOB year from Search customer gui : "+doby);
+            System.out.println(" DOB nonth from Search customer gui : "+dobm);
+            System.out.println(" DOB date from Search customer gui :"+dobd);
             System.out.println(" Email from Search customer gui : "+emal);
 
             try {
@@ -229,7 +239,9 @@ public class SearchCustomer extends JDialog implements ActionListener
         	firstname.setText(" ");
         	lastname.setText(" ");
         	phoneno.setText(" ");
-        	dobTxt.setText(" ");
+        	dobyyyy.setText(" ");
+            dobmm.setText(" ");
+            dobdd.setText(" ");
         	email.setText(" ");
         	System.out.println("Text Cleared" );
         }
