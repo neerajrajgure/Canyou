@@ -1,0 +1,2 @@
+UPDATE tax SET endDate = "2016-05-31" where taxId = 2;
+INSERT INTO tax (name, description, percentValue, startDate, endDate, taxId) VALUES ('Service Tax', 'Service Tax', 6.0, '2016-06-01', '2050-12-31', 3);
