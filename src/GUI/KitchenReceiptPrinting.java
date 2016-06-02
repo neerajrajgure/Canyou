@@ -8,10 +8,27 @@ import javax.swing.*;
 import java.awt.print.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.*;
 
 public class KitchenReceiptPrinting implements Printable {
 	private static CafeBill _cb;
+	static FileWriter fout;
+	static String FileName = CafeBill.getCurrentDate().toString();
+	static String FilePath = "//bin//Docs//Log//HIVE-";
 	public KitchenReceiptPrinting(CafeBill cb){
+		FileName=FilePath+FileName+".txt";
+		try {
+			fout = new FileWriter(FileName);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Printing Process Initiated.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		_cb = cb;
 	}
 	//    public ReceiptPrinting()

@@ -3,6 +3,7 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 import javax.swing.*;
 
@@ -11,6 +12,9 @@ import javax.swing.*;
 public class Payment extends JDialog {
     private static CafeBill _cb;
 
+    static FileWriter fout;
+    static String FileName = CafeBill.getCurrentDate().toString();
+    static String FilePath = "//bin//Docs//Log//HIVE-";
     final static int CASH_PAY = 51;  // Default payment if they do not select.
     final static int CC_DC_PAY = 52;
     public static int payCashOrCC;
@@ -29,6 +33,19 @@ public class Payment extends JDialog {
     private final JButton btnCancel = new JButton("Cancel");
 
     public Payment(CafeBill cb) {
+    	FileName=FilePath+FileName+".txt";
+    	try {
+    		fout= new FileWriter(FileName);
+    	} catch (Exception e3) {
+    		// TODO Auto-generated catch block
+    		e3.printStackTrace();
+    	}
+    	try {
+    		fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Payment Process Initiated.");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
         cancelPressed = false;
         setResizable(false);
         getContentPane().setBackground(Color.WHITE);
@@ -66,6 +83,12 @@ public class Payment extends JDialog {
             @SuppressWarnings("static-access")
             public void actionPerformed(ActionEvent e) {
                 if((radioOptionCash.isSelected() && jTxtCash.getText().length() >= 1 ) || radioOptionCC.isSelected()) {
+                	try {
+                		fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Payment Mode = Cash");
+                	} catch (IOException e1) {
+                		// TODO Auto-generated catch block
+                		e1.printStackTrace();
+                	}
                     calculatePay();
 //                String msg = "Do you want to print? ";
 //                int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "Print", JOptionPane.YES_NO_OPTION);
@@ -77,6 +100,7 @@ public class Payment extends JDialog {
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Make a selection 'Cash' or 'Credit/Debit card. If 'Cash' selected enter amount in test box.'");
+                   
                 }
             }
         });
@@ -86,6 +110,12 @@ public class Payment extends JDialog {
         btncalculate.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if((radioOptionCash.isSelected() && jTxtCash.getText().length() >= 1 ) || radioOptionCC.isSelected()) {
+                	try {
+                		fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Payment Mode = Credit Card");
+                	} catch (IOException e1) {
+                		// TODO Auto-generated catch block
+                		e1.printStackTrace();
+                	}
                     calculatePay();
                 }
             }
@@ -121,6 +151,12 @@ public class Payment extends JDialog {
             System.out.println("Payment::createAbdShowGUI - In  if ActionListener");
             payCashOrCC = CASH_PAY;
             transInfo = jTxtCash.getText();
+            try {
+            	fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Paied Amount = " + transInfo);
+            } catch (IOException e) {
+            	// TODO Auto-generated catch block
+            	e.printStackTrace();
+            }
             System.out.println("transInfo on btnsubmit in if radiocash payment:"+transInfo);
             float diff = CafeBill.roundDecimal(new Float(new Float(transInfo) - new Float(Total)), 2);
             System.out.println("amount due change (diff):" + diff);
@@ -134,6 +170,12 @@ public class Payment extends JDialog {
         } else {
             transInfo = "jTxtCash = '" + jTxtCash.getText() + "' jTxtCreditCard = '" + jTxtCreditCard.getText() + "'";
             System.out.println("amount due change in else  transInfo:"+transInfo);
+        }
+        try {
+        	fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+lblamount.getText());
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+        	e.printStackTrace();
         }
         System.out.println("amount due change :"+lblamount.getText());
     }

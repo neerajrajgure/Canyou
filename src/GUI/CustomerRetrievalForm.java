@@ -10,10 +10,15 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class CustomerRetrievalForm extends javax.swing.JDialog {
     private static CafeBill _cb;
+    static String FilePath = "//bin//Docs//Log//HIVE-";
+    static String FileName;
+    static FileWriter fout; 
     public CustomerRetrievalForm(CafeBill cb){
         _cb = cb;
     }
@@ -76,6 +81,12 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
             public void actionPerformed(ActionEvent e) {
                 for (int row : jTable1.getSelectedRows()) {
                     long cid = new Long(jTable1.getValueAt(row ,0).toString()).longValue();
+                    try {
+    					fout.write("Searched Customer ID = " + cid);
+    				} catch (IOException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    				}
                     GUI.CafeBill.cid = cid;
                     System.out.println("Customre id on select in CustomeRetrivalform : " +cid  );
                     DefaultTableModel dm = (DefaultTableModel)jTable1.getModel();
@@ -116,6 +127,14 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+    	FileName = CafeBill.getCurrentDate().toString();
+		FileName=FilePath+FileName+".txt";
+		try {
+			fout= new FileWriter(FileName);
+		} catch (Exception e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

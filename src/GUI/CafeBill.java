@@ -41,6 +41,8 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -53,6 +55,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.awt.event.ActionEvent;
@@ -111,7 +115,10 @@ public class CafeBill extends JFrame {
     private JMenuItem ViewSaleMenuItem;
     private JMenuItem CustomerLookUpMenuItem;
     private JMenuItem AboutMenuItem;
-
+    public String FilePath = "//bin//Docs//Log//HIVE-";
+    public String FileName;
+    public FileWriter fout; 
+    Date d;
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
 	// " 5 Item Five" };
 	private JComboBox<String> cExtraItem;
@@ -131,7 +138,7 @@ public class CafeBill extends JFrame {
 	public float db_tax3 =(float) 0.0;
 	public float db_totalTaxPerc = (float)0.0;
 
-	private java.sql.Time getCurrentTime() {
+	static java.sql.Time getCurrentTime() {
 		java.util.Date today = new java.util.Date();
 		return new java.sql.Time(today.getTime());
 	}
@@ -173,12 +180,23 @@ public class CafeBill extends JFrame {
     }
 	 */
 	public void init() {
+		FileName = getCurrentDate().toString();
+		FileName=FilePath+FileName+".txt";
+		System.out.println("File Name = "+FileName);
+		try {
+			fout= new FileWriter(FileName);
+		} catch (Exception e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		try {
 			// CafeBill frame = new CafeBill();
             setTitle("The Hive - " + currEmpName); // Title name with Employee name
+            fout.write("Employ Login = "+currEmpName);
 			setVisible(true);
 			pack();
 			try {
+				fout.write("Current Order Id="+currentOid);
 				nextOid = getNextOid();
 				currentOid = nextOid;
 				// cid= getNextCid();
@@ -201,6 +219,12 @@ public class CafeBill extends JFrame {
 		this.dispose();
 		Login loginScreen = new Login(this);
 		loginScreen.pack();
+		try {
+			fout.write("Login Screen Initiated");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
 		final int x = (screenSize.width - loginScreen.getWidth()) / 2;
@@ -215,6 +239,12 @@ public class CafeBill extends JFrame {
 		CafeBill cfbl= new CafeBill();
 		Payment objPay = new Payment(this);
 		// objPay.createAndShowGUI();
+		try {
+			fout.write("Payment Window Open");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("Cash or CC: " + Payment.payCashOrCC);
 		objPay.pack();
 		//		final Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -227,7 +257,13 @@ public class CafeBill extends JFrame {
 		objPay.setVisible(true);
 		System.out.println("Cancel button station at - 2 = " + objPay.cancelPressed);
 		if(objPay.cancelPressed == true) {
-		    return PAY_OPTION_CANCEL_CLICKED;
+			try {
+				fout.write("Cancel Button Pressed in Payment Window");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return PAY_OPTION_CANCEL_CLICKED;
 		}
 		return 1;
 	}
@@ -277,18 +313,36 @@ public class CafeBill extends JFrame {
 					db_tax1 = rs.getFloat("percentValue");
 					lblTax1_1.setText(db_tax_name+ "(" + db_tax1 + "%)");
 					System.out.println("In tax if :"+ db_tax1);
+					try {
+						fout.write("Tax 1 % Value = "+db_tax1);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				else if (db_tax_name.compareTo("VAT")==0)
 				{
 					db_tax2 = rs.getFloat("percentValue");
 					lblTax2_1.setText(db_tax_name + "(" + db_tax2 + "%)");
 					System.out.println("In tax else 1 : "+ db_tax2 );
+					try {
+						fout.write("Tax 2 % Value = "+db_tax2);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				else if(db_tax_name.compareTo("Service Charge") == 0)
 				{
 					db_tax3 = rs.getFloat("percentValue");
 					lblTax3_1.setText(db_tax_name+ "(" + db_tax3 + "%)");
 					System.out.println("Ins tax else 2: "+ db_tax3 );
+					try {
+						fout.write("Tax 3 % Value = "+db_tax3);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			//            System.out.println("db_tax1: " );
@@ -296,6 +350,12 @@ public class CafeBill extends JFrame {
 			db_totalTaxPerc = db_tax1 + db_tax2 + db_tax3 ;
 			lblTotal_1.setText("Total");
 			System.out.println("totalTax:- " + db_totalTaxPerc );
+			try {
+				fout.write("Total Tax % Value = "+db_totalTaxPerc);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -387,6 +447,12 @@ public class CafeBill extends JFrame {
                     rs.next();
                     String sum = rs.getString(1);
                     System.out.println(" TOTAL SALE IS: " +sum);
+                    try {
+						fout.write("Today's TOtal Sale is = " + sum);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                     JOptionPane.showMessageDialog ( null, "Total Sale of Today is Rs " + sum, "TOTAL SALE AMOUNT", JOptionPane.PLAIN_MESSAGE);
                 }
                 catch (ClassNotFoundException e2) {
@@ -401,18 +467,36 @@ public class CafeBill extends JFrame {
         });
         CustomerLookUpMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	try {
+					fout.write("Search Customer Option Selected");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
                 searchCust();
             }
         });
 
         ViewSaleMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	try {
+					fout.write("View Sale Frame Option Selected");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
                 viewSaleFrame();
             }
         });
 
         AboutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	try {
+					fout.write("About Hive Option Pressed");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
                 try {
                     File file = new File("./src/GUI/HiveCafe.properties");
                     FileInputStream fileInput = new FileInputStream(file);
@@ -500,6 +584,9 @@ public class CafeBill extends JFrame {
 		list.setSelectedIndex(0);
 		setCategoryPane();
 		setCostPane();
+//		DateFormat df = new SimpleDateFormat("dd/MM/yy");
+//		Date d = new Date();
+//		System.out.println(df.format(d));
 		//contentPane.setLayout(gl_contentPane);
 	}
 	public void setCategoryPane(){
@@ -521,6 +608,12 @@ public class CafeBill extends JFrame {
 					//setMenuExpansionPaneForCoffee();
 					//System.out.println(menuItems.get(menuItems.indexOf(btn.getName())));
 					System.out.println(btn.getName());
+					try {
+						fout.write("Menu Selected = "+btn.getName());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					ArrayList<MenuItem> expandedMenu = menuItems.get(categories.indexOf(btn.getName()));
 					setMenuExpansionPane(expandedMenu);
 				}
@@ -546,6 +639,12 @@ public class CafeBill extends JFrame {
 			btn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//itemAddedToBill(item);
+					try {
+						fout.write("Sub Menu Selected = " + btn.getName());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					String[] row = { Integer.toString(expandedMenu.get(Integer.parseInt(btn.getName())).itemNum),  item, "1", Float.toString(expandedMenu.get(Integer.parseInt(btn.getName())).price), Float.toString(expandedMenu.get(Integer.parseInt(btn.getName())) .price)};
 					dataModel.addRow(row);
 					calculateTotal();
@@ -633,6 +732,12 @@ public class CafeBill extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (table.getSelectedRow() != -1) {
 					// remove selected row from the model
+					try {
+						fout.write("Deleting Row = " + table.getValueAt((table.getSelectedRow()),1));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					System.out.println("Deleting row number #### " + table.getSelectedRowCount());
 					dataModel.removeRow(table.getSelectedRow());
 					calculateTotal();
@@ -649,6 +754,12 @@ public class CafeBill extends JFrame {
 					Object [] data = {"","","1","20.0","20.0"};
 					int col = 0;
 					dataModel.insertRow(selRow + 1, data);
+					try {
+						fout.write("Adding New Row at = " + table.getValueAt((table.getSelectedRow()),1).toString());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					TableColumn cm = table.getColumnModel().getColumn(1); //hard code value
 					//This is cell Editor return appropriate combobox This need s to happen as soon as the table is created
 					cm.setCellEditor(new TextAreaCellRenderer());
@@ -718,6 +829,12 @@ public class CafeBill extends JFrame {
 		JButton btnPrintBill = new JButton("Submit Order");
 		btnPrintBill.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					fout.write("Submit OrderButton Pressed");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				PrinterJob job = PrinterJob.getPrinterJob();
 				PageFormat pf = job.defaultPage();
 				Paper paper = new Paper();
@@ -757,6 +874,24 @@ public class CafeBill extends JFrame {
 				System.out.println("CafeBill::Submit_order - Payment type: " + Payment.payCashOrCC);
 				System.out.println("CafeBill::Submit_order - Payment info: " + Payment.transInfo);
 				System.out.println("CafeBill::Submit_order - before krp print " );
+				try {
+					fout.write("Payment Type = " + Payment.payCashOrCC);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					fout.write("Transaction Information = " + Payment.transInfo);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					fout.write("Printing Starting.");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				job.setPrintable(krp, pf);
 				if (job.printDialog()) {
 					try {
@@ -893,10 +1028,22 @@ public class CafeBill extends JFrame {
 		JButton btnClear = new JButton("Clear Order");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					fout.write("Order Clear Button Pressed");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				String msg = "Do you want to clear the screen? ";
 				int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "alert", JOptionPane.YES_NO_OPTION);
 
 				if (result != JOptionPane.YES_OPTION) {
+					try {
+						fout.write("Clear Order Confirmed");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					return;
 				}
 				for(int i=table.getModel().getRowCount()-1;i>=0;i--)
@@ -917,6 +1064,12 @@ public class CafeBill extends JFrame {
 		btnac.setSize(100, 100);
 		btnac.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					fout.write("Setting Discount.");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				new CouponDiscount().setVisible(true);
 				/*	            
 				      try {
@@ -954,6 +1107,12 @@ public class CafeBill extends JFrame {
 		JButton btncanelOrder = new JButton("Logout");
 		btncanelOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					fout.write("Logout Process Initiated.");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				//code for cancel the order
 				//             new CafeBill().setVisible(true);
 				//System.exit(0);
@@ -962,6 +1121,12 @@ public class CafeBill extends JFrame {
 				int result = JOptionPane.showConfirmDialog(( java.awt.Component) null, (Object)msg, "alert", JOptionPane.YES_NO_OPTION);
 
 				if (result != JOptionPane.YES_OPTION) {
+					try {
+						fout.write("Logout Process Confirmed by = " + currEmpName);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					return;
 				}
 				for(int i=table.getModel().getRowCount()-1;i>=0;i--)
@@ -983,6 +1148,12 @@ public class CafeBill extends JFrame {
 		JButton btnCR = new JButton("Customer Registration");
 		btnCR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					fout.write("Customer Registration Preocess Initiated.");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				new  CustRegForm().setVisible(true);
 			}
 		});
@@ -993,6 +1164,12 @@ public class CafeBill extends JFrame {
 		JButton btnCl = new JButton("Customer Lookup");
 		btnCl.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	try {
+					fout.write("Search Customer Process initiated.");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		        new SearchCustomer ().setVisible(true);
 		    }
 		});
@@ -1003,6 +1180,12 @@ public class CafeBill extends JFrame {
 		JButton btndemography = new JButton("Demography");
 		btndemography.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					fout.write("Demography Process Initiated.");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				new Demography().setVisible(true);
 			}
 		});
@@ -1038,13 +1221,12 @@ public class CafeBill extends JFrame {
 	    Quantity.setCellEditor(new DefaultCellEditor(comboBox));
 
 	    //Set up tool tips for the sport cells.
-	    DefaultTableCellRenderer renderer =
-	            new DefaultTableCellRenderer();
+	    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 	    renderer.setToolTipText("Click for combo box");
 	    Quantity.setCellRenderer(renderer);
 
 	}
-public  void searchCust() {
+public void searchCust() {
         //welcomeLabel. setText("Welcome user at - 1: " + cid );
         SearchCustomer objCustSearch = new SearchCustomer();
         objCustSearch.pack();
@@ -1083,6 +1265,12 @@ public  void searchCust() {
     }
 
     public void setBillingInfo( int itemId, String itemInstruction) {
+    	try {
+			fout.write("Adding Billing information to the database.");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         try {
             String query="Insert into billing_info(oid, orderDate, itemid,item_instruction) values (?,?,?,?)";
             preparedStatement=connect.prepareStatement(query);
@@ -1120,6 +1308,12 @@ public  void searchCust() {
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			System.out.println("menu order updated " );
+			try {
+				fout.write("Menu Order Updated.");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
