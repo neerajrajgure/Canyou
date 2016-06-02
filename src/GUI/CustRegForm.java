@@ -3,6 +3,7 @@ package GUI;
 import java.awt.*;
 import java.applet.*;
 import java.awt.event.*;
+import java.io.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -16,6 +17,9 @@ import java.awt.Dialog.ModalExclusionType;
 import javax.swing.JButton;
 
 public class CustRegForm extends JDialog {
+	static FileWriter fout;
+	static String FileName;
+	static String FilePath = "//bin//Docs//Log//HIVE-";
     private static CafeBill _cb;
     public CustRegForm(CafeBill cb){
         _cb = cb;
@@ -50,6 +54,12 @@ public class CustRegForm extends JDialog {
         setModal(true);
         createAndShowGUI();
         setTitle("Customer Registration");
+        try {
+        	fout.write("Customer Registration Initiated.");
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+        	e.printStackTrace();
+        }
         setSize(413,300);
         setLocation(500, 200);
         setResizable(false);
@@ -153,6 +163,15 @@ public class CustRegForm extends JDialog {
 
     public static void main(String g[])
     {
+    	FileName = CafeBill.getCurrentDate().toString();
+		FileName=FilePath+FileName+".txt";
+		System.out.println("File Name = "+FileName);
+		try {
+			fout= new FileWriter(FileName);
+		} catch (Exception e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
         new  CustRegForm().setVisible(true);
     }
 
@@ -188,11 +207,23 @@ public class CustRegForm extends JDialog {
 
                 if(addCustomer() == true) {
                     System.out.println("Customer sucessfully added." );
+                    try {
+                    	fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"New Customer Information Saved.");
+                    } catch (IOException e1) {
+                    	// TODO Auto-generated catch block
+                    	e1.printStackTrace();
+                    }
                     JOptionPane.showMessageDialog(null, "Customer Data Saved!");
                     dispose();
                }
                 else {
                     System.out.println("Error: Failed to save customer info." );
+                    try {
+                    	fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Failed to Save Customer Data.");
+                    } catch (IOException e1) {
+                    	// TODO Auto-generated catch block
+                    	e1.printStackTrace();
+                    }
                     JOptionPane.showMessageDialog(null, "Error: Unable to save customer data.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.sql.ResultSet;
 
 class Login extends JDialog implements ActionListener
@@ -23,10 +24,25 @@ class Login extends JDialog implements ActionListener
     JTextField text2;
     String empName;
     long empID;
+    static FileWriter fout;
+    static String FileName = CafeBill.getCurrentDate().toString();
+    static String FilePath = "//bin//Docs//Log//HIVE-";
 
     public Login(CafeBill cb){
         cb_ = cb;
-
+        FileName=FilePath+FileName+".txt";
+        try {
+        	fout= new FileWriter(FileName);
+        } catch (Exception e3) {
+        	// TODO Auto-generated catch block
+        	e3.printStackTrace();
+        }
+        try {
+        	fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Login Process Initiated.");
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+        	e.printStackTrace();
+        }
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

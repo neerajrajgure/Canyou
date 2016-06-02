@@ -15,6 +15,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.*;
+
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
@@ -27,6 +29,9 @@ import java.sql.Date;
 
 public class Demography extends javax.swing.JDialog {
     private static CafeBill _cb;
+    static FileWriter fout;
+    static String FileName = CafeBill.getCurrentDate().toString();
+    static String FilePath = "//bin//Docs//Log//HIVE-";
     public Demography(CafeBill cb){
         _cb = cb;
     }
@@ -37,7 +42,14 @@ public class Demography extends javax.swing.JDialog {
      * Creates new form demography
      */
     public Demography() {
+    	FileName=FilePath+FileName+".txt";
         setModal(true);
+        try {
+        	fout.write(CafeBill.getCurrentDate()+"-"+CafeBill.getCurrentTime()+"-"+"Demography Form Initiated.");
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+        	e.printStackTrace();
+        }
         initComponents();
     }
 
