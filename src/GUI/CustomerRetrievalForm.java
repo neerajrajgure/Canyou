@@ -18,17 +18,22 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
         _cb = cb;
     }
 
-    // Variables declaration - do not modify                     
+    public CustomerRetrievalForm() {
+		// TODO Auto-generated constructor stub
+	}
+
+	// Variables declaration - do not modify
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration   
 
     /**
      * Creates new form CustomerReterivalForm
+     * @return
      * @wbp.parser.constructor
      */
-
-    public CustomerRetrievalForm(Vector searchlist) {
+static String cust_name;
+    public void init(Vector searchlist) {
         setTitle("Customer Data");
         setModal(true);
 
@@ -78,6 +83,7 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
                     long cid = new Long(jTable1.getValueAt(row ,0).toString()).longValue();
                     GUI.CafeBill.cid = cid;
                     System.out.println("Customre id on select in CustomeRetrivalform : " +cid  );
+                    cust_name= new String(jTable1.getValueAt(row ,1).toString());
                     DefaultTableModel dm = (DefaultTableModel)jTable1.getModel();
                     while(dm.getRowCount() > 0)
                     {

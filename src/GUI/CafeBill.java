@@ -91,12 +91,13 @@ public class CafeBill extends JFrame {
 	final JLabel lblDiscountvalue = new JLabel();
 	final JLabel lblDiscount_1 = new JLabel("Discount" + "( 0.0 % )" ); //new JLabellblDiscount_1.set("Discount" + "( " + lblDiscountvalue.getText() + " % )" );
 	final JLabel lblDiscount = new JLabel("");
+	final JLabel lblCustName = new JLabel("Customer Name : NULL");
 	final static String db_name= "HMS";
 	final static String username = "billing";
 	final static String password = "hmsbilling";
 	final static String hmsDbUrl ="jdbc:mysql://localhost/"+db_name+"?"+ "user=" + username + "&" + "password=" + password;
 	final int PAY_OPTION_CANCEL_CLICKED = -1;
-	//    final JLabel username = new JLabel("username");
+	final JLabel Cust_namelbl = new JLabel("Customer Name");
 	String currEmpName;
 	private static Connection connect = null;
 	//private static Statement statement = null;
@@ -667,6 +668,11 @@ public class CafeBill extends JFrame {
 		c.gridwidth = 1;
 		c.weightx =1;
 		costPane.add(btnAddRow,c);
+		c.gridx = 3;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		c.weightx =1;
+		costPane.add(lblCustName, c);
 		c.gridx =1;
 		c.gridy = 2;
 		c.gridwidth = 1;
@@ -993,13 +999,12 @@ public class CafeBill extends JFrame {
 		JButton btnCl = new JButton("Customer Lookup");
 		btnCl.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        new SearchCustomer ().setVisible(true);
+		    	searchCust();
 		    }
 		});
 		c.gridx = 2;
 		c.gridy = 8;
 		costPane.add(btnCl,c);
-
 		JButton btndemography = new JButton("Demography");
 		btndemography.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1044,16 +1049,16 @@ public class CafeBill extends JFrame {
 	    Quantity.setCellRenderer(renderer);
 
 	}
-public  void searchCust() {
+public void searchCust() {
         //welcomeLabel. setText("Welcome user at - 1: " + cid );
         SearchCustomer objCustSearch = new SearchCustomer();
         objCustSearch.pack();
         objCustSearch.setLocation(400, 200);
         objCustSearch.setSize(500, 300);
+        System.out.println("after before visible in cafe bill @1053");
         objCustSearch.setVisible(true);
-        objCustSearch.setTitle("Search Customer");
-        objCustSearch.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        //welcomeLabel. setText("Welcome user at - 2 : " + cid );
+        System.out.println("after set visible in cafe bill @1055: " + objCustSearch.cust);
+        lblCustName.setText("Customer Name : "+objCustSearch.cust);
     }
 
    private void viewSaleFrame() {
