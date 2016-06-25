@@ -60,6 +60,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+//import CheckInForm;
+
 import javax.swing.table.TableColumn;
 import javax.swing.JDialog;
 import java.awt.Dialog;
@@ -402,11 +404,11 @@ public class CafeBill extends JFrame {
                 }
             }
         });
-        CheckInItem.addActionListener(new ActionListener() {
+        /*CheckInItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 CheckInForm ci = new CheckInForm();
             }
-        });
+        });*/
         CustomerLookUpMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 searchCust();
