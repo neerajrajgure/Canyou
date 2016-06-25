@@ -17,7 +17,7 @@ public class RewardDialogue extends javax.swing.JDialog {
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
     
-    int pastID,NoV,custID,rewardID,itemID;
+    int pastID,NoV,custID,rewardID,itemID,ToV;
     long cID;
 	public RewardDialogue(long cid) throws SQLException {
 		System.out.println("in reward dialogue constructor");
@@ -30,6 +30,8 @@ public class RewardDialogue extends javax.swing.JDialog {
 	    rewardID=0;
 	    custID=0;
 	    NoV=0;
+	    ToV=0;
+	    
 	    Connection con = ConnectionManager.getConnection();
 	    
 	    SQLExecution(cid);
@@ -49,7 +51,8 @@ public class RewardDialogue extends javax.swing.JDialog {
 			System.out.println("in try to get number of visits for customer id="+cid);
 			
 			// first get the total no. of visits in current table;
-			sql = "SELECT TotalNoVisits FROM customer WHERE cid = "+cid+";";
+			sql = "SELECT TotalNoVisits FROM customer WHERE cid = "+cid;
+			System.out.println(sql);
 			preparedStatement = con.prepareStatement(sql);
 			System.out.println(sql);
 			resultSet = preparedStatement.executeQuery();
@@ -57,7 +60,7 @@ public class RewardDialogue extends javax.swing.JDialog {
 			System.out.println("before visits ="+resultSet.getFetchSize());
 			
 			while(resultSet.next()){
-				visits = resultSet.getInt(1);
+				ToV = resultSet.getInt(1);
 			}
 			
 			//select no. of visits from customer current reward table
@@ -73,7 +76,7 @@ public class RewardDialogue extends javax.swing.JDialog {
 			
 			//selecting required visits from reward table where requiredVisits = numberOfVisits(CustomerCurrent Table) and maxNoVisits >= totalNoVisits(customer table)
 			//returning rewardId
-			sql="SELECT rewardId FROM Rewards WHERE requiredVisits = (SELECT NumberOfVisits from CustomerCurrentReward where custId="+cid+") AND maxTotalVisits>(select TotalNoVisits from customer where cid="+cid+")";
+			sql="SELECT rewardId FROM Rewards WHERE requiredVisits = "+NoV+" AND maxTotalVisits>"+ToV;
 			preparedStatement = con.prepareStatement(sql);
 			System.out.println("line 76 query = "+sql);
 			resultSet = preparedStatement.executeQuery();
@@ -104,19 +107,20 @@ public class RewardDialogue extends javax.swing.JDialog {
 		}
 		pastID = pastID + 1;
 
-		sql="INSET INTO CustomerPastReward (pastRewardNumber,NomberOfVisits,custId,rewardId) VALUES ("+pastID+",(SELECT numberOfVisits from CustomerCurrentReward where custId="+cID+"),"+cID+","+rewardID+")";
+		sql="INSET INTO CustomerPastReward (pastRewardNumber,NumberOfVisits,custId,rewardId) VALUES ("+pastID+","+NoV+","+cID+","+rewardID+")";
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 118 query = "+sql);
 		preparedStatement.executeUpdate();
 
 		//update customer table TotalNoVisits = TotalNoVisits + 1
-		sql = "UPDATE customer SET TotalNoVisis = TotalNoVisis + 1, lastVisit = now() where cid = "+cID;
+		sql = "UPDATE customer SET TotalNoVisis = "+ToV+" + 1, lastVisit = now() where cid = "+cID;
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 124 query = "+sql);
 		preparedStatement.executeUpdate();
-
+		
+		int nov=0;
 		//update customer current table NumberOfVisits = 0 for custID
-		sql = "UPDATE CustomerCurrentReward SET NumberOfVisits = 0 where cid = "+cID;
+		sql = "UPDATE CustomerCurrentReward SET NumberOfVisits = "+nov+" where cid = "+cID;
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 124 query = "+sql);
 		preparedStatement.executeUpdate();
@@ -125,19 +129,19 @@ public class RewardDialogue extends javax.swing.JDialog {
 		System.out.println("Customer "+cID+" is not applicble for reward.");
 
 		//TotalNoVisits = TotalNoVisits + 1 in customer table AND last visit = now()
-		sql="UPDATE customer SET TotalNoVisits = TotalNoVisits + 1, lastVisit = now() where cid = "+cID;
+		sql="UPDATE customer SET TotalNoVisis = "+ToV+" + 1, lastVisit = now() where cid = "+cID;
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 76 query = "+sql);
 		preparedStatement.executeUpdate();
 
 		//NumberOfVisits = Number of Visits + 1
-		sql="UPDATE CustomerCurrentReward SET numberOfVisits = numberOfVisits + 1 where custId = "+cID;
+		sql="UPDATE CustomerCurrentReward SET NumberOfVisits = "+NoV+" + 1 where custId = "+cID;
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 98 query = "+sql);
 		preparedStatement.executeUpdate();
 
 		//confirming
-		sql="SELECT rewardId FROM Rewards WHERE requiredVisits = (SELECT NumberOfVisits from CustomerCurrentReward where custId="+cID+") AND maxTotalVisits>(select TotalNoVisits from customer where cid="+cID+")";
+		sql="SELECT rewardId FROM Rewards WHERE requiredVisits = "+NoV+" AND maxTotalVisits>"+ToV;
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 76 query = "+sql);
 		resultSet = preparedStatement.executeQuery();
