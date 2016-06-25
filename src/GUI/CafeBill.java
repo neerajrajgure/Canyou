@@ -111,6 +111,7 @@ public class CafeBill extends JFrame {
     private JMenuItem ViewSaleMenuItem;
     private JMenuItem CustomerLookUpMenuItem;
     private JMenuItem AboutMenuItem;
+    private JMenuItem CheckInItem;
 
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
 	// " 5 Item Five" };
@@ -131,7 +132,7 @@ public class CafeBill extends JFrame {
 	public float db_tax3 =(float) 0.0;
 	public float db_totalTaxPerc = (float)0.0;
 
-	private java.sql.Time getCurrentTime() {
+	public static java.sql.Time getCurrentTime() {
 		java.util.Date today = new java.util.Date();
 		return new java.sql.Time(today.getTime());
 	}
@@ -372,10 +373,12 @@ public class CafeBill extends JFrame {
         ViewTotalMenuItem = new JMenuItem("View Total");
         ViewSaleMenuItem = new JMenuItem("View Sale");
         CustomerLookUpMenuItem = new JMenuItem("Customer LookUp");
+        CheckInItem = new JMenuItem("Check In");
         AboutMenuItem = new JMenuItem("About");
         fileMenu.add(ViewTotalMenuItem);
         fileMenu.add(ViewSaleMenuItem);
         fileMenu.add(CustomerLookUpMenuItem);
+        fileMenu.add(CheckInItem);
         fileMenu.add(AboutMenuItem);
         ViewTotalMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -399,6 +402,11 @@ public class CafeBill extends JFrame {
                 }
             }
         });
+        CheckInItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CheckInForm ci = new CheckInForm();
+            }
+        });
         CustomerLookUpMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 searchCust();
@@ -413,6 +421,7 @@ public class CafeBill extends JFrame {
 
         AboutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	Test t1 = new Test();
                 try {
                     File file = new File("./src/GUI/HiveCafe.properties");
                     FileInputStream fileInput = new FileInputStream(file);
@@ -769,7 +778,27 @@ public class CafeBill extends JFrame {
 				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
-
+				
+				Connection connect = null;
+				Connection con = ConnectionManager.getConnection();
+			    PreparedStatement preparedStatement = null;
+			    String sql="UPDATE customer SET lastVisit=now(), TotalNoVisits = TotalNoVisits + 1 where cid="+CafeBill.cid;
+			    try {
+					preparedStatement = con.prepareStatement(sql);
+					preparedStatement.executeQuery();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			    sql="UPDATE CurrentCustomerReward SET NumberOfVisits = NumberOfVisits + 1 where custId="+CafeBill.cid;
+			    try {
+					preparedStatement = con.prepareStatement(sql);
+					preparedStatement.executeQuery();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			    
 				Object obj;
 				Object objQty;
 				String objString;

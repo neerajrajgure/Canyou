@@ -5,6 +5,8 @@ import java.applet.*;
 import java.awt.event.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -43,7 +45,8 @@ public class CustRegForm extends JDialog {
     TextField dobmm=new TextField();
     TextField dobyyyy=new TextField();
     TextField email=new TextField();
-
+    
+    //Connection connect = null;
 
     public CustRegForm()
     {
@@ -103,8 +106,10 @@ public class CustRegForm extends JDialog {
             String dobStr = doby + "-" + dobm + "-" + dobd;
             System.out.println("DOB in (YYYY-MM-DD) format: " + dobStr);
             // Setup the connection with the DB
+            int nov=1;
             connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
-            String query="Insert into customer (cid,FName,LName,Address,phonenum,phone,emailid,DOB,flag) values (?,?,?,?,?,?,?,?,?)";
+            String query="Insert into customer(cid,FName,LName,Address,phonenum,phone,emailid,DOB,flag,TotalNoVisits,lastVisit,firstVisit) values (?,?,?,?,?,?,?,?,?,?,?,?)";
+            String query1="insert into CustomerCurrentReward (CurrRewardNumber,CustId, NumberOfVisits, rewardId) values (1,"+newCid+",1,(SELECT rewardId FROM Rewards WHERE flag != 'D' AND startDate<=now() AND endDate>=now() ORDER BY MaxTotalVisits ASC LIMIT 1))";
             preparedStatement=connect.prepareStatement(query);
             System.out.println("Customer will get this Cid: " + newCid );
             preparedStatement.setLong(1, newCid);
@@ -124,10 +129,23 @@ public class CustRegForm extends JDialog {
                 preparedStatement.setLong(6, 1234567890);
                 nfe.printStackTrace();
             }
+            int TotalNoVisits=1;
             preparedStatement.setString(7, email.getText());
-            preparedStatement.setString(8,  dobStr);
+            preparedStatement.setString(8, dobStr);
             preparedStatement.setString (9, "C"); // C - Create, D - Deleted
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(10, TotalNoVisits);
+            
+            System.out.println("Date = "+CafeBill.getCurrentDate()+" Time ="+CafeBill.getCurrentTime());
+            String date =CafeBill.getCurrentDate()+" "+CafeBill.getCurrentTime();
+            Date d = CafeBill.getCurrentDate();
+            
+            preparedStatement.setDate(11, d);
+            preparedStatement.setDate(12, d);
+            System.out.println(query);
+            preparedStatement=connect.prepareStatement(query);
+            preparedStatement.execute();
+            //preparedStatement=connect.prepareStatement(query);
+            //preparedStatement.executeUpdate();
         }
         catch (SQLException e2) {
             // TODO Auto-generated catch block
