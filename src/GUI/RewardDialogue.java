@@ -7,13 +7,17 @@ import java.sql.*;
 
 import javax.swing.*;
 
-// public class RewardDialogue extends JDialog {
-
 public class RewardDialogue extends javax.swing.JDialog {
+	
+	final static String db_name= "HMS";
+	final static String username = "billing";
+	final static String password = "hmsbilling";
+	final static String hmsDbUrl ="jdbc:mysql://localhost/"+db_name+"?"+ "user=" + username + "&" + "password=" + password;
+	static Connection con = null;
 
 	Frame frame;
 	String msg,name,sql;
-    Connection con = null;
+    //Connection con;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
     
@@ -32,7 +36,7 @@ public class RewardDialogue extends javax.swing.JDialog {
 	    NoV=0;
 	    ToV=0;
 	    
-	    Connection con = ConnectionManager.getConnection();
+	    con = ConnectionManager.getConnection();
 	    
 	    SQLExecution(cid);
 		setTitle("Reward Syst");
@@ -76,7 +80,7 @@ public class RewardDialogue extends javax.swing.JDialog {
 			
 			//selecting required visits from reward table where requiredVisits = numberOfVisits(CustomerCurrent Table) and maxNoVisits >= totalNoVisits(customer table)
 			//returning rewardId
-			sql="SELECT rewardId FROM Rewards WHERE requiredVisits = "+NoV+" AND maxTotalVisits>"+ToV;
+			sql="SELECT rewardId FROM Rewards WHERE requiredVisits = "+NoV+" AND maxTotalVisits>="+ToV;
 			preparedStatement = con.prepareStatement(sql);
 			System.out.println("line 76 query = "+sql);
 			resultSet = preparedStatement.executeQuery();
@@ -94,7 +98,10 @@ public class RewardDialogue extends javax.swing.JDialog {
 				reward();
 			}			
 		}
-		catch(Exception e){}
+		catch(Exception e){
+			System.out.println("in catch block"+e.getStackTrace());
+			e.printStackTrace();
+		}
 	}
 	void reward() throws SQLException{
 		//Insert into past table
@@ -107,29 +114,40 @@ public class RewardDialogue extends javax.swing.JDialog {
 		}
 		pastID = pastID + 1;
 
-		sql="INSET INTO CustomerPastReward (pastRewardNumber,NumberOfVisits,custId,rewardId) VALUES ("+pastID+","+NoV+","+cID+","+rewardID+")";
+		sql="INSERT INTO CustomerPastReward (pastRewardNumber,NumberOfVisits,custId,rewardId) VALUES ("+pastID+","+NoV+","+cID+","+rewardID+")";
 		preparedStatement = con.prepareStatement(sql);
-		System.out.println("line 118 query = "+sql);
+		System.out.println("line 119 query = "+sql);
 		preparedStatement.executeUpdate();
 
 		//update customer table TotalNoVisits = TotalNoVisits + 1
-		sql = "UPDATE customer SET TotalNoVisis = "+ToV+" + 1, lastVisit = now() where cid = "+cID;
+		sql = "UPDATE customer SET TotalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cID;
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 124 query = "+sql);
 		preparedStatement.executeUpdate();
-		
+
 		int nov=0;
 		//update customer current table NumberOfVisits = 0 for custID
-		sql = "UPDATE CustomerCurrentReward SET NumberOfVisits = "+nov+" where cid = "+cID;
+		sql = "UPDATE CustomerCurrentReward SET NumberOfVisits = "+nov+" where custId = "+cID;
 		preparedStatement = con.prepareStatement(sql);
-		System.out.println("line 124 query = "+sql);
+		System.out.println("line 132 query = "+sql);
 		preparedStatement.executeUpdate();
+		
+		String item;
+		sql = "SELECT itemName FROM item WHERE itemId = (SELECT itemId from Reward WHERE rewardId ="+rewardID+")";
+		preparedStatement = con.prepareStatement(sql);
+		System.out.println("line 138 query = "+sql);
+		preparedStatement.executeUpdate();
+		
+		
+		
+		System.out.println("All dats inserted");
+		JOptionPane.showMessageDialog(frame, "Customer is eligibale for reward.");
 	}
 	void noreward() throws SQLException{
 		System.out.println("Customer "+cID+" is not applicble for reward.");
 
 		//TotalNoVisits = TotalNoVisits + 1 in customer table AND last visit = now()
-		sql="UPDATE customer SET TotalNoVisis = "+ToV+" + 1, lastVisit = now() where cid = "+cID;
+		sql="UPDATE customer SET TotalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cID;
 		preparedStatement = con.prepareStatement(sql);
 		System.out.println("line 76 query = "+sql);
 		preparedStatement.executeUpdate();
@@ -155,7 +173,5 @@ public class RewardDialogue extends javax.swing.JDialog {
 		else{
 			reward();
 		}
-
 	}
-	
 }
