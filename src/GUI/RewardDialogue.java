@@ -8,11 +8,7 @@ import java.sql.*;
 import javax.swing.*;
 
 public class RewardDialogue extends javax.swing.JDialog {
-	
-	final static String db_name= "HMS";
-	final static String username = "billing";
-	final static String password = "hmsbilling";
-	final static String hmsDbUrl ="jdbc:mysql://localhost/"+db_name+"?"+ "user=" + username + "&" + "password=" + password;
+
 	static Connection con = null;
 
 	Frame frame;
@@ -20,7 +16,7 @@ public class RewardDialogue extends javax.swing.JDialog {
     //Connection con;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
-    
+
     int pastID,NoV,custID,rewardID,itemID,ToV;
     long cID;
 	public RewardDialogue(long cid) throws SQLException {
@@ -35,9 +31,9 @@ public class RewardDialogue extends javax.swing.JDialog {
 	    custID=0;
 	    NoV=0;
 	    ToV=0;
-	    
+
 	    con = ConnectionManager.getConnection();
-	    
+
 	    SQLExecution(cid);
 		setTitle("Reward Syst");
         setSize(413,300);
