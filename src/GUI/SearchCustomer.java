@@ -240,7 +240,13 @@ public class SearchCustomer extends JDialog implements ActionListener{
 
             System.out.println(" vector length is :" + searchlist.size());
             dispose();
-            CustomerRetrievalForm custRetrieval = new CustomerRetrievalForm(searchlist);
+            CustomerRetrievalForm custRetrieval = null;
+			try {
+				custRetrieval = new CustomerRetrievalForm(searchlist);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             custRetrieval.setVisible(true);
 
             /*

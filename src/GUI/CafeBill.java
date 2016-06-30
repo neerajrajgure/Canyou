@@ -773,7 +773,10 @@ public class CafeBill extends JFrame {
 				Object obj;
 				Object objQty;
 				String objString;
-				int itemId;
+				int itemId=0;
+				float price=0;
+				String sql=null;
+				
 				int j= dataModel.findColumn("Sr_No");
 				int q = dataModel.findColumn("Quantity");
 				for (int i=0; i< iRowCnt; i++)
@@ -784,6 +787,27 @@ public class CafeBill extends JFrame {
 						continue;
 					}
 					itemId = Integer.parseInt(obj.toString());
+					item item_form = new item();
+					int item_id = item_form.getItemID();
+					if(itemId == item_id)
+					{
+						sql = "SELECT price FROM item WHERE itemId = "+item_id;
+						try {
+							preparedStatement = connect.prepareStatement(sql);
+							System.out.println("line 138 query = "+sql);
+							resultSet = preparedStatement.executeQuery();
+							while(resultSet.next()){
+								price = resultSet.getFloat(1);
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						System.out.println("Item present in form");
+					}
+					else if(itemId != item_id){
+						System.out.println("Item not present in form");
+					}
 
 					objQty = dataModel.getValueAt(i, q);
 					int quantity = Integer.parseInt(objQty.toString());
@@ -793,6 +817,7 @@ public class CafeBill extends JFrame {
 					}
 
 				}
+
 				nextOid++; // Do not change. Do not delete this line.
                 System.out.println("Current oid is: " + currentOid);
 				currentOid = nextOid;
