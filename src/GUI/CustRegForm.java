@@ -106,7 +106,7 @@ public class CustRegForm extends JDialog {
             String dobStr = doby + "-" + dobm + "-" + dobd;
             System.out.println("DOB in (YYYY-MM-DD) format: " + dobStr);
             // Setup the connection with the DB
-            int tov=1;
+            int tov=0;
             connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
             String query="Insert into customer (cid,FName,LName,Address,phonenum,phone,emailid,DOB,flag) values (?,?,?,?,?,?,?,?,?)";
             preparedStatement=connect.prepareStatement(query);
