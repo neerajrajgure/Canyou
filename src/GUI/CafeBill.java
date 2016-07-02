@@ -60,6 +60,10 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+import junit.framework.Test;
+
+//import CheckInForm;
+
 import javax.swing.table.TableColumn;
 import javax.swing.JDialog;
 import java.awt.Dialog;
@@ -111,6 +115,7 @@ public class CafeBill extends JFrame {
     private JMenuItem ViewSaleMenuItem;
     private JMenuItem CustomerLookUpMenuItem;
     private JMenuItem AboutMenuItem;
+    private JMenuItem CheckInItem;
 
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
 	// " 5 Item Five" };
@@ -131,7 +136,7 @@ public class CafeBill extends JFrame {
 	public float db_tax3 =(float) 0.0;
 	public float db_totalTaxPerc = (float)0.0;
 
-	private java.sql.Time getCurrentTime() {
+	public static java.sql.Time getCurrentTime() {
 		java.util.Date today = new java.util.Date();
 		return new java.sql.Time(today.getTime());
 	}
@@ -372,10 +377,12 @@ public class CafeBill extends JFrame {
         ViewTotalMenuItem = new JMenuItem("View Total");
         ViewSaleMenuItem = new JMenuItem("View Sale");
         CustomerLookUpMenuItem = new JMenuItem("Customer LookUp");
+        CheckInItem = new JMenuItem("Check In");
         AboutMenuItem = new JMenuItem("About");
         fileMenu.add(ViewTotalMenuItem);
         fileMenu.add(ViewSaleMenuItem);
         fileMenu.add(CustomerLookUpMenuItem);
+        fileMenu.add(CheckInItem);
         fileMenu.add(AboutMenuItem);
         ViewTotalMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -399,6 +406,11 @@ public class CafeBill extends JFrame {
                 }
             }
         });
+        /*CheckInItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CheckInForm ci = new CheckInForm();
+            }
+        });*/
         CustomerLookUpMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 searchCust();
@@ -413,6 +425,8 @@ public class CafeBill extends JFrame {
 
         AboutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	//Test t1 = new Test();
+
                 try {
                     File file = new File("./src/GUI/HiveCafe.properties");
                     FileInputStream fileInput = new FileInputStream(file);
@@ -769,6 +783,54 @@ public class CafeBill extends JFrame {
 				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
+				
+				Connection connect = null;
+				Connection con = ConnectionManager.getConnection();
+			    PreparedStatement preparedStatement = null;
+			    String sql=null;
+
+				int ToV = 0;
+				int NoV = 0;
+
+				try{
+					// first get the total no. of visits in current table;
+					sql = "SELECT TotalNoVisits FROM customer WHERE cid = "+cid;
+					System.out.println(sql);
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					resultSet = preparedStatement.executeQuery();
+					System.out.println("after result set 64");
+					System.out.println("before visits ="+resultSet.getFetchSize());
+
+					while(resultSet.next()){
+						ToV = resultSet.getInt(1);
+					}
+
+					//select no. of visits from customer current reward table
+					sql = "SELECT NumberOfVisits from CustomerCurrentReward where custId = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					resultSet = preparedStatement.executeQuery();
+					while(resultSet.next()){
+						NoV=resultSet.getInt(1);
+					}
+
+					//update customer table TotalNoVisits = TotalNoVisits + 1
+					sql = "UPDATE customer SET TotalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println("line 124 query = "+sql);
+					preparedStatement.executeUpdate();
+
+					/*//update into customercurrentreward table
+					sql="UPDATE CurrentCustomerReward SET NumberOfVisits = "+NoV+" + 1 where custId="+CafeBill.cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println("line 124 query = "+sql);
+					preparedStatement.executeQuery();*/
+				}
+				catch(Exception e1){
+					e1.printStackTrace();
+				}
+
 
 				Object obj;
 				Object objQty;
