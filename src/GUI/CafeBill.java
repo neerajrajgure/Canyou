@@ -60,6 +60,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+import junit.framework.Test;
+
 //import CheckInForm;
 
 import javax.swing.table.TableColumn;
@@ -423,7 +425,8 @@ public class CafeBill extends JFrame {
 
         AboutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	Test t1 = new Test();
+            	//Test t1 = new Test();
+
                 try {
                     File file = new File("./src/GUI/HiveCafe.properties");
                     FileInputStream fileInput = new FileInputStream(file);
@@ -784,23 +787,51 @@ public class CafeBill extends JFrame {
 				Connection connect = null;
 				Connection con = ConnectionManager.getConnection();
 			    PreparedStatement preparedStatement = null;
-			    String sql="UPDATE customer SET lastVisit=now(), TotalNoVisits = TotalNoVisits + 1 where cid="+CafeBill.cid;
-			    try {
-					preparedStatement = con.prepareStatement(sql);
+			    String sql=null;
+
+				int ToV = 0;
+				int NoV = 0;
+
+				try{
+					// first get the total no. of visits in current table;
+					sql = "SELECT TotalNoVisits FROM customer WHERE cid = "+cid;
+					System.out.println(sql);
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					resultSet = preparedStatement.executeQuery();
+					System.out.println("after result set 64");
+					System.out.println("before visits ="+resultSet.getFetchSize());
+
+					while(resultSet.next()){
+						ToV = resultSet.getInt(1);
+					}
+
+					//select no. of visits from customer current reward table
+					sql = "SELECT NumberOfVisits from CustomerCurrentReward where custId = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					resultSet = preparedStatement.executeQuery();
+					while(resultSet.next()){
+						NoV=resultSet.getInt(1);
+					}
+
+					//update customer table TotalNoVisits = TotalNoVisits + 1
+					sql = "UPDATE customer SET TotalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println("line 124 query = "+sql);
+					preparedStatement.executeUpdate();
+
+					//update into customercurrentreward table
+					sql="UPDATE CurrentCustomerReward SET NumberOfVisits = "+NoV+" + 1 where custId="+CafeBill.cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println("line 124 query = "+sql);
 					preparedStatement.executeQuery();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
+				}
+				catch(Exception e1){
 					e1.printStackTrace();
 				}
-			    sql="UPDATE CurrentCustomerReward SET NumberOfVisits = NumberOfVisits + 1 where custId="+CafeBill.cid;
-			    try {
-					preparedStatement = con.prepareStatement(sql);
-					preparedStatement.executeQuery();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			    
+
+
 				Object obj;
 				Object objQty;
 				String objString;
