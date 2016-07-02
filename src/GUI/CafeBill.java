@@ -821,11 +821,11 @@ public class CafeBill extends JFrame {
 					System.out.println("line 124 query = "+sql);
 					preparedStatement.executeUpdate();
 
-					//update into customercurrentreward table
+					/*//update into customercurrentreward table
 					sql="UPDATE CurrentCustomerReward SET NumberOfVisits = "+NoV+" + 1 where custId="+CafeBill.cid;
 					preparedStatement = connect.prepareStatement(sql);
 					System.out.println("line 124 query = "+sql);
-					preparedStatement.executeQuery();
+					preparedStatement.executeQuery();*/
 				}
 				catch(Exception e1){
 					e1.printStackTrace();
