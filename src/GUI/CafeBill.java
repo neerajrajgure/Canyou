@@ -60,8 +60,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
-//import CheckInForm;
-
 import javax.swing.table.TableColumn;
 import javax.swing.JDialog;
 import java.awt.Dialog;
@@ -113,7 +111,6 @@ public class CafeBill extends JFrame {
     private JMenuItem ViewSaleMenuItem;
     private JMenuItem CustomerLookUpMenuItem;
     private JMenuItem AboutMenuItem;
-    private JMenuItem CheckInItem;
 
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
 	// " 5 Item Five" };
@@ -362,12 +359,10 @@ public class CafeBill extends JFrame {
         ViewTotalMenuItem = new JMenuItem("View Total");
         ViewSaleMenuItem = new JMenuItem("View Sale");
         CustomerLookUpMenuItem = new JMenuItem("Customer LookUp");
-        CheckInItem = new JMenuItem("Check In");
         AboutMenuItem = new JMenuItem("About");
         fileMenu.add(ViewTotalMenuItem);
         fileMenu.add(ViewSaleMenuItem);
         fileMenu.add(CustomerLookUpMenuItem);
-        fileMenu.add(CheckInItem);
         fileMenu.add(AboutMenuItem);
         ViewTotalMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -391,11 +386,6 @@ public class CafeBill extends JFrame {
                 }
             }
         });
-        /*CheckInItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CheckInForm ci = new CheckInForm();
-            }
-        });*/
         CustomerLookUpMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 searchCust();
