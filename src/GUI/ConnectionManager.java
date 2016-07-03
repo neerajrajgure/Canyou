@@ -13,8 +13,8 @@ public class ConnectionManager {
 	{
 		try
 		{
-		   Class.forName("com.mysql.jdbc.Driver");
-	       con = DriverManager.getConnection(CafeBill.hmsDbUrl);
+			Class.forName("com.mysql.jdbc.Driver");
+			con = DriverManager.getConnection(CafeBill.hmsDbUrl);
 		}
 		catch(Exception e){e.printStackTrace();}
 		return con;
@@ -28,6 +28,4 @@ public class ConnectionManager {
 		}
 		catch(Exception e){e.printStackTrace();}
 	}
-
-
 }

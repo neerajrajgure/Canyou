@@ -60,8 +60,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
-import junit.framework.Test;
-
 //import CheckInForm;
 
 import javax.swing.table.TableColumn;
@@ -135,19 +133,6 @@ public class CafeBill extends JFrame {
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
 	public float db_totalTaxPerc = (float)0.0;
-
-	public static java.sql.Time getCurrentTime() {
-		java.util.Date today = new java.util.Date();
-		return new java.sql.Time(today.getTime());
-	}
-	private Timestamp getCurrentTimeStamp() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public static java.sql.Date getCurrentDate() {
-		java.util.Date today = new java.util.Date();
-		return new java.sql.Date(today.getTime());
-	}
 	/**
 	 * Launch the application.
 	 */
@@ -425,8 +410,6 @@ public class CafeBill extends JFrame {
 
         AboutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//Test t1 = new Test();
-
                 try {
                     File file = new File("./src/GUI/HiveCafe.properties");
                     FileInputStream fileInput = new FileInputStream(file);
@@ -794,38 +777,21 @@ public class CafeBill extends JFrame {
 
 				try{
 					// first get the total no. of visits in current table;
-					sql = "SELECT TotalNoVisits FROM customer WHERE cid = "+cid;
-					System.out.println(sql);
+					sql = "SELECT totalNoVisits FROM customer WHERE cid = "+cid;
 					preparedStatement = connect.prepareStatement(sql);
 					System.out.println(sql);
 					resultSet = preparedStatement.executeQuery();
-					System.out.println("after result set 64");
 					System.out.println("before visits ="+resultSet.getFetchSize());
 
 					while(resultSet.next()){
 						ToV = resultSet.getInt(1);
 					}
 
-					//select no. of visits from customer current reward table
-					sql = "SELECT NumberOfVisits from CustomerCurrentReward where custId = "+cid;
+					//update customer table TotalNoVisits = TotalNoVisits + 1
+					sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
 					preparedStatement = connect.prepareStatement(sql);
 					System.out.println(sql);
-					resultSet = preparedStatement.executeQuery();
-					while(resultSet.next()){
-						NoV=resultSet.getInt(1);
-					}
-
-					//update customer table TotalNoVisits = TotalNoVisits + 1
-					sql = "UPDATE customer SET TotalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
-					preparedStatement = connect.prepareStatement(sql);
-					System.out.println("line 124 query = "+sql);
 					preparedStatement.executeUpdate();
-
-					/*//update into customercurrentreward table
-					sql="UPDATE CurrentCustomerReward SET NumberOfVisits = "+NoV+" + 1 where custId="+CafeBill.cid;
-					preparedStatement = connect.prepareStatement(sql);
-					System.out.println("line 124 query = "+sql);
-					preparedStatement.executeQuery();*/
 				}
 				catch(Exception e1){
 					e1.printStackTrace();
@@ -1150,7 +1116,7 @@ public  void searchCust() {
             preparedStatement=connect.prepareStatement(query);
             preparedStatement.setLong(1, currentOid);
             System.out.println(" Oid in billing_info is  : "+ currentOid);
-            preparedStatement.setDate(2, getCurrentDate());
+            preparedStatement.setDate(2, DateTimeHelper.getCurrentDate());
             preparedStatement.setInt(3, itemId);
             preparedStatement.setString(4, itemInstruction);
             preparedStatement.executeUpdate();
@@ -1168,8 +1134,8 @@ public  void searchCust() {
 			preparedStatement.setLong(1, currentOid);
 			System.out.println(" Oid in menu_order is  : "+ currentOid);
 			preparedStatement.setLong(2, customerId);
-			preparedStatement.setDate(3, getCurrentDate());
-			preparedStatement.setTime(4, getCurrentTime());
+			preparedStatement.setDate(3, DateTimeHelper.getCurrentDate());
+			preparedStatement.setTime(4, DateTimeHelper.getCurrentTime());
 			preparedStatement.setInt(5, transID);
 			preparedStatement.setString(6, transInfo);
 			preparedStatement.setLong(7, currEmpID);

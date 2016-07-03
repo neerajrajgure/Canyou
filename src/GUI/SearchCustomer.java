@@ -247,7 +247,7 @@ public class SearchCustomer extends JDialog implements ActionListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            custRetrieval.setVisible(true);
+			custRetrieval.setVisible(true);
 
             /*
 	            // list iterate

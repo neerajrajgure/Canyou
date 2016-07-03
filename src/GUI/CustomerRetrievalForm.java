@@ -90,15 +90,7 @@ public class CustomerRetrievalForm extends javax.swing.JDialog {
                     }
                     dispose();
                 }
-                try {
-					RewardDialogue rd = new RewardDialogue(cid);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
             }
-           
- 
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

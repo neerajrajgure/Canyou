@@ -45,8 +45,6 @@ public class CustRegForm extends JDialog {
     TextField dobmm=new TextField();
     TextField dobyyyy=new TextField();
     TextField email=new TextField();
-    
-    //Connection connect = null;
 
     public CustRegForm()
     {
