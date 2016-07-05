@@ -110,6 +110,7 @@ public class CafeBill extends JFrame {
     private JMenuItem ViewTotalMenuItem;
     private JMenuItem ViewSaleMenuItem;
     private JMenuItem CustomerLookUpMenuItem;
+    private JMenuItem CheckInItem;
     private JMenuItem AboutMenuItem;
 
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
@@ -372,10 +373,12 @@ public class CafeBill extends JFrame {
         ViewTotalMenuItem = new JMenuItem("View Total");
         ViewSaleMenuItem = new JMenuItem("View Sale");
         CustomerLookUpMenuItem = new JMenuItem("Customer LookUp");
+        CheckInItem = new JMenuItem("Employee Check-In");
         AboutMenuItem = new JMenuItem("About");
         fileMenu.add(ViewTotalMenuItem);
         fileMenu.add(ViewSaleMenuItem);
         fileMenu.add(CustomerLookUpMenuItem);
+        fileMenu.add(CheckInItem);
         fileMenu.add(AboutMenuItem);
         ViewTotalMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -409,6 +412,13 @@ public class CafeBill extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 viewSaleFrame();
             }
+        });
+
+        CheckInItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				@SuppressWarnings("unused")
+				CheckInForm ci = new CheckInForm();
+			}
         });
 
         AboutMenuItem.addActionListener(new ActionListener() {
