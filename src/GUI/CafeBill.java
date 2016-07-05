@@ -416,6 +416,7 @@ public class CafeBill extends JFrame {
 
         CheckInItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
+				@SuppressWarnings("unused")
 				CheckInForm ci = new CheckInForm();
 			}
         });
