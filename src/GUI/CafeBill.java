@@ -67,6 +67,7 @@ import java.awt.Dialog;
 import javax.swing.JOptionPane;
 
 public class CafeBill extends JFrame {
+	JFrame frame;
 
 	private JPanel contentPane;
 	private JPanel categoryPane;
@@ -130,6 +131,11 @@ public class CafeBill extends JFrame {
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
 	public float db_totalTaxPerc = (float)0.0;
+	public boolean check;
+	int itemid;
+	float itemPrice;
+	RewardOperation ro;
+	ItemHelper ih;
 	/**
 	 * Launch the application.
 	 */
@@ -757,8 +763,8 @@ public class CafeBill extends JFrame {
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
 				
-				Connection connect = null;
-				Connection con = ConnectionManager.getConnection();
+				//Connection connect = null;
+				//Connection con = ConnectionManager.getConnection();
 				PreparedStatement preparedStatement = null;
 				String sql=null;
 
@@ -777,11 +783,54 @@ public class CafeBill extends JFrame {
 						ToV = resultSet.getInt(1);
 					}
 
+					// first get the total no. of visits in current table;
+					sql = "SELECT numberOfVisits FROM CustomerCurrentReward WHERE custId = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					resultSet = preparedStatement.executeQuery();
+					System.out.println("before visits ="+resultSet.getFetchSize());
+
+					while(resultSet.next()){
+						NoV = resultSet.getInt(1);
+					}
+
 					//update customer table TotalNoVisits = TotalNoVisits + 1
-					sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
+					sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() WHERE cid = "+cid;
 					preparedStatement = connect.prepareStatement(sql);
 					System.out.println(sql);
 					preparedStatement.executeUpdate();
+
+					//update customer table TotalNoVisits = TotalNoVisits + 1
+					sql = "UPDATE CustomerCurrentReward SET numberOfVisits = "+NoV+" + 1 WHERE custId = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					preparedStatement.executeUpdate();
+
+					ro = new RewardOperation();
+					ih = new ItemHelper();
+
+					check = ro.confirm(cid);
+					if(check == true){
+						System.out.println(cid + "eligible for reward");
+						JOptionPane.showMessageDialog(frame, "Customer is Getting Reward");
+						ro.reward();
+
+						//getting price for item
+						sql = "SELECT price FROM item WHERE itemId = " + ih.getItemId();
+						preparedStatement = connect.prepareStatement(sql);
+						System.out.println(sql);
+						resultSet = preparedStatement.executeQuery();
+						System.out.println("before visits ="+resultSet.getFetchSize());
+
+						while(resultSet.next()){
+							itemPrice = resultSet.getInt(1);
+							System.out.println("Item Price ="+itemPrice);
+						}
+					}
+					else{
+						System.out.println(cid + "not eligible for reward");
+						JOptionPane.showMessageDialog(frame, "Customer is Not Getting Reward");
+					}
 				}
 				catch(Exception e1){
 					e1.printStackTrace();
