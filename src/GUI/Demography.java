@@ -286,7 +286,7 @@ public class Demography extends javax.swing.JDialog {
                     System.out.println("OrderId in Demography is: "+OrderId);
                     System.out.println("CustomerId in Demography is: "+CustomerId);
                     preparedStatement.setLong(23, OrderId );
-                    preparedStatement.setDate(24, CafeBill.getCurrentDate() );
+                    preparedStatement.setDate(24, DateTimeHelper.getCurrentDate() );
                     preparedStatement.setLong(25, CustomerId );
                     preparedStatement.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Data inserted", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);

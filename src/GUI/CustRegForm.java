@@ -5,6 +5,8 @@ import java.applet.*;
 import java.awt.event.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -43,7 +45,6 @@ public class CustRegForm extends JDialog {
     TextField dobmm=new TextField();
     TextField dobyyyy=new TextField();
     TextField email=new TextField();
-
 
     public CustRegForm()
     {
@@ -103,6 +104,7 @@ public class CustRegForm extends JDialog {
             String dobStr = doby + "-" + dobm + "-" + dobd;
             System.out.println("DOB in (YYYY-MM-DD) format: " + dobStr);
             // Setup the connection with the DB
+            int tov=0;
             connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
             String query="Insert into customer (cid,FName,LName,Address,phonenum,phone,emailid,DOB,flag) values (?,?,?,?,?,?,?,?,?)";
             preparedStatement=connect.prepareStatement(query);
@@ -128,6 +130,11 @@ public class CustRegForm extends JDialog {
             preparedStatement.setString(8,  dobStr);
             preparedStatement.setString (9, "C"); // C - Create, D - Deleted
             preparedStatement.executeUpdate();
+
+            query="UPDATE customer SET TotalNoVisits ="+tov+",lastVisit = now(), firstVisit = now() where cid="+newCid;
+            preparedStatement=connect.prepareStatement(query);
+            preparedStatement.executeUpdate();
+
         }
         catch (SQLException e2) {
             // TODO Auto-generated catch block
