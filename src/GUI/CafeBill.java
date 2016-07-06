@@ -759,8 +759,8 @@ public class CafeBill extends JFrame {
 				
 				Connection connect = null;
 				Connection con = ConnectionManager.getConnection();
-			    PreparedStatement preparedStatement = null;
-			    String sql=null;
+				PreparedStatement preparedStatement = null;
+				String sql=null;
 
 				int ToV = 0;
 				int NoV = 0;
