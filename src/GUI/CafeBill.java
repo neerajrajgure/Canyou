@@ -837,7 +837,7 @@ public class CafeBill extends JFrame {
 				 */
 
 				CouponDiscount.couponValue=0.0;
-				CafeBill.cid = NO_CUSTOMER_ID;
+				cid = NO_CUSTOMER_ID;
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
 				//new ReceiptPrinting().setVisible(true);
