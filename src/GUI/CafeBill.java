@@ -125,7 +125,8 @@ public class CafeBill extends JFrame {
 	KitchenReceiptPrinting krp;
 	public long nextOid = 0;
 	public static long currentOid = 0; // This need to change pass oid to the constructor of the classes that need it (instead of accessing the static variable)
-	public static long cid = 0; // This need to change pass cid to the constructor of the classes that need it (instead of accessing the static variable)
+	public static long NO_CUSTOMER_ID = 0;
+	public static long cid = NO_CUSTOMER_ID; // This need to change pass cid to the constructor of the classes that need it (instead of accessing the static variable)
 	public float db_tax1=(float) 0.0;
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
@@ -170,7 +171,7 @@ public class CafeBill extends JFrame {
 				currentOid = nextOid;
 				// cid= getNextCid();
 				System.out.println("Current Oid in frame is  : "+ currentOid);
-				System.out.println("Cid in frame is  : "+ cid);
+				//System.out.println("Cid in frame is  : "+ cid);
 			} catch(Exception e) {
 				// Call the Fall back method to use text files as the backups
 				e.printStackTrace();
@@ -756,33 +757,34 @@ public class CafeBill extends JFrame {
 				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
-				
-				PreparedStatement preparedStatement = null;
-				String sql=null;
+				if(cid != NO_CUSTOMER_ID){
+					PreparedStatement preparedStatement = null;
+					String sql=null;
 
-				int ToV = 0;
-				int NoV = 0;
+					int ToV = 0;
+					int NoV = 0;
 
-				try{
-					// first get the total no. of visits in current table;
-					sql = "SELECT totalNoVisits FROM customer WHERE cid = "+cid;
-					System.out.println(sql);
-					preparedStatement = connect.prepareStatement(sql);
-					resultSet = preparedStatement.executeQuery();
-					System.out.println("before visits ="+resultSet.getFetchSize());
+					try{
+						// first get the total no. of visits in current table;
+						sql = "SELECT totalNoVisits FROM customer WHERE cid = "+cid;
+						System.out.println(sql);
+						preparedStatement = connect.prepareStatement(sql);
+						resultSet = preparedStatement.executeQuery();
+						System.out.println("before visits ="+resultSet.getFetchSize());
 
-					while(resultSet.next()){
-						ToV = resultSet.getInt(1);
+						while(resultSet.next()){
+							ToV = resultSet.getInt(1);
+						}
+
+						//update customer table TotalNoVisits = TotalNoVisits + 1
+						sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
+						System.out.println(sql);
+						preparedStatement = connect.prepareStatement(sql);
+						preparedStatement.executeUpdate();
 					}
-
-					//update customer table TotalNoVisits = TotalNoVisits + 1
-					sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
-					System.out.println(sql);
-					preparedStatement = connect.prepareStatement(sql);
-					preparedStatement.executeUpdate();
-				}
-				catch(Exception e1){
-					e1.printStackTrace();
+					catch(Exception e1){
+						e1.printStackTrace();
+					}
 				}
 
 
@@ -835,7 +837,7 @@ public class CafeBill extends JFrame {
 				 */
 
 				CouponDiscount.couponValue=0.0;
-
+				CafeBill.cid = NO_CUSTOMER_ID;
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
 				//new ReceiptPrinting().setVisible(true);
