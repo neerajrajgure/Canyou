@@ -60,6 +60,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
 import javax.swing.table.TableColumn;
 import javax.swing.JDialog;
 import java.awt.Dialog;
@@ -133,7 +135,7 @@ public class CafeBill extends JFrame {
 	public float db_totalTaxPerc = (float)0.0;
 	public boolean check;
 	int itemid;
-	float itemPrice;
+	float itemPrice = 0;
 	RewardOperation ro;
 	ItemHelper ih;
 	/**
@@ -826,6 +828,8 @@ public class CafeBill extends JFrame {
 							itemPrice = resultSet.getInt(1);
 							System.out.println("Item Price ="+itemPrice);
 						}
+
+						ro.awared();
 					}
 					else{
 						System.out.println(cid + "not eligible for reward");
@@ -851,7 +855,29 @@ public class CafeBill extends JFrame {
 						continue;
 					}
 					itemId = Integer.parseInt(obj.toString());
-
+					itemId = Integer.parseInt(obj.toString());
+					ItemHelper ih = new ItemHelper();
+					int item_id = ih.getItemId();
+					if(itemId == item_id)
+					{
+						sql = "SELECT price FROM item WHERE itemId = "+item_id;
+						try {
+							preparedStatement = connect.prepareStatement(sql);
+							System.out.println("line 138 query = "+sql);
+							resultSet = preparedStatement.executeQuery();
+							while(resultSet.next()){
+								itemPrice = resultSet.getFloat(1);
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(frame,"Customer is eligibale for reward id");
+						System.out.println("Item present in form");
+					}
+					else if(itemId != item_id){
+						System.out.println("Item not present in form");
+					}
 					objQty = dataModel.getValueAt(i, q);
 					int quantity = Integer.parseInt(objQty.toString());
 					for(int k = 0; k < quantity; k++)
@@ -1387,7 +1413,7 @@ public  void searchCust() {
 		 int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
 		 iRowCnt = dataModel.getRowCount();
 		 Object obj;
-		 String quant ;
+		 String quant;
 		 System.out.println("Row Count :"+iRowCnt);
 		 System.out.println("Calculating total rowselected =" + table.getSelectedRowCount());
 
@@ -1418,13 +1444,17 @@ public  void searchCust() {
 			 totalAmt =  totalAmt + tot;
 		 }
 		 totalAmt = roundDecimal(totalAmt,2);
+		 System.out.println("Total Price = "+totalAmt);
 		 //        System.out.println("Discount Value :"+CouponDiscount.couponValue);
 		 //        System.out.println("db_tax1: " );
 		 //        System.out.println(db_tax1 );
 		 if(CouponDiscount.couponValue!=0.0 && CouponDiscount.couponValue <=100)
 		 {
 			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
-		     totAmtAfterDiscount =  (float)( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100)));
+		     totAmtAfterDiscount =  (float)(( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100))));
+		     System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
+		     totAmtAfterDiscount = (float)(totAmtAfterDiscount - itemPrice);
+		     System.out.println("Total amt after reward discount ="+totAmtAfterDiscount);
 			 // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
 			 //lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
 			 lblDiscount.setText("-"+new Float(discountValue).toString());
