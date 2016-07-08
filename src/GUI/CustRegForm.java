@@ -132,7 +132,7 @@ public class CustRegForm extends JDialog {
             preparedStatement.executeUpdate();
 
             //first visit and total no visit
-            query="UPDATE customer SET TotalNoVisits ="+tov+",firstVisit = now() where cid="+newCid;
+            query="UPDATE customer SET totalNumVisits ="+tov+",firstVisit = now() where cid="+newCid;
             preparedStatement=connect.prepareStatement(query);
             preparedStatement.executeUpdate();
 

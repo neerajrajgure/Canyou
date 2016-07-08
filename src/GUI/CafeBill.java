@@ -766,7 +766,7 @@ public class CafeBill extends JFrame {
 
 					try{
 						// first get the total no. of visits in current table;
-						sql = "SELECT totalNoVisits FROM customer WHERE cid = "+cid;
+						sql = "SELECT totalNumVisits FROM customer WHERE cid = "+cid;
 						System.out.println(sql);
 						preparedStatement = connect.prepareStatement(sql);
 						resultSet = preparedStatement.executeQuery();
@@ -776,8 +776,8 @@ public class CafeBill extends JFrame {
 							ToV = resultSet.getInt(1);
 						}
 
-						//update customer table TotalNoVisits = TotalNoVisits + 1
-						sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
+						//update customer table totalNumVisits = totalNumVisits + 1
+						sql = "UPDATE customer SET totalNumVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
 						System.out.println(sql);
 						preparedStatement = connect.prepareStatement(sql);
 						preparedStatement.executeUpdate();
