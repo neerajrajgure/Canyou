@@ -757,8 +757,6 @@ public class CafeBill extends JFrame {
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
 				int iRowCnt = dataModel.getRowCount();
 				
-				Connection connect = null;
-				Connection con = ConnectionManager.getConnection();
 				PreparedStatement preparedStatement = null;
 				String sql=null;
 
@@ -768,8 +766,8 @@ public class CafeBill extends JFrame {
 				try{
 					// first get the total no. of visits in current table;
 					sql = "SELECT totalNoVisits FROM customer WHERE cid = "+cid;
-					preparedStatement = connect.prepareStatement(sql);
 					System.out.println(sql);
+					preparedStatement = connect.prepareStatement(sql);
 					resultSet = preparedStatement.executeQuery();
 					System.out.println("before visits ="+resultSet.getFetchSize());
 
@@ -779,8 +777,8 @@ public class CafeBill extends JFrame {
 
 					//update customer table TotalNoVisits = TotalNoVisits + 1
 					sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
-					preparedStatement = connect.prepareStatement(sql);
 					System.out.println(sql);
+					preparedStatement = connect.prepareStatement(sql);
 					preparedStatement.executeUpdate();
 				}
 				catch(Exception e1){
