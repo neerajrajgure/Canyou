@@ -836,7 +836,7 @@ public class CafeBill extends JFrame {
                 }
 				 */
 
-				CouponDiscount.couponValue=0.0;
+
 
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
@@ -884,7 +884,7 @@ public class CafeBill extends JFrame {
 					menuExpansionPane.removeAll();
 					menuExpansionPane.updateUI();
 				}
-				CouponDiscount.couponValue=0.0;
+				clearVeriables();
 				new Demography().setVisible(true);
 				/*				 
 	                String msg = "Change Printer Name to adobe pdf And save";
@@ -922,10 +922,10 @@ public class CafeBill extends JFrame {
 					System.out.println(dataModel.getRowCount());
 					dataModel.removeRow(i);
 				}
-				CouponDiscount.couponValue=0.0;
 				calculateTotal();
 				menuExpansionPane.removeAll();
 				menuExpansionPane.updateUI();
+				clearVeriables();
 			}
 		});
 		c.gridx = 1;
@@ -987,7 +987,8 @@ public class CafeBill extends JFrame {
 					System.out.println(dataModel.getRowCount());
 					dataModel.removeRow(i);
 				}
-				CouponDiscount.couponValue=0.0;
+				clearVeriables();
+				//CouponDiscount.couponValue=0.0;
 				calculateTotal();
 				menuExpansionPane.removeAll();
 				menuExpansionPane.updateUI();
@@ -1042,6 +1043,12 @@ public class CafeBill extends JFrame {
         costPane.add(btnClockInClockOut,c);
 */
 		}
+
+	protected void clearVeriables() {
+		cid = 0;
+		CouponDiscount.couponValue=0.0;
+		CouponDiscount.DISCOUNTDEC = "";
+	}
 
 	private void setUpquantyColumn(JTable table2, TableColumn Quantity) {
 	    // TODO Auto-generated method stub
