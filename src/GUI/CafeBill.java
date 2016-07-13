@@ -717,56 +717,7 @@ public class CafeBill extends JFrame {
 				PageFormat pf = job.defaultPage();
 				Paper paper = new Paper();
 				double margin = 8; // half inch
-				System.out.println("width = " + paper.getWidth());
-				System.out.println("Calc width = " + (paper.getWidth() - margin * 2));
-				paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
-				pf.setPaper(paper);
-				int count=table.getRowCount();
 
-				//ResultSet resultset=null;
-
-				// showOpenPayScreen();
-
-				//ResultSet resultset=null;    
-
-
-				/*                
-                Customer cust = new Customer();
-                //c.DOB = null;
-                cust.cid = cid;
-                cust.FName ="Bill";
-                cust.LName ="Gates";
-                cust.phoneNum = 9873211111L;
-                cust.address = "Test addr";
-                cust.flag = 'N';
-                cust.emailid = "abcd";
-                cust.phone = "9873211111";
-                cust.DOB = getCurrentDate();
-                setCustomerInfo_old(cust);
-
-				 */ 
-				if(showOpenPayScreen() == PAY_OPTION_CANCEL_CLICKED) {
-				    return;
-				}
-				//TODO: Should substring the transInfo so that the data in the db does not overflow.
-				System.out.println("CafeBill::Submit_order - Payment type: " + Payment.payCashOrCC);
-				System.out.println("CafeBill::Submit_order - Payment info: " + Payment.transInfo);
-				System.out.println("CafeBill::Submit_order - before krp print " );
-				job.setPrintable(krp, pf);
-				if (job.printDialog()) {
-					try {
-						System.out.println(" inside try krp " );
-						job.print();
-					} catch (PrinterException printException) {
-						System.out.println(printException);
-					}
-				}
-				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
-				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
-				int iRowCnt = dataModel.getRowCount();
-				
-				//Connection connect = null;
-				//Connection con = ConnectionManager.getConnection();
 				PreparedStatement preparedStatement = null;
 				String sql=null;
 
@@ -827,8 +778,12 @@ public class CafeBill extends JFrame {
 						while(resultSet.next()){
 							itemPrice = resultSet.getInt(1);
 							System.out.println("Item Price ="+itemPrice);
+							StringBuilder sb = new StringBuilder();
+							sb.append("");
+							sb.append(itemPrice);
+							String s = sb.toString();
+							lblDiscount.setText(s);
 						}
-
 						ro.awared();
 					}
 					else{
@@ -840,6 +795,56 @@ public class CafeBill extends JFrame {
 					e1.printStackTrace();
 				}
 
+				System.out.println("width = " + paper.getWidth());
+				System.out.println("Calc width = " + (paper.getWidth() - margin * 2));
+				paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
+				pf.setPaper(paper);
+				int count=table.getRowCount();
+
+				//ResultSet resultset=null;
+
+				// showOpenPayScreen();
+
+				//ResultSet resultset=null;
+
+
+				/*
+                Customer cust = new Customer();
+                //c.DOB = null;
+                cust.cid = cid;
+                cust.FName ="Bill";
+                cust.LName ="Gates";
+                cust.phoneNum = 9873211111L;
+                cust.address = "Test addr";
+                cust.flag = 'N';
+                cust.emailid = "abcd";
+                cust.phone = "9873211111";
+                cust.DOB = getCurrentDate();
+                setCustomerInfo_old(cust);
+
+				 */
+				if(showOpenPayScreen() == PAY_OPTION_CANCEL_CLICKED) {
+				    return;
+				}
+				//TODO: Should substring the transInfo so that the data in the db does not overflow.
+				System.out.println("CafeBill::Submit_order - Payment type: " + Payment.payCashOrCC);
+				System.out.println("CafeBill::Submit_order - Payment info: " + Payment.transInfo);
+				System.out.println("CafeBill::Submit_order - before krp print " );
+				job.setPrintable(krp, pf);
+				if (job.printDialog()) {
+					try {
+						System.out.println(" inside try krp " );
+						job.print();
+					} catch (PrinterException printException) {
+						System.out.println(printException);
+					}
+				}
+				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
+				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
+				int iRowCnt = dataModel.getRowCount();
+
+				//Connection connect = null;
+				//Connection con = ConnectionManager.getConnection();
 
 				Object obj;
 				Object objQty;
@@ -860,18 +865,7 @@ public class CafeBill extends JFrame {
 					int item_id = ih.getItemId();
 					if(itemId == item_id)
 					{
-						sql = "SELECT price FROM item WHERE itemId = "+item_id;
-						try {
-							preparedStatement = connect.prepareStatement(sql);
-							System.out.println("line 138 query = "+sql);
-							resultSet = preparedStatement.executeQuery();
-							while(resultSet.next()){
-								itemPrice = resultSet.getFloat(1);
-							}
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						CouponDiscount.couponValue = itemPrice;
 						JOptionPane.showMessageDialog(frame,"Customer is eligibale for reward id");
 						System.out.println("Item present in form");
 					}
@@ -911,7 +905,6 @@ public class CafeBill extends JFrame {
                 }
 				 */
 
-				CouponDiscount.couponValue=0.0;
 
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
@@ -1453,8 +1446,9 @@ public  void searchCust() {
 			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
 		     totAmtAfterDiscount =  (float)(( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100))));
 		     System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
-		     totAmtAfterDiscount = (float)(totAmtAfterDiscount - itemPrice);
-		     System.out.println("Total amt after reward discount ="+totAmtAfterDiscount);
+		     CouponDiscount.couponValue = itemPrice;
+		     //totAmtAfterDiscount = (float)(totAmtAfterDiscount - itemPrice);
+		     System.out.println("reward discount ="+CouponDiscount.couponValue);
 			 // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
 			 //lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
 			 lblDiscount.setText("-"+new Float(discountValue).toString());
