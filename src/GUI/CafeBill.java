@@ -136,6 +136,7 @@ public class CafeBill extends JFrame {
 	public boolean check;
 	int itemid;
 	float itemPrice = 0;
+	int flag = 0;
 	RewardOperation ro;
 	ItemHelper ih;
 	/**
@@ -785,6 +786,7 @@ public class CafeBill extends JFrame {
 							lblDiscount.setText(s);
 						}
 						ro.awared();
+						int result = calculateTotal();
 					}
 					else{
 						System.out.println(cid + "not eligible for reward");
@@ -865,7 +867,8 @@ public class CafeBill extends JFrame {
 					int item_id = ih.getItemId();
 					if(itemId == item_id)
 					{
-						CouponDiscount.couponValue = itemPrice;
+						//CouponDiscount.couponValue = itemPrice;
+						flag = 1;
 						JOptionPane.showMessageDialog(frame,"Customer is eligibale for reward id");
 						System.out.println("Item present in form");
 					}
@@ -953,6 +956,7 @@ public class CafeBill extends JFrame {
 					menuExpansionPane.updateUI();
 				}
 				CouponDiscount.couponValue=0.0;
+				itemPrice = 0;
 				new Demography().setVisible(true);
 				/*				 
 	                String msg = "Change Printer Name to adobe pdf And save";
@@ -1400,7 +1404,7 @@ public  void searchCust() {
 	  *  The amount is .05
 	  *
 	  */
-	 public void calculateTotal()
+	 public int calculateTotal()
 	 {
 		 float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
 		 int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
@@ -1474,6 +1478,75 @@ public  void searchCust() {
 		 lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
 		 System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
 	 }
+	 public float calculateTotal()
+	 {
+		float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
+		int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
+		iRowCnt = dataModel.getRowCount();
+		Object obj;
+		String quant;
+		System.out.println("Row Count :"+iRowCnt);
+		System.out.println("Calculating total rowselected =" + table.getSelectedRowCount());
+
+		cQty = dataModel.findColumn("Quantity");
+		cUnit = dataModel.findColumn("Unit Price");
+		j  = dataModel.findColumn("Total Price");
+		for (int i=0; i< iRowCnt; i++)
+		{
+			obj = dataModel.getValueAt(i, cQty);
+			quant = obj.toString();
+			if(quant.equals("") ){
+					continue;
+			}
+			iQty = Integer.parseInt(obj.toString());
+			obj = dataModel.getValueAt(i, cUnit);
+			quant = obj.toString();
+			if(quant.equals("") ){
+				continue;
+			}
+			price = Float.parseFloat(obj.toString());
+			dataModel.setValueAt((price*iQty), i, j);
+			obj = dataModel.getValueAt(i, j) ;
+			quant = obj.toString();
+			if(quant.equals("") ){
+				continue;
+			}
+			tot = Float.parseFloat(obj.toString());
+			totalAmt =  totalAmt + tot;
+		}
+		totalAmt = roundDecimal(totalAmt,2);
+		System.out.println("Total Price = "+totalAmt);
+
+		if(flag == 1){
+		totAmtAfterDiscount = (float)(totalAmt - itemPrice);
+		System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
+		System.out.println("reward discount ="+itemPrice);
+		}
+		else{
+
+		}
+		lblDiscount.setText("-"+new Float(discountValue).toString());
+		lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
+		lblDiscount.setText("100.0");
+		lblDiscount_1.setText("Discount" + "(Rs.)" );
+
+		ftax1 = (float) ((totAmtAfterDiscount * db_tax1)/100);
+		ftax1 = roundDecimal(ftax1,2);
+		ftax2 = (float) (totAmtAfterDiscount * db_tax2/100);
+		ftax2 = roundDecimal(ftax2,2);
+		ftax3 = (float) (totAmtAfterDiscount * db_tax3/100);
+		ftax3 = roundDecimal(ftax3,2);
+		totAmtWithTax=  (float) (totAmtAfterDiscount + ftax1 + ftax2+ ftax3);
+		totAmtWithTax = roundDecimal(totAmtWithTax,2);
+		lblSubtotal.setText(Float.toString(totalAmt));
+		lblTax1.setText(Float.toString(ftax1));
+		lblTax2.setText(Float.toString(ftax2));
+		lblTax3.setText(Float.toString(ftax3));
+		lblTotal.setText (Float.toString(totAmtWithTax));
+		lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
+		System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
+		return null;
+	}
 	 /*
 	  *
 	  *Seema
