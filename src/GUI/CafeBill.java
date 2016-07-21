@@ -786,7 +786,47 @@ public class CafeBill extends JFrame {
 							lblDiscount.setText(s);
 						}
 						ro.awared();
-						int result = calculateTotal();
+
+						int iRowCnt = dataModel.getRowCount();
+
+						Object obj;
+						Object objQty;
+						String objString;
+						int itemId;
+						int j= dataModel.findColumn("Sr_No");
+						int q = dataModel.findColumn("Quantity");
+						for (int i=0; i< iRowCnt; i++)
+						{
+							obj = dataModel.getValueAt(i, j);
+							objString =  obj.toString();
+							if(objString.equals("") ){
+								continue;
+							}
+							itemId = Integer.parseInt(obj.toString());
+							itemId = Integer.parseInt(obj.toString());
+							ItemHelper ih = new ItemHelper();
+							int item_id = ih.getItemId();
+							if(itemId == item_id)
+							{
+								//CouponDiscount.couponValue = itemPrice;
+								flag = 1;
+								JOptionPane.showMessageDialog(frame,"Customer is eligibale for reward id");
+								System.out.println("Item present in form");
+							}
+							else if(itemId != item_id){
+								System.out.println("Item not present in form");
+							}
+							objQty = dataModel.getValueAt(i, q);
+							int quantity = Integer.parseInt(objQty.toString());
+							for(int k = 0; k < quantity; k++)
+							{
+								setBillingInfo(itemId, "Test");
+							}
+
+						}
+						if(flag == 1){
+							float result = calculateTotal1();
+						}
 					}
 					else{
 						System.out.println(cid + "not eligible for reward");
@@ -843,46 +883,11 @@ public class CafeBill extends JFrame {
 				}
 				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
 				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
-				int iRowCnt = dataModel.getRowCount();
 
 				//Connection connect = null;
 				//Connection con = ConnectionManager.getConnection();
 
-				Object obj;
-				Object objQty;
-				String objString;
-				int itemId;
-				int j= dataModel.findColumn("Sr_No");
-				int q = dataModel.findColumn("Quantity");
-				for (int i=0; i< iRowCnt; i++)
-				{
-					obj = dataModel.getValueAt(i, j);
-					objString =  obj.toString();
-					if(objString.equals("") ){
-						continue;
-					}
-					itemId = Integer.parseInt(obj.toString());
-					itemId = Integer.parseInt(obj.toString());
-					ItemHelper ih = new ItemHelper();
-					int item_id = ih.getItemId();
-					if(itemId == item_id)
-					{
-						//CouponDiscount.couponValue = itemPrice;
-						flag = 1;
-						JOptionPane.showMessageDialog(frame,"Customer is eligibale for reward id");
-						System.out.println("Item present in form");
-					}
-					else if(itemId != item_id){
-						System.out.println("Item not present in form");
-					}
-					objQty = dataModel.getValueAt(i, q);
-					int quantity = Integer.parseInt(objQty.toString());
-					for(int k = 0; k < quantity; k++)
-					{
-						setBillingInfo(itemId, "Test");
-					}
 
-				}
 				nextOid++; // Do not change. Do not delete this line.
                 System.out.println("Current oid is: " + currentOid);
 				currentOid = nextOid;
@@ -1404,7 +1409,7 @@ public  void searchCust() {
 	  *  The amount is .05
 	  *
 	  */
-	 public int calculateTotal()
+	 public void calculateTotal()
 	 {
 		 float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
 		 int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
@@ -1478,7 +1483,7 @@ public  void searchCust() {
 		 lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
 		 System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
 	 }
-	 public float calculateTotal()
+	 public float calculateTotal1()
 	 {
 		float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
 		int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
@@ -1518,12 +1523,21 @@ public  void searchCust() {
 		System.out.println("Total Price = "+totalAmt);
 
 		if(flag == 1){
-		totAmtAfterDiscount = (float)(totalAmt - itemPrice);
-		System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
-		System.out.println("reward discount ="+itemPrice);
+			totAmtAfterDiscount = (float)(totalAmt - itemPrice);
+			System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
+			System.out.println("reward discount ="+itemPrice);
 		}
 		else{
-
+			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
+		     totAmtAfterDiscount =  (float)(( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100))));
+		     System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
+		     CouponDiscount.couponValue = itemPrice;
+		     //totAmtAfterDiscount = (float)(totAmtAfterDiscount - itemPrice);
+		     System.out.println("reward discount ="+CouponDiscount.couponValue);
+			 // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
+			 //lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
+			 lblDiscount.setText("-"+new Float(discountValue).toString());
+			 lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
 		}
 		lblDiscount.setText("-"+new Float(discountValue).toString());
 		lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
@@ -1545,7 +1559,7 @@ public  void searchCust() {
 		lblTotal.setText (Float.toString(totAmtWithTax));
 		lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
 		System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
-		return null;
+		return 0;
 	}
 	 /*
 	  *
