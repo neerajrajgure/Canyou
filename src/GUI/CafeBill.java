@@ -1483,6 +1483,8 @@ public  void searchCust() {
 		 lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
 		 System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
 	 }
+
+	 //*sanket
 	 public float calculateTotal1()
 	 {
 		float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
@@ -1540,8 +1542,14 @@ public  void searchCust() {
 			 lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
 		}
 		lblDiscount.setText("-"+new Float(discountValue).toString());
-		lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
-		lblDiscount.setText("100.0");
+
+		System.out.println("Item Price ="+itemPrice);
+		StringBuilder sb = new StringBuilder();
+		sb.append("");
+		sb.append(itemPrice);
+		String s = sb.toString();
+		lblDiscount.setText(s);
+
 		lblDiscount_1.setText("Discount" + "(Rs.)" );
 
 		ftax1 = (float) ((totAmtAfterDiscount * db_tax1)/100);
