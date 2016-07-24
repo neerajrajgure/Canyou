@@ -1533,11 +1533,7 @@ public  void searchCust() {
 			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
 		     totAmtAfterDiscount =  (float)(( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100))));
 		     System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
-		     CouponDiscount.couponValue = itemPrice;
-		     //totAmtAfterDiscount = (float)(totAmtAfterDiscount - itemPrice);
 		     System.out.println("reward discount ="+CouponDiscount.couponValue);
-			 // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
-			 //lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
 			 lblDiscount.setText("-"+new Float(discountValue).toString());
 			 lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
 		}
@@ -1558,13 +1554,13 @@ public  void searchCust() {
 		ftax2 = roundDecimal(ftax2,2);
 		ftax3 = (float) (totAmtAfterDiscount * db_tax3/100);
 		ftax3 = roundDecimal(ftax3,2);
-		totAmtWithTax=  (float) (totAmtAfterDiscount + ftax1 + ftax2+ ftax3);
+		totAmtWithTax = (float) (totAmtAfterDiscount + ftax1 + ftax2+ ftax3);
 		totAmtWithTax = roundDecimal(totAmtWithTax,2);
 		lblSubtotal.setText(Float.toString(totalAmt));
 		lblTax1.setText(Float.toString(ftax1));
 		lblTax2.setText(Float.toString(ftax2));
 		lblTax3.setText(Float.toString(ftax3));
-		lblTotal.setText (Float.toString(totAmtWithTax));
+		lblTotal.setText(Float.toString(totAmtWithTax));
 		lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
 		System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
 		return 0;
