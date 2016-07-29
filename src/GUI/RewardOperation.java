@@ -13,7 +13,7 @@ public class RewardOperation {
 	ResultSet rs;
 	static long cID;
 	int ToV,NoV;
-	static int rewardID = 0,itemID = 0;
+	int rewardID = 0,itemID = 0;
 
 	public RewardOperation(){
 		status = false;
@@ -84,7 +84,7 @@ public class RewardOperation {
 	}
 	public void awared() throws SQLException{
 
-		int NoV = 0;
+		NoV = 0;
 		int pastID = 0;
 
 		// first get the total no. of visits in current table;
