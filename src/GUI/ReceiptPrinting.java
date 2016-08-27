@@ -106,24 +106,24 @@ public class ReceiptPrinting implements Printable {
         /* Now we perform our rendering */
         int y1 = 10;
         g2d.drawString(companyName, 75 , y1);
-        g.drawString(companyTag, 33, 20);
-        g.drawString(dash, leftMargin, 30);
-        g.drawString(oid, leftMargin, 40);
-        g.drawString(String.valueOf(OrderId), 75, 40);
-        g.drawString(custid, leftMargin, 50);
-        g.drawString(String.valueOf(CustomerId), 75, 50);
-        g.drawString(dash, leftMargin, 60);
-        g.drawString(sdf.format(date1) , 130, 40);
-        g.drawString(sdf1.format(date1) , 152, 50);
-        g.drawString(addrLine1, leftMargin, 70);
-        g.drawString(addrLine2, leftMargin, 80);
-        g.drawString(addrLine3, leftMargin, 90);
-        g.drawString(dash, leftMargin, 100);
-        g.drawString(tfield1, leftMargin, 110);
-        g.drawString(tfield2, 100, 110);
-        g.drawString(tfield3, 125, 110);
-        g.drawString(tfield4, 160, 110);
-        g.drawString(dash, leftMargin, 120);
+        g.drawString(companyTag, 33, y1*2);
+        g.drawString(dash, leftMargin, y1*3);
+        g.drawString(oid, leftMargin, y1*4);
+        g.drawString(String.valueOf(OrderId), 75, y1*4);
+        g.drawString(custid, leftMargin, y1*5);
+        g.drawString(String.valueOf(CustomerId), 75, y1*5);
+        g.drawString(dash, leftMargin, y1*6);
+        g.drawString(sdf.format(date1) , 130, y1*4);
+        g.drawString(sdf1.format(date1) , 152, y1*5);
+        g.drawString(addrLine1, leftMargin, y1*7);
+        g.drawString(addrLine2, leftMargin, y1*8);
+        g.drawString(addrLine3, leftMargin, y1*9);
+        g.drawString(dash, leftMargin, y1*10);
+        g.drawString(tfield1, leftMargin, y1*11);
+        g.drawString(tfield2, 100, y1*11);
+        g.drawString(tfield3, 125, y1*11);
+        g.drawString(tfield4, 160, y1*11);
+        g.drawString(dash, leftMargin, y1*12);
 
 
         int newline = g.getFont().getSize() + 5 ;
