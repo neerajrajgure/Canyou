@@ -105,24 +105,25 @@ public class ReceiptPrinting implements Printable {
         System.out.println("Discount is:"+Discount+"is the value");
         /* Now we perform our rendering */
         int y1 = 10;
-        g2d.drawString(companyName, 75 , y1);
-        g.drawString(companyTag, 33, y1*2);
+        int x1 = 75;
+        g2d.drawString(companyName, x1 , y1);
+        g.drawString(companyTag, x1/2, y1*2);
         g.drawString(dash, leftMargin, y1*3);
         g.drawString(oid, leftMargin, y1*4);
-        g.drawString(String.valueOf(OrderId), 75, y1*4);
+        g.drawString(String.valueOf(OrderId), x1, y1*4);
         g.drawString(custid, leftMargin, y1*5);
-        g.drawString(String.valueOf(CustomerId), 75, y1*5);
+        g.drawString(String.valueOf(CustomerId), x1, y1*5);
         g.drawString(dash, leftMargin, y1*6);
-        g.drawString(sdf.format(date1) , 130, y1*4);
-        g.drawString(sdf1.format(date1) , 152, y1*5);
+        g.drawString(sdf.format(date1) , (int) (x1*1.75), y1*4);
+        g.drawString(sdf1.format(date1) , x1*2, y1*5);
         g.drawString(addrLine1, leftMargin, y1*7);
         g.drawString(addrLine2, leftMargin, y1*8);
         g.drawString(addrLine3, leftMargin, y1*9);
         g.drawString(dash, leftMargin, y1*10);
         g.drawString(tfield1, leftMargin, y1*11);
-        g.drawString(tfield2, 100, y1*11);
-        g.drawString(tfield3, 125, y1*11);
-        g.drawString(tfield4, 160, y1*11);
+        g.drawString(tfield2, x1+25, y1*11);
+        g.drawString(tfield3, x1+50, y1*11);
+        g.drawString(tfield4, x1+85, y1*11);
         g.drawString(dash, leftMargin, y1*12);
 
 
@@ -141,10 +142,10 @@ public class ReceiptPrinting implements Printable {
             System.out.println( "Field = "+menuName+" "+printQuantity+" "+prinrtunitprice+" "+prinrToatalprice);
             //            g.drawString(printitem+printQuantity+prinrtunitprice+prinrToatalprice,5,y += newline);
             g.drawString(menuName, leftMargin, y);
-            g.drawString(printQuantity, 110, y);
-            g.drawString(prinrtunitprice, 135, y);
-            g.drawString(prinrToatalprice, 165, y);
-            g.drawString(blank, 175,y += newline);//This has to fix later
+            g.drawString(printQuantity, y1*11, y);
+            g.drawString(prinrtunitprice, ((y1*13)+5), y);
+            g.drawString(prinrToatalprice, ((y1*16)+5), y);
+            g.drawString(blank, ((y1*17)+5),y += newline);//This has to fix later
 
             //System.out.println("Value of Y :"+y);
         }
