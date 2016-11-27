@@ -4,4 +4,4 @@ INSERT INTO item (itemId,itemName,categoryId,price) VALUES (9501,"Pool Table - 1
 INSERT INTO item (itemId,itemName,categoryId,price) VALUES (9502,"Pool Table - 30Mins",107,100);
 INSERT INTO item (itemId,itemName,categoryId,price) VALUES (1111,"French Fries",103,40);
 
-INSERT INTO emp (loginName,firstName,lastName,password,empid) VALUES (" ","Prashant"," ",32247,35);
+INSERT INTO emp (loginName,firstName,lastName,password,empid) VALUES (" ","Prashant"," ",48579,35);
