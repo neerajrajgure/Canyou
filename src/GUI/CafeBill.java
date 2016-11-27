@@ -60,6 +60,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
 import javax.swing.table.TableColumn;
 import javax.swing.JDialog;
 import java.awt.Dialog;
@@ -67,6 +69,7 @@ import java.awt.Dialog;
 import javax.swing.JOptionPane;
 
 public class CafeBill extends JFrame {
+	JFrame frame;
 
 	private JPanel contentPane;
 	private JPanel categoryPane;
@@ -130,6 +133,12 @@ public class CafeBill extends JFrame {
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
 	public float db_totalTaxPerc = (float)0.0;
+	public boolean check;
+	int itemid;
+	float itemPrice = 0;
+	int flag = 0;
+	RewardOperation ro;
+	ItemHelper ih;
 	/**
 	 * Launch the application.
 	 */
@@ -709,56 +718,7 @@ public class CafeBill extends JFrame {
 				PageFormat pf = job.defaultPage();
 				Paper paper = new Paper();
 				double margin = 8; // half inch
-				System.out.println("width = " + paper.getWidth());
-				System.out.println("Calc width = " + (paper.getWidth() - margin * 2));
-				paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
-				pf.setPaper(paper);
-				int count=table.getRowCount();
 
-				//ResultSet resultset=null;
-
-				// showOpenPayScreen();
-
-				//ResultSet resultset=null;    
-
-
-				/*                
-                Customer cust = new Customer();
-                //c.DOB = null;
-                cust.cid = cid;
-                cust.FName ="Bill";
-                cust.LName ="Gates";
-                cust.phoneNum = 9873211111L;
-                cust.address = "Test addr";
-                cust.flag = 'N';
-                cust.emailid = "abcd";
-                cust.phone = "9873211111";
-                cust.DOB = getCurrentDate();
-                setCustomerInfo_old(cust);
-
-				 */ 
-				if(showOpenPayScreen() == PAY_OPTION_CANCEL_CLICKED) {
-				    return;
-				}
-				//TODO: Should substring the transInfo so that the data in the db does not overflow.
-				System.out.println("CafeBill::Submit_order - Payment type: " + Payment.payCashOrCC);
-				System.out.println("CafeBill::Submit_order - Payment info: " + Payment.transInfo);
-				System.out.println("CafeBill::Submit_order - before krp print " );
-				job.setPrintable(krp, pf);
-				if (job.printDialog()) {
-					try {
-						System.out.println(" inside try krp " );
-						job.print();
-					} catch (PrinterException printException) {
-						System.out.println(printException);
-					}
-				}
-				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
-				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
-				int iRowCnt = dataModel.getRowCount();
-				
-				Connection connect = null;
-				Connection con = ConnectionManager.getConnection();
 				PreparedStatement preparedStatement = null;
 				String sql=null;
 
@@ -777,40 +737,157 @@ public class CafeBill extends JFrame {
 						ToV = resultSet.getInt(1);
 					}
 
+					// first get the total no. of visits in current table;
+					sql = "SELECT numberOfVisits FROM CustomerCurrentReward WHERE custId = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					resultSet = preparedStatement.executeQuery();
+					System.out.println("before visits ="+resultSet.getFetchSize());
+
+					while(resultSet.next()){
+						NoV = resultSet.getInt(1);
+					}
+
 					//update customer table TotalNoVisits = TotalNoVisits + 1
-					sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() where cid = "+cid;
+					sql = "UPDATE customer SET totalNoVisits = "+ToV+" + 1, lastVisit = now() WHERE cid = "+cid;
 					preparedStatement = connect.prepareStatement(sql);
 					System.out.println(sql);
 					preparedStatement.executeUpdate();
+
+					//update customer table TotalNoVisits = TotalNoVisits + 1
+					sql = "UPDATE CustomerCurrentReward SET numberOfVisits = "+NoV+" + 1 WHERE custId = "+cid;
+					preparedStatement = connect.prepareStatement(sql);
+					System.out.println(sql);
+					preparedStatement.executeUpdate();
+
+					ro = new RewardOperation();
+					ih = new ItemHelper();
+
+					check = ro.confirm(cid);
+					if(check == true){
+						System.out.println(cid + "eligible for reward");
+						JOptionPane.showMessageDialog(frame, "Customer is Getting Reward");
+						ro.reward();
+
+						//getting price for item
+						sql = "SELECT price FROM item WHERE itemId = " + ih.getItemId();
+						preparedStatement = connect.prepareStatement(sql);
+						System.out.println(sql);
+						resultSet = preparedStatement.executeQuery();
+						System.out.println("before visits ="+resultSet.getFetchSize());
+
+						while(resultSet.next()){
+							itemPrice = resultSet.getInt(1);
+							System.out.println("Item Price ="+itemPrice);
+							StringBuilder sb = new StringBuilder();
+							sb.append("");
+							sb.append(itemPrice);
+							String s = sb.toString();
+							lblDiscount.setText(s);
+						}
+						ro.awared();
+
+						int iRowCnt = dataModel.getRowCount();
+
+						Object obj;
+						Object objQty;
+						String objString;
+						int itemId;
+						int j= dataModel.findColumn("Sr_No");
+						int q = dataModel.findColumn("Quantity");
+						for (int i=0; i< iRowCnt; i++)
+						{
+							obj = dataModel.getValueAt(i, j);
+							objString =  obj.toString();
+							if(objString.equals("") ){
+								continue;
+							}
+							itemId = Integer.parseInt(obj.toString());
+							itemId = Integer.parseInt(obj.toString());
+							ItemHelper ih = new ItemHelper();
+							int item_id = ih.getItemId();
+							if(itemId == item_id)
+							{
+								//CouponDiscount.couponValue = itemPrice;
+								flag = 1;
+								JOptionPane.showMessageDialog(frame,"Customer is eligibale for reward id");
+								System.out.println("Item present in form");
+							}
+							else if(itemId != item_id){
+								System.out.println("Item not present in form");
+							}
+							objQty = dataModel.getValueAt(i, q);
+							int quantity = Integer.parseInt(objQty.toString());
+							for(int k = 0; k < quantity; k++)
+							{
+								setBillingInfo(itemId, "Test");
+							}
+
+						}
+						if(flag == 1){
+							float result = calculateTotal1();
+						}
+					}
+					else{
+						System.out.println(cid + "not eligible for reward");
+						JOptionPane.showMessageDialog(frame, "Customer is Not Getting Reward");
+					}
 				}
 				catch(Exception e1){
 					e1.printStackTrace();
 				}
 
+				System.out.println("width = " + paper.getWidth());
+				System.out.println("Calc width = " + (paper.getWidth() - margin * 2));
+				paper.setImageableArea(margin, margin, paper.getWidth() - margin * 2, paper.getHeight() - margin * 2);
+				pf.setPaper(paper);
+				int count=table.getRowCount();
 
-				Object obj;
-				Object objQty;
-				String objString;
-				int itemId;
-				int j= dataModel.findColumn("Sr_No");
-				int q = dataModel.findColumn("Quantity");
-				for (int i=0; i< iRowCnt; i++)
-				{
-					obj = dataModel.getValueAt(i, j);
-					objString =  obj.toString();
-					if(objString.equals("") ){
-						continue;
-					}
-					itemId = Integer.parseInt(obj.toString());
+				//ResultSet resultset=null;
 
-					objQty = dataModel.getValueAt(i, q);
-					int quantity = Integer.parseInt(objQty.toString());
-					for(int k = 0; k < quantity; k++)
-					{
-						setBillingInfo(itemId, "Test");
-					}
+				// showOpenPayScreen();
 
+				//ResultSet resultset=null;
+
+
+				/*
+                Customer cust = new Customer();
+                //c.DOB = null;
+                cust.cid = cid;
+                cust.FName ="Bill";
+                cust.LName ="Gates";
+                cust.phoneNum = 9873211111L;
+                cust.address = "Test addr";
+                cust.flag = 'N';
+                cust.emailid = "abcd";
+                cust.phone = "9873211111";
+                cust.DOB = getCurrentDate();
+                setCustomerInfo_old(cust);
+
+				 */
+				if(showOpenPayScreen() == PAY_OPTION_CANCEL_CLICKED) {
+				    return;
 				}
+				//TODO: Should substring the transInfo so that the data in the db does not overflow.
+				System.out.println("CafeBill::Submit_order - Payment type: " + Payment.payCashOrCC);
+				System.out.println("CafeBill::Submit_order - Payment info: " + Payment.transInfo);
+				System.out.println("CafeBill::Submit_order - before krp print " );
+				job.setPrintable(krp, pf);
+				if (job.printDialog()) {
+					try {
+						System.out.println(" inside try krp " );
+						job.print();
+					} catch (PrinterException printException) {
+						System.out.println(printException);
+					}
+				}
+				// Change Values customerId, transID, transInfo from the Credit Cash Dialog
+				setMenuOrder(CafeBill.cid, Payment.payCashOrCC, Payment.transInfo, Float.parseFloat(lblDiscount.getText()), (float)CouponDiscount.couponValue, (String)CouponDiscount.DISCOUNTDEC, Float.parseFloat(lblSubtotal.getText()), db_totalTaxPerc, Float.parseFloat(lblTotal.getText()));
+
+				//Connection connect = null;
+				//Connection con = ConnectionManager.getConnection();
+
+
 				nextOid++; // Do not change. Do not delete this line.
                 System.out.println("Current oid is: " + currentOid);
 				currentOid = nextOid;
@@ -836,7 +913,6 @@ public class CafeBill extends JFrame {
                 }
 				 */
 
-				CouponDiscount.couponValue=0.0;
 
 				//JOptionPane.showConfirmDialog(null, "Order is Placed", "Printing", JOptionPane.DEFAULT_OPTION);
 
@@ -885,6 +961,7 @@ public class CafeBill extends JFrame {
 					menuExpansionPane.updateUI();
 				}
 				CouponDiscount.couponValue=0.0;
+				itemPrice = 0;
 				new Demography().setVisible(true);
 				/*				 
 	                String msg = "Change Printer Name to adobe pdf And save";
@@ -1338,7 +1415,7 @@ public  void searchCust() {
 		 int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
 		 iRowCnt = dataModel.getRowCount();
 		 Object obj;
-		 String quant ;
+		 String quant;
 		 System.out.println("Row Count :"+iRowCnt);
 		 System.out.println("Calculating total rowselected =" + table.getSelectedRowCount());
 
@@ -1369,13 +1446,18 @@ public  void searchCust() {
 			 totalAmt =  totalAmt + tot;
 		 }
 		 totalAmt = roundDecimal(totalAmt,2);
+		 System.out.println("Total Price = "+totalAmt);
 		 //        System.out.println("Discount Value :"+CouponDiscount.couponValue);
 		 //        System.out.println("db_tax1: " );
 		 //        System.out.println(db_tax1 );
 		 if(CouponDiscount.couponValue!=0.0 && CouponDiscount.couponValue <=100)
 		 {
 			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
-		     totAmtAfterDiscount =  (float)( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100)));
+		     totAmtAfterDiscount =  (float)(( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100))));
+		     System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
+		     CouponDiscount.couponValue = itemPrice;
+		     //totAmtAfterDiscount = (float)(totAmtAfterDiscount - itemPrice);
+		     System.out.println("reward discount ="+CouponDiscount.couponValue);
 			 // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
 			 //lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
 			 lblDiscount.setText("-"+new Float(discountValue).toString());
@@ -1401,6 +1483,88 @@ public  void searchCust() {
 		 lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
 		 System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
 	 }
+
+	 //*sanket
+	 public float calculateTotal1()
+	 {
+		float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
+		int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
+		iRowCnt = dataModel.getRowCount();
+		Object obj;
+		String quant;
+		System.out.println("Row Count :"+iRowCnt);
+		System.out.println("Calculating total rowselected =" + table.getSelectedRowCount());
+
+		cQty = dataModel.findColumn("Quantity");
+		cUnit = dataModel.findColumn("Unit Price");
+		j  = dataModel.findColumn("Total Price");
+		for (int i=0; i< iRowCnt; i++)
+		{
+			obj = dataModel.getValueAt(i, cQty);
+			quant = obj.toString();
+			if(quant.equals("") ){
+					continue;
+			}
+			iQty = Integer.parseInt(obj.toString());
+			obj = dataModel.getValueAt(i, cUnit);
+			quant = obj.toString();
+			if(quant.equals("") ){
+				continue;
+			}
+			price = Float.parseFloat(obj.toString());
+			dataModel.setValueAt((price*iQty), i, j);
+			obj = dataModel.getValueAt(i, j) ;
+			quant = obj.toString();
+			if(quant.equals("") ){
+				continue;
+			}
+			tot = Float.parseFloat(obj.toString());
+			totalAmt =  totalAmt + tot;
+		}
+		totalAmt = roundDecimal(totalAmt,2);
+		System.out.println("Total Price = "+totalAmt);
+
+		if(flag == 1){
+			totAmtAfterDiscount = (float)(totalAmt - itemPrice);
+			System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
+			System.out.println("reward discount ="+itemPrice);
+		}
+		else{
+			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
+		     totAmtAfterDiscount =  (float)(( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100))));
+		     System.out.println("Total Amt After Discount ="+totAmtAfterDiscount);
+		     System.out.println("reward discount ="+CouponDiscount.couponValue);
+			 lblDiscount.setText("-"+new Float(discountValue).toString());
+			 lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
+		}
+		lblDiscount.setText("-"+new Float(discountValue).toString());
+
+		System.out.println("Item Price ="+itemPrice);
+		StringBuilder sb = new StringBuilder();
+		sb.append("");
+		sb.append(itemPrice);
+		String s = sb.toString();
+		lblDiscount.setText(s);
+
+		lblDiscount_1.setText("Discount" + "(Rs.)" );
+
+		ftax1 = (float) ((totAmtAfterDiscount * db_tax1)/100);
+		ftax1 = roundDecimal(ftax1,2);
+		ftax2 = (float) (totAmtAfterDiscount * db_tax2/100);
+		ftax2 = roundDecimal(ftax2,2);
+		ftax3 = (float) (totAmtAfterDiscount * db_tax3/100);
+		ftax3 = roundDecimal(ftax3,2);
+		totAmtWithTax = (float) (totAmtAfterDiscount + ftax1 + ftax2+ ftax3);
+		totAmtWithTax = roundDecimal(totAmtWithTax,2);
+		lblSubtotal.setText(Float.toString(totalAmt));
+		lblTax1.setText(Float.toString(ftax1));
+		lblTax2.setText(Float.toString(ftax2));
+		lblTax3.setText(Float.toString(ftax3));
+		lblTotal.setText(Float.toString(totAmtWithTax));
+		lblDiscountvalue.setText(Float.toString((float) CouponDiscount.couponValue));
+		System.out.println("lable Discount value in cafebill : " + lblDiscountvalue.getText());
+		return 0;
+	}
 	 /*
 	  *
 	  *Seema

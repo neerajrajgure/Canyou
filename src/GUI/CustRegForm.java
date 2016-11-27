@@ -131,19 +131,40 @@ public class CustRegForm extends JDialog {
             preparedStatement.setString (9, "C"); // C - Create, D - Deleted
             preparedStatement.executeUpdate();
 
-            query="UPDATE customer SET TotalNoVisits ="+tov+",lastVisit = now(), firstVisit = now() where cid="+newCid;
+            query="UPDATE customer SET TotalNoVisits ="+tov+", firstVisit = now() where cid="+newCid;
             preparedStatement=connect.prepareStatement(query);
             preparedStatement.executeUpdate();
 
+            //insering into customer current table
+            int ccrID = 1,NoV = 0,rewardID=0;
+            query="SELECT MAX(currRewardNumber) from CustomerCurrentReward";
+            preparedStatement=connect.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+            	ccrID=resultSet.getInt(1);
+            }
+            ccrID = ccrID +1;
+
+            query="SELECT rewardId FROM Rewards WHERE flag != 'D' AND startDate<=now() AND endDate>=now() ORDER BY MaxTotalVisits ASC LIMIT 1";
+            preparedStatement=connect.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+            	rewardID=resultSet.getInt(1);
+            }
+
+            query = "INSERT INTO CustomerCurrentReward (currRewardNumber,custId,NumberOfVisits,rewardId) VALUES (?,?,?,?)";
+            preparedStatement=connect.prepareStatement(query);
+            preparedStatement.setInt(1,ccrID);
+            preparedStatement.setLong(2,newCid);
+            preparedStatement.setInt(3,NoV);
+            preparedStatement.setInt(4,rewardID);
+            preparedStatement.executeUpdate();
         }
         catch (SQLException e2) {
-            // TODO Auto-generated catch block
             e2.printStackTrace();
-
             return false;
         }
         clearFields();
-
         return true;
     }
 
