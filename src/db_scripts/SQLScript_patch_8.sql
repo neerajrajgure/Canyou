@@ -12,3 +12,4 @@ INSERT INTO categories VALUES(108, 'Breakfast','./src/images/Breakfast.png' );
 
 /*Adding new column in the item table named secCategoryId*/
 ALTER TABLE item ADD COLUMN secCategoryId INT DEFAULT NULL;
+
