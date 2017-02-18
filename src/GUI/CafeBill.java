@@ -58,6 +58,7 @@ import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.TableColumnModel;
 
 import javax.swing.table.TableColumn;
@@ -89,8 +90,10 @@ public class CafeBill extends JFrame {
 	final JLabel lblTax3_1 = new JLabel("");
 	final JLabel lblTax3 = new JLabel("");
 	final JLabel lblDiscountvalue = new JLabel();
-	final JLabel lblDiscount_1 = new JLabel("Discount" + "( 0.0 % )" ); //new JLabellblDiscount_1.set("Discount" + "( " + lblDiscountvalue.getText() + " % )" );
+	final JLabel lblDiscount_1 = new JLabel("Discount" + "( Rs )" ); //new JLabellblDiscount_1.set("Discount" + "( " + lblDiscountvalue.getText() + " % )" );
 	final JLabel lblDiscount = new JLabel("");
+	final JTextField txtCoupon_ID = new JTextField("");
+	final JButton btnCoupon_Apply = new JButton("Apply Coupon");
 	final static String db_name= "HMS";
 	final static String username = "billing";
 	final static String password = "hmsbilling";
@@ -101,7 +104,7 @@ public class CafeBill extends JFrame {
 	private static Connection connect = null;
 	//private static Statement statement = null;
 	private static PreparedStatement preparedStatement = null;
-	private static ResultSet resultSet = null;
+	private ResultSet resultSet = null;
 	private int index;
 	private int index2;
 	long currEmpID=0;
@@ -931,44 +934,68 @@ public class CafeBill extends JFrame {
 		c.gridx = 1;
 		c.gridy = 11;
 		costPane.add(btnClear,c);
+		btnCoupon_Apply.setSize(50,50);
+		c.gridx = 3;
+		c.gridy = 9;
+		costPane.add(btnCoupon_Apply,c);
+		btnCoupon_Apply.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String coupon_Name;
+				@SuppressWarnings("unused")
+				int item_Id,per,finalDiscountAmt;
+				coupon_Name = txtCoupon_ID.getText();
+				//ResultSet rs = null;
+				System.out.println("Coupon Name = " + coupon_Name);
+
+				//Searching for itemId and discount percentage giving to certain product
+				String query = "select itemId,percentage from coupon where couponName =";
+				query = query +"'" + coupon_Name +"';";
+				System.out.println("Query for itemId and percentage search =  " + query);
+                try {
+					preparedStatement = connect.prepareStatement(query);
+					System.out.println("After perpared statement");
+					resultSet = preparedStatement.executeQuery();
+					System.out.println("After execute query");
+                } catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+                try {
+                	System.out.println("Before resultset.next()");
+                	if(resultSet.getFetchSize()<=0){
+                		System.out.println("Empty");
+                	}
+                	else{
+                		System.out.println("Not empty");
+                	}
+					while(resultSet.next()){
+						System.out.println("Checking resultset");
+						item_Id = resultSet.getInt(1);
+						per = resultSet.getInt(2);
+						System.out.println("ItemId = "+item_Id+"  Percentage = "+per);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("In catch after resultset.next");
+					e1.printStackTrace();
+				}
+			}
+		});
 		JButton btnac = new JButton("Apply Coupon & Discount");
 		btnac.setSize(100, 100);
 		btnac.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new CouponDiscount().setVisible(true);
-				/*	            
-				      try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    // Setup the connection with the DB
-                    connect = DriverManager.getConnection(CafeBill.hmsDbUrl);
-                    String query="Insert into coupon(couponId,couponName,startDate,startTime,endDate,endTime,itemId,percentage) values (?,?,?,?,?,?,?,?)";
-                    preparedStatement=connect.prepareStatement(query);
-                    preparedStatement.setInt(1, 101);
-                    preparedStatement.setString(2, "HIVE10");
-                    preparedStatement.setDate(3, getCurrentDate());
-                    preparedStatement.setTime(4, getCurrentTime());
-                    preparedStatement.setDate(5, getCurrentDate());
-                    preparedStatement.setTime(6, getCurrentTime());
-                    preparedStatement.setInt(7, 1001);
-                    preparedStatement.setInt(8, 100);
-                    preparedStatement.executeUpdate();
-                }
-                catch (ClassNotFoundException e2) {
-                    // TODO Auto-generated catch block
-                    e2.printStackTrace();
-                }
-                catch (SQLException e2) {
-                    // TODO Auto-generated catch block
-                    e2.printStackTrace();
-                }
-				 */
 			}
-
-			//}
 		});
 		c.gridx = 1;
 		c.gridy = 9;
 		costPane.add(btnac,c);
+		c.gridx = 2;
+		c.gridy = 9;
+		//txtCoupon_ID.setSize(20,20);
+		costPane.add(txtCoupon_ID,c);
 		JButton btncanelOrder = new JButton("Logout");
 		btncanelOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
