@@ -75,7 +75,8 @@ public class CafeBill extends JFrame {
 	private JPanel frequentItemsPane;
 	private JList list;
 	private DefaultListModel<String> listModel;
-	private ArrayList<String> categories;
+	private ArrayList<String> category_name;
+	private ArrayList<String> category_ids;
 	private ArrayList<String> imageIcons;
 	private ArrayList<ArrayList<MenuItem>> menuItems;
 	final JLabel lblSubtotal_1 = new JLabel("Subtotal");
@@ -332,7 +333,8 @@ public class CafeBill extends JFrame {
 		CouponDiscount cd= new CouponDiscount(this);
 		connectDatabase();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(("./src/images/THE_HIVE_Logo.jpg"))); //Title logo
-		categories = new ArrayList<String>();
+		category_ids = new ArrayList<String>();
+		category_name = new ArrayList<String>();
 		imageIcons = new ArrayList<String>();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -422,12 +424,14 @@ public class CafeBill extends JFrame {
 		/*
 		 * Read Categories and Items from Database
 		 */
-		ResultSet r = readDBMS("Select categoryName, imageIcon from "+db_name+".categories");
+		ResultSet r = readDBMS("Select categoryId, categoryName, imageIcon from "+db_name+".categories");
 		try {
 			while (r.next()) {
+				String categoryId = r.getString("categoryId");
 				String categoryName = r.getString("categoryName");
 				String imageIcon = r.getString("imageIcon");
-				categories.add(categoryName);
+				category_ids.add(categoryId);
+				category_name.add(categoryName);
 				imageIcons.add(imageIcon);
 			}
 		} catch (SQLException e1) {
@@ -452,8 +456,9 @@ public class CafeBill extends JFrame {
 		 * Read Items from Database
 		 */
 		menuItems = new ArrayList<ArrayList<MenuItem>>();
-		for(int i = 0;i<categories.size();i++){
-			ResultSet r1 = readDBMS("Select itemId, itemName, price from item I , categories C where I.categoryId = C.categoryId and categoryName = '"+categories.get(i)+"'");
+		for(int i = 0;i<category_ids.size();i++){
+			// Look for both the primary and secondary category id to be same as the category id present in the loop.
+			ResultSet r1 = readDBMS("SELECT itemId, itemName, price FROM item where categoryId = '" + category_ids.get(i) + "' OR secCategoryId = '" + category_ids.get(i) + "'");
 			ArrayList<MenuItem> subcategories = new ArrayList<MenuItem>();
 			try {
 				while (r1.next()) {
@@ -493,11 +498,11 @@ public class CafeBill extends JFrame {
 		/*
 		 * Set Layout
 		 */
-		GridLayout categoryLayout = new GridLayout(categories.size(),1);
+		GridLayout categoryLayout = new GridLayout(category_name.size(),1);
 		categoryPane.setLayout(categoryLayout);
 		//Dynamically Add Buttons
-		for(index=0;index<categories.size();index++){
-			String b = categories.get(index);
+		for(index=0;index<category_name.size();index++){
+			String b = category_name.get(index);
 			final JButton btn= new JButton();
 			btn.setPreferredSize(new Dimension(40,40));
 			btn.setName(b);
@@ -508,7 +513,7 @@ public class CafeBill extends JFrame {
 					//setMenuExpansionPaneForCoffee();
 					//System.out.println(menuItems.get(menuItems.indexOf(btn.getName())));
 					System.out.println(btn.getName());
-					ArrayList<MenuItem> expandedMenu = menuItems.get(categories.indexOf(btn.getName()));
+					ArrayList<MenuItem> expandedMenu = menuItems.get(category_name.indexOf(btn.getName()));
 					setMenuExpansionPane(expandedMenu);
 				}
 			});
