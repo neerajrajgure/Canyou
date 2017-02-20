@@ -1,5 +1,8 @@
 use hms;
 
+/* Adding new column in the item table named secCategoryId */
+ALTER TABLE item ADD COLUMN secCategoryId INT DEFAULT NULL;
+
 /* Introduce regular Sandwich (Corn, Cheese, Tomato and Chocolate) */
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1112, 'Cheese S/W WB Reg', 103, 25.00);
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES (1113, 'Corn Ch S/W WB Reg', 103, 30.00);
@@ -29,9 +32,6 @@ UPDATE item SET categoryName = 'Waffle_Cake' WHERE categoryId = 104;
 
 /* DELETE empty Category (ID = 105 i.e Cake) */
 DELETE FROM categories WHERE categoryId = 105;
-
-/* Adding new column in the item table named secCategoryId */
-ALTER TABLE item ADD COLUMN secCategoryId INT DEFAULT NULL;
 
 /* Inserting new row in category table (for Sides and Breakfast) */
 INSERT INTO categories VALUES(108, 'Sides_Breakfast','./src/images/Sides_Breakfast.png' );
