@@ -111,6 +111,7 @@ public class CafeBill extends JFrame {
     private JMenuItem ViewSaleMenuItem;
     private JMenuItem CustomerLookUpMenuItem;
     private JMenuItem AboutMenuItem;
+    private JMenuItem QryGeneratorItem;
 
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
 	// " 5 Item Five" };
@@ -360,10 +361,12 @@ public class CafeBill extends JFrame {
         ViewSaleMenuItem = new JMenuItem("View Sale");
         CustomerLookUpMenuItem = new JMenuItem("Customer LookUp");
         AboutMenuItem = new JMenuItem("About");
+        QryGeneratorItem = new JMenuItem("Qurey Generator");
         fileMenu.add(ViewTotalMenuItem);
         fileMenu.add(ViewSaleMenuItem);
         fileMenu.add(CustomerLookUpMenuItem);
         fileMenu.add(AboutMenuItem);
+        fileMenu.add(QryGeneratorItem);
         ViewTotalMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -397,7 +400,12 @@ public class CafeBill extends JFrame {
                 viewSaleFrame();
             }
         });
-
+        QryGeneratorItem.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e) {
+                Generator gn = new Generator();
+                gn.Generator();
+            }
+        });
         AboutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
