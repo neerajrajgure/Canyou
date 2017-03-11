@@ -21,7 +21,7 @@ public class Generator implements ActionListener{
 	JButton btnAddNewCategory;
 	//String country[];
 	JComboBox cbxCatId;
-	JButton btnAddNewItem,btnAddCat;
+	JButton btnAddNewItem;
 	JTextArea txtFianlQuery;
 	boolean flag = false;
 	JTable tblCategory;
@@ -85,7 +85,12 @@ public class Generator implements ActionListener{
 				System.out.println("query generator btn");
 //				queryGenerator();
 				AddNewCategory ac = new AddNewCategory();
-				ac.AddNewCategory();
+				try {
+					ac.AddNewCategory();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		panel.add(btnAddNewCategory);

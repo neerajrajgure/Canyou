@@ -1,10 +1,9 @@
 package GUI;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
 
 public class AddNewItem {
 	JFrame frame;
@@ -12,12 +11,14 @@ public class AddNewItem {
 	JLabel lblItemId,lblItemName,lblItemPrice,lblCatId,lblSecCatId;
 	JTextField txtItemId,txtItemName,txtItemPrice,txtCatId,txtSecCatId;
 	JButton btnAddItem,btnClear;
+	String strItemId,strItemName,strItemPrice,strCatId,strSecCatId,strQry;
+	JTextArea txtExeQry;
 
 	public void AddNewItem() {
 		// TODO Auto-generated constructor stub
 		frame = new JFrame("Add New Menu Item");
-		frame.setSize(350, 200);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(350, 320);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		panel = new JPanel();
 
@@ -68,10 +69,32 @@ public class AddNewItem {
 		btnAddItem = new JButton("Add Item");
 		btnAddItem.setBounds(40, 120, 100, 30);
 		panel.add(btnAddItem);
+		btnAddItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				strItemId=txtItemId.getText();
+				strItemName =txtItemName.getText();
+				strItemPrice = txtItemPrice.getText();
+				strCatId = txtCatId.getText();
+				strSecCatId = txtSecCatId.getText();
+				
+				strQry ="INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES("+strItemId+","+strItemName+","+strCatId+","+strItemPrice+","+strSecCatId+")";
+				System.out.println(strQry);
+				txtExeQry.setText(strQry);
+			}
+		});
 		
 		btnClear  = new JButton("Clear");
 		btnClear.setBounds(160, 120, 100, 30);
 		panel.add(btnClear);
+		
+		txtExeQry = new JTextArea();
+		txtExeQry.setBounds(0, 160, 320, 100);
+		txtExeQry.setWrapStyleWord(true);
+		txtExeQry.setLineWrap(true);
+		panel.add(txtExeQry);
 		
 		frame.setVisible(true);
 

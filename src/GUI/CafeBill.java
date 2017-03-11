@@ -409,6 +409,15 @@ public class CafeBill extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}*/
+        		//AddNewItem an = new AddNewItem();
+        		//an.AddNewItem();
+        		/*AddNewCategory ac = new AddNewCategory();
+        		try {
+					ac.AddNewCategory();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
             }
         });
         AboutMenuItem.addActionListener(new ActionListener() {
