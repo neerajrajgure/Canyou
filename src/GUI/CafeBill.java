@@ -221,7 +221,7 @@ public class CafeBill extends JFrame {
 	}
 
 	
-	public void connectDatabase(){
+	public static void connectDatabase(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Setup the connection with the DB
@@ -402,8 +402,13 @@ public class CafeBill extends JFrame {
         });
         QryGeneratorItem.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e) {
-                Generator gn = new Generator();
-                gn.Generator();
+                /*Generator gn = new Generator();
+                try {
+					gn.Generator();
+				} catch (SQLException | ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
             }
         });
         AboutMenuItem.addActionListener(new ActionListener() {
