@@ -31,6 +31,13 @@ public class AddNewCategory {
 
 		frame.add(panel);
 		panel.setLayout(null);
+		ItemInfo ii = new ItemInfo();
+		if(ii.flag==true){
+			System.out.println("Edit Mode");
+		}
+		else{
+			System.out.println("Add new mode");
+		}
 
 		//Database Connection -->
 		con=ConnectionManager.getConnection();

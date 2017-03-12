@@ -24,8 +24,14 @@ public class AddNewItem {
 
 		frame.add(panel);
 		panel.setLayout(null);
-
-
+		ItemInfo ii = new ItemInfo();
+		if(ii.flag==true){
+			System.out.println("Edit Mode");
+		}
+		else{
+			System.out.println("Add new mode");
+			System.out.println("seleted id="+CafeBill.itemid);
+		}
 		lblItemId = new JLabel("Item Id");
 		lblItemId.setBounds(10, 10, 80, 25);
 		panel.add(lblItemId);
