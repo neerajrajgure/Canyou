@@ -30,6 +30,7 @@ public class Generator extends javax.swing.JDialog {
 	java.sql.PreparedStatement ps;
 	ResultSet rsCategory;
 	Connection connect = null;
+	String catId=null;
 	
     // Variables declaration - do not modify                     
     private javax.swing.JScrollPane jScrollPane1;
@@ -69,29 +70,27 @@ public class Generator extends javax.swing.JDialog {
 		System.out.println("Category Query is = "+qryCategory);
         ps = connect.prepareStatement(qryCategory);
         rsCategory = ps.executeQuery();
-
-
-        int ids;
-		/*Vector<String> vectorCategory = new Vector<String>();
-		//ArrayList<String> arrayItem = new ArrayList<String>();
-		Vector<String> columnNames = new Vector<String>();
-        columnNames.add("categoryId");
-        columnNames.add("categoryName");
-        columnNames.add("imageIcon");
-*/
-		int i = 1;
 		cbxCatId=new JComboBox();
 		while (rsCategory.next()) {
-			//ids = rsCategory.getInt(1);
-			//vectorCategory.add(rsCategory.getString(i++));
-			//vectorCategory.add(rsCategory.getInt(1), qryCategory);
-			//vectorCategory.add(rsCategory.getString(2));
-			//vectorCategory.add(rsCategory.getString(3));
 			cbxCatId.addItem(rsCategory.getString("categoryId"));
 		}
-		// cbxCatId.setBounds(110, 10, 160, 25);    
-		// panel.add(cbxCatId);        
-
+		cbxCatId.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("Selected Number = "+cbxCatId.getSelectedItem());
+				catId = cbxCatId.getSelectedItem().toString();
+				//catId = Integer..toString();
+				getMenuItemsForCat();
+				try {
+					initComponents();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 
 		btnAddNewCategory = new JButton("Category");
 		btnAddNewCategory.setBounds(10, 100, 80, 25);
@@ -222,7 +221,7 @@ public class Generator extends javax.swing.JDialog {
 
          try
          {
-             String querySelectPart1 = "SELECT * FROM item where categoryId = 104;";
+             String querySelectPart1 = "SELECT * FROM item where categoryId ="+catId+";";
              String queryCustSearch = querySelectPart1;
              
              System.out.println("Query for cust search: " + queryCustSearch);
