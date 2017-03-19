@@ -13,6 +13,7 @@ public class AddNewItem {
 	JButton btnAddItem,btnClear;
 	String strItemId,strItemName,strItemPrice,strCatId,strSecCatId,strQry;
 	JTextArea txtExeQry;
+	ItemInfo ii = new ItemInfo();
 
 	public void AddNewItem() {
 		// TODO Auto-generated constructor stub
@@ -24,7 +25,7 @@ public class AddNewItem {
 
 		frame.add(panel);
 		panel.setLayout(null);
-		ItemInfo ii = new ItemInfo();
+
 		if(ii.flag==true){
 			System.out.println("Edit Mode");
 		}
@@ -86,7 +87,7 @@ public class AddNewItem {
 				strCatId = txtCatId.getText();
 				strSecCatId = txtSecCatId.getText();
 				
-				strQry ="INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES("+strItemId+","+strItemName+","+strCatId+","+strItemPrice+","+strSecCatId+")";
+				strQry ="INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES("+strItemId+",'"+strItemName+"',"+strCatId+","+strItemPrice+","+strSecCatId+")";
 				System.out.println(strQry);
 				txtExeQry.setText(strQry);
 			}

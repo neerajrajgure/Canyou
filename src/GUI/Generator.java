@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.jdbc.PreparedStatement;
 import com.sun.prism.paint.Color;
 
-public class Generator extends javax.swing.JDialog {
+public class Generator extends JFrame {
 	static String stringMode,qryP2,stringTableName,stringWhr,stringWhrCons,qryP6;
 	static String FinalQuery;
 	JFrame frame;
@@ -31,16 +31,26 @@ public class Generator extends javax.swing.JDialog {
 	ResultSet rsCategory;
 	Connection connect = null;
 	String catId=null;
+    Vector<String> colNames = new Vector<String>();
 	
     // Variables declaration - do not modify                     
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableMenuItems;
     // End of variables declaration 
 
 	// public Generator() throws SQLException, ClassNotFoundException {
     public Generator() throws SQLException {
         setTitle("Customer Data");
-        setModal(true);
+        setVisible(true);
+
+        // String[] strColNames = new String []{ "cid-1", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"};
+
+        String[] strColNames = new String []{ "itemId", "itemName", "categoryId", "price", "secCategoryId"};
+        String str;
+        for(int j = 0; j < strColNames.length; j++) {
+            colNames.add(strColNames[j]);
+        }
+        // setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         initComponents();
     }
@@ -75,20 +85,15 @@ public class Generator extends javax.swing.JDialog {
 			cbxCatId.addItem(rsCategory.getString("categoryId"));
 		}
 		cbxCatId.addItemListener(new ItemListener() {
-			
+
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("Selected Number = "+cbxCatId.getSelectedItem());
 				catId = cbxCatId.getSelectedItem().toString();
 				//catId = Integer..toString();
-				getMenuItemsForCat();
-				try {
-					initComponents();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				Vector menuItemList = getMenuItemsForCat();
+				jTableMenuItems.setModel(new javax.swing.table.DefaultTableModel( menuItemList, colNames));
 			}
 		});
 
@@ -96,17 +101,16 @@ public class Generator extends javax.swing.JDialog {
 		btnAddNewCategory.setBounds(10, 100, 80, 25);
 		btnAddNewCategory.addActionListener(new ActionListener(){
 
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("query generator btn");
+		public void actionPerformed(ActionEvent arg0) {
+			System.out.println("query generator btn");
 //				queryGenerator();
-				try {
+			try {
 					AddNewCategory ac = new AddNewCategory();
-				} catch (SQLException e) {
+			} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				e.printStackTrace();
 			}
-		});
+		}});
 		panel.add(btnAddNewCategory);
 		
 		btnAddNewItem = new JButton("Item");
@@ -120,36 +124,25 @@ public class Generator extends javax.swing.JDialog {
 		});
 		
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableMenuItems = new javax.swing.JTable();
 
-
-        Vector colNames = new Vector();
-
-        // String[] strColNames = new String []{ "cid-1", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"};
-
-        String[] strColNames = new String []{ "itemId", "itemName", "categoryId", "price", "secCategoryId"};
-        String str;
-        for(int j = 0; j < strColNames.length; j++) {
-            colNames.add(strColNames[j]);
-        }
-        // setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         Vector<Vector> searchlist = getMenuItemsForCat();
-        jTable1.setModel(new javax.swing.table.DefaultTableModel( searchlist, colNames));
-        jScrollPane1.setViewportView(jTable1);
+        jTableMenuItems.setModel(new javax.swing.table.DefaultTableModel( searchlist, colNames));
+        jScrollPane1.setViewportView(jTableMenuItems);
 
         JButton btnSelect = new JButton("Select");
         btnSelect.addActionListener(new ActionListener() {
         	long itemid;
 
         	public void actionPerformed(ActionEvent e) {
-                for (int row : jTable1.getSelectedRows()) {
-                    itemid = new Long(jTable1.getValueAt(row ,0).toString()).longValue();
+                for (int row : jTableMenuItems.getSelectedRows()) {
+                    itemid = new Long(jTableMenuItems.getValueAt(row ,0).toString()).longValue();
                     GUI.CafeBill.itemid = itemid;
                     ItemInfo ii = new ItemInfo();
                     ii.setFlag(true);
                     System.out.println("item id on select in generator form : " +itemid  );
-                    DefaultTableModel dm = (DefaultTableModel)jTable1.getModel();
+                    DefaultTableModel dm = (DefaultTableModel)jTableMenuItems.getModel();
                     while(dm.getRowCount() > 0)
                     {
                         dm.removeRow(0);
@@ -165,11 +158,11 @@ public class Generator extends javax.swing.JDialog {
         	long cid;
 
         	public void actionPerformed(ActionEvent e) {
-                for (int row : jTable1.getSelectedRows()) {
-                    cid = new Long(jTable1.getValueAt(row ,0).toString()).longValue();
+                for (int row : jTableMenuItems.getSelectedRows()) {
+                    cid = new Long(jTableMenuItems.getValueAt(row ,0).toString()).longValue();
                     GUI.CafeBill.cid = cid;
                     System.out.println("Test ... 2 ......Customre ids on select in CustomeRetrivalform : " +cid  );
-                    DefaultTableModel dm = (DefaultTableModel)jTable1.getModel();
+                    DefaultTableModel dm = (DefaultTableModel)jTableMenuItems.getModel();
                     while(dm.getRowCount() > 0)
                     {
                         dm.removeRow(0);
