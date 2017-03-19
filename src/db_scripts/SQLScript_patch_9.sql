@@ -10,14 +10,14 @@ INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4006,'Kasata (Dry 
 
 INSERT INTO categories (categoryId,categoryName,imageIcon) VALUES(110,'Kulfi','./src/images/Kulfi.png');
 
-INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES(4101,'Malai',110,20);
-INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES(4102,'Pista',110,20);
-INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES(4103,'Mango',110,20);
-INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES(4104,'Chocolate',110,20);
-INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES(4105,'Gulkand',110,20);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4101,'Malai',110,20);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4102,'Pista',110,20);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4103,'Mango',110,20);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4104,'Chocolate',110,20);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4105,'Gulkand',110,20);
 
 
 INSERT INTO categories (categoryId,categoryName,imageIcon) VALUES(111,'Ice-Cream','./src/images/Ice-Cream.png');
 
-INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES(4201,'Faluda Reg',111,35);
-INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES(4202,'Faluda Large',111,50);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4201,'Faluda Reg',111,35);
+INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4202,'Faluda Large',111,50);
