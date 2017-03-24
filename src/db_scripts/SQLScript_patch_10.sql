@@ -1,4 +1,4 @@
-INSERT INTO categories (categoryId, categoryName, imageIcon) VALUES(110, 'Momos n Rolls', './src/images/MomosNRolls.png');
+INSERT INTO categories (categoryId, categoryName, imageIcon) VALUES(110, 'Wraps and Momos', './src/images/Momos_Wraps.png');
 
 
 INSERT INTO item (itemId, itemName, categoryId, price) VALUES(4101, 'Veg. Momos', 110, 49);
