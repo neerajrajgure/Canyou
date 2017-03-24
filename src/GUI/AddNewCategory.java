@@ -112,7 +112,7 @@ public class AddNewCategory {
 				strCatId = txtCatId.getText();
 				strCatName = txtCatName.getText();
 				strPath = txtPath.getText();
-				strQry = "INSERT INTO categories (categoryId,categoryName,imageIcon) VALUES("+newCatId+",'"+strCatName+"','"+strPath+"')";
+				strQry = "INSERT INTO categories (categoryId,categoryName,imageIcon) VALUES("+newCatId+", '"+strCatName+"', '"+strPath+"')";
 				System.out.println("Add Category ="+strQry);
 			}
 		});

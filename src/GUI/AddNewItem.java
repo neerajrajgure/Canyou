@@ -87,7 +87,7 @@ public class AddNewItem {
 				strCatId = txtCatId.getText();
 				strSecCatId = txtSecCatId.getText();
 				
-				strQry ="INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES("+strItemId+",'"+strItemName+"',"+strCatId+","+strItemPrice+","+strSecCatId+")";
+				strQry ="INSERT INTO item (itemId, itemName, categoryId, price, secCategoryId) VALUES("+strItemId+", '"+strItemName+"', "+strCatId+", "+strItemPrice+", "+strSecCatId+")";
 				System.out.println(strQry);
 				txtExeQry.setText(strQry);
 			}
