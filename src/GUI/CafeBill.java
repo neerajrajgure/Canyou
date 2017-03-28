@@ -1389,9 +1389,9 @@ public  void searchCust() {
 		 }
 		 ftax1 = (float) ((totAmtAfterDiscount *  db_tax1)/100);
 		 ftax1 = roundDecimal(ftax1,2);
-		 ftax2 = (float) (totAmtAfterDiscount *  db_tax1/100);
+		 ftax2 = (float) (totAmtAfterDiscount *  db_tax2/100);
 		 ftax2 = roundDecimal(ftax2,2);
-		 ftax3 = (float) (totAmtAfterDiscount *  db_tax1/100);
+		 ftax3 = (float) (totAmtAfterDiscount *  db_tax3/100);
 		 ftax3 = roundDecimal(ftax3,2);
 		 System.out.println("Total Amt=" + totalAmt);
 		 totalTax = ftax1 + ftax2 + ftax3;
