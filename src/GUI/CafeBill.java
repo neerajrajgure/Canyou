@@ -1339,7 +1339,7 @@ public  void searchCust() {
 	  */
 	 public void calculateTotal()
 	 {
-		 float totalAmt = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, tot =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
+		 float sumOfMenuItemPrices = 0 ,ftax1 = 0,ftax2 = 0 ,ftax3 = 0, itemPrice =0 , totAmtWithTax =0 ,price=0, totAmtAfterDiscount=0, discountValue=0;
 		 int iRowCnt, iQty, iNumber, j,k,cQty,cUnit,ctotal;
 		 iRowCnt = dataModel.getRowCount();
 		 Object obj;
@@ -1370,35 +1370,39 @@ public  void searchCust() {
 			 if(quant.equals("") ){
 				 continue;
 			 }
-			 tot = Float.parseFloat(obj.toString());
-			 totalAmt =  totalAmt + tot;
+			 itemPrice = Float.parseFloat(obj.toString());
+			 sumOfMenuItemPrices =  sumOfMenuItemPrices + itemPrice;
 		 }
-		 totalAmt = roundDecimal(totalAmt,2);
+		 sumOfMenuItemPrices = roundDecimal(sumOfMenuItemPrices,2);
 		 //        System.out.println("Discount Value :"+CouponDiscount.couponValue);
 		 //        System.out.println("db_tax1: " );
 		 //        System.out.println(db_tax1 );
 		 if(CouponDiscount.couponValue!=0.0 && CouponDiscount.couponValue <=100)
 		 {
-			 discountValue=(float) (totalAmt*(CouponDiscount.couponValue/100));
-		     totAmtAfterDiscount =  (float)( (totalAmt)- (totalAmt*(CouponDiscount.couponValue/100)));
+			 discountValue = (float) (sumOfMenuItemPrices*(CouponDiscount.couponValue/100));
+		     totAmtAfterDiscount =  (float)( (sumOfMenuItemPrices) - (sumOfMenuItemPrices*(CouponDiscount.couponValue/100)));
 			 // lblDiscount.setText(totAmtAfterDiscount+"   ("+Float.toString((float) CouponDiscount.couponValue)+"%"+")  ");
 			 //lblDiscount.setText(new Float(totAmtAfterDiscount).toString());
 			 lblDiscount.setText("-"+new Float(discountValue).toString());
 			 lblDiscount_1.setText("Discount" + "( " +CouponDiscount.couponValue + " % )" );
 		 }else{
-			 totAmtAfterDiscount = totalAmt;
+			 totAmtAfterDiscount = sumOfMenuItemPrices;
 			 lblDiscount.setText("0.0");
 			 lblDiscount_1.setText("Discount" + "( 0.0 % )" );
 		 }
-		 ftax1 = (float) ((totAmtAfterDiscount *  db_tax1)/100);
-		 ftax1 = roundDecimal(ftax1,2);
-		 ftax2 = (float) (totAmtAfterDiscount *  db_tax2/100);
-		 ftax2 = roundDecimal(ftax2,2);
-		 ftax3 = (float) (totAmtAfterDiscount *  db_tax3/100);
-		 ftax3 = roundDecimal(ftax3,2);
-		 totAmtWithTax=  (float) (totAmtAfterDiscount + ftax1 + ftax2+ ftax3);
+
+		 float taxDivisor_1 = (100 + db_tax1) / 100; // For e.g if tax is 6 here we are creating 1.06
+		 float taxDivisor_2 = (100 + db_tax2) / 100;
+		 float taxDivisor_3 = (100 + db_tax3) / 100;
+		 float totalTaxDivisor = (100 + db_tax1 + db_tax2 + db_tax3) / 100;
+		 ftax1 = roundDecimal(totAmtAfterDiscount - (totAmtAfterDiscount / taxDivisor_1), 2);
+		 ftax2 = roundDecimal(totAmtAfterDiscount - (totAmtAfterDiscount / taxDivisor_2), 2);
+		 ftax3 = roundDecimal(totAmtAfterDiscount - (totAmtAfterDiscount / taxDivisor_3), 2);
+		 float subTotal = roundDecimal(totAmtAfterDiscount / totalTaxDivisor, 2);
+
+		 totAmtWithTax = totAmtAfterDiscount;
 		 totAmtWithTax = roundDecimal(totAmtWithTax,2);
-		 lblSubtotal.setText(Float.toString(totalAmt));
+		 lblSubtotal.setText(Float.toString(subTotal));
 		 lblTax1.setText(Float.toString(ftax1));
 		 lblTax2.setText(Float.toString(ftax2));
 		 lblTax3.setText(Float.toString(ftax3));
