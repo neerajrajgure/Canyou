@@ -119,6 +119,8 @@ public class CafeBill extends JFrame {
 	//private ComboBoxEditor<String> cExtraItem1;
 
 	DefaultTableModel dataModel;
+	float totalTax=0;
+	float taxCal=0;
 
 	//JTableX table ;
 	JTable table ;
@@ -1396,6 +1398,13 @@ public  void searchCust() {
 		 ftax2 = roundDecimal(ftax2,2);
 		 ftax3 = (float) (totAmtAfterDiscount *  db_tax3/100);
 		 ftax3 = roundDecimal(ftax3,2);
+		 System.out.println("Total Amt=" + totalAmt);
+		 totalTax = ftax1 + ftax2 + ftax3;
+		 System.out.println("Discount Amt="+totAmtAfterDiscount);
+		 System.out.println("Tax 1=" + ftax1 + "Tax 2=" + ftax2 + "Tax 3=" + ftax3);
+		 System.out.println("total tax="+ totalTax);
+		 taxCal = ( totalTax + 100 ) / 100;
+		 System.out.println("total tax="+ taxCal);
 		 totAmtWithTax=  (float) (totAmtAfterDiscount + ftax1 + ftax2+ ftax3);
 		 totAmtWithTax = roundDecimal(totAmtWithTax,2);
 		 lblSubtotal.setText(Float.toString(totalAmt));
