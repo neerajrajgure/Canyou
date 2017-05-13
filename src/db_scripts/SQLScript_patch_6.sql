@@ -1,4 +1,4 @@
 ALTER TABLE customer 
-ADD COLUMN totalNoVisits INT, 
+ADD COLUMN firstVisit DATETIME,
 ADD COLUMN lastVisit DATETIME, 
-ADD COLUMN firstVisit DATETIME;
+ADD COLUMN totalNumVisits INT;

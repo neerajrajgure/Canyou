@@ -131,7 +131,8 @@ public class CustRegForm extends JDialog {
             preparedStatement.setString (9, "C"); // C - Create, D - Deleted
             preparedStatement.executeUpdate();
 
-            query="UPDATE customer SET TotalNoVisits ="+tov+",lastVisit = now(), firstVisit = now() where cid="+newCid;
+            //first visit and total no visit
+            query="UPDATE customer SET totalNumVisits ="+tov+",firstVisit = now() where cid="+newCid;
             preparedStatement=connect.prepareStatement(query);
             preparedStatement.executeUpdate();
 
