@@ -55,6 +55,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -112,6 +113,7 @@ public class CafeBill extends JFrame {
     private JMenuItem ViewSaleMenuItem;
     private JMenuItem CustomerLookUpMenuItem;
     private JMenuItem AboutMenuItem;
+    private JMenuItem QryGeneratorItem;
 
 	//String ExtraChoiceCombo[] = { " 1  cheese", " 2 coffee  ", "3 extra ", " 4 Four",
 	// " 5 Item Five" };
@@ -127,6 +129,7 @@ public class CafeBill extends JFrame {
 	public long nextOid = 0;
 	public static long currentOid = 0; // This need to change pass oid to the constructor of the classes that need it (instead of accessing the static variable)
 	public static long cid = 0; // This need to change pass cid to the constructor of the classes that need it (instead of accessing the static variable)
+	public static long itemid = 0; //this is to use it for modify or add item or category
 	public float db_tax1=(float) 0.0;
 	public float db_tax2 = (float)0.0;
 	public float db_tax3 =(float) 0.0;
@@ -221,7 +224,7 @@ public class CafeBill extends JFrame {
 	}
 
 	
-	public void connectDatabase(){
+	public static void connectDatabase(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Setup the connection with the DB
@@ -362,10 +365,12 @@ public class CafeBill extends JFrame {
         ViewSaleMenuItem = new JMenuItem("View Sale");
         CustomerLookUpMenuItem = new JMenuItem("Customer LookUp");
         AboutMenuItem = new JMenuItem("About");
+        QryGeneratorItem = new JMenuItem("Qurey Generator");
         fileMenu.add(ViewTotalMenuItem);
         fileMenu.add(ViewSaleMenuItem);
         fileMenu.add(CustomerLookUpMenuItem);
         fileMenu.add(AboutMenuItem);
+        fileMenu.add(QryGeneratorItem);
         ViewTotalMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -399,7 +404,38 @@ public class CafeBill extends JFrame {
                 viewSaleFrame();
             }
         });
-
+        QryGeneratorItem.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt) {
+    			try {
+    				// custRetrieval = new CustomerRetrievalForm(searchlist);
+    				//Vector<Vector> searchlist = getMenuItemsForCat();
+    				Generator genrator_test = new Generator();
+    				genrator_test.setVisible(true);
+    			} catch (SQLException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+        		/*
+                Generator gn = new Generator();
+                try {
+					gn.Generator();
+				} catch (SQLException | ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				*/
+        		//AddNewItem an = new AddNewItem();
+        		//an.AddNewItem();
+        		/*AddNewCategory ac = new AddNewCategory();
+        		try {
+					ac.AddNewCategory();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
+            }
+        });
         AboutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -1562,5 +1598,74 @@ public  void searchCust() {
 
      }
 	  */
+/*	 
+	 Vector<Vector> getMenuItemsForCat() {
 
+		 Vector<Vector> searchlist = new Vector<Vector>();
+
+         try
+         {
+             String querySelectPart1 = "SELECT * FROM item where categoryId = 104;";
+             /*
+             String queryParamName = null;
+             String queryParamVal = null;
+             if (fname.length() > 0 ) {
+                 queryParamName = COLUMN_F_NAME;
+                 queryParamVal = firstname.getText();
+             }
+             else if (lname.length() > 0 ) // lname
+             {
+                 queryParamName = COLUMN_L_NAME;
+                 queryParamVal = lastname.getText();
+             }
+             else if (dobStr2.length() > 0) //DOB
+             {
+                 queryParamName = COLUMN_DOB;
+                 queryParamVal = dobStr2;
+             }
+             else if( phno.length() > 0 )
+             {
+                 queryParamName = COLUMN_PHONENUM;
+                 queryParamVal = phoneno.getText();
+             }
+             // String queryCustSearch = querySelectPart1  + " " + queryParamName + " = '" + queryParamVal + "';";
+             String queryCustSearch = querySelectPart1;
+             
+             System.out.println("Query for cust search: " + queryCustSearch);
+             preparedStatement = connect.prepareStatement(queryCustSearch);
+             ResultSet rs = preparedStatement.executeQuery();
+             //search_info si = new search_info();
+             
+             while(rs.next())
+             {
+                 // "cid", "Fname", "Lname", "Address", "phonenum", "phone", "emailid", "DOB", "flag"
+                 CustInfo si = new CustInfo();
+                 //	            	si.setCid(rs.getString((int) CafeBill.cid));
+                 si.setCid(rs.getString("itemId"));
+                 si.setFName(rs.getString("itemName"));
+                 si.setLName(rs.getString("categoryId"));
+                 si.setPhonenum(rs.getString("price"));
+                 si.setDOB(rs.getString("secCategoryId"));
+
+                 Vector searchData = new Vector();
+                 searchData.add(si.getCid());
+                 searchData.add(si.getFName());
+                 searchData.add(si.getLName());
+                 searchData.add(si.getAddress());
+                 searchData.add(si.getPhonenum());
+
+                 System.out.println( "Recordset data: CID = " + si.getCid() + " Name = " + si.getFName( ));
+                 searchlist.add(searchData);
+             }
+         }
+         catch (SQLException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+         }
+
+         System.out.println(" vector length is :" + searchlist.size());
+         
+         return searchlist;
+	 }
+*/
 }
